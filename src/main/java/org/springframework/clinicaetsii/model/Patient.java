@@ -15,12 +15,16 @@
  */
 package org.springframework.clinicaetsii.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -32,23 +36,28 @@ import javax.validation.constraints.NotEmpty;
 public class Patient extends User {
 
 	@Column(name = "nss")
-	@NotEmpty
+	@NotBlank
 	private String nss;
 
-	@Column(name = "fechaNacimiento")
-	@NotEmpty
-	private Date fechaNacimiento;
+	@Column(name = "birth_date")
+	@Past
+	private LocalDate birthDate;
 
 	@Column(name = "phone2")
-	@NotEmpty
+	@NotBlank
 	private String phone2;
 
 	@Column(name = "address")
-	@NotEmpty
+	@NotBlank
 	private String address;
 
 	@Column(name = "state")
-	@NotEmpty
+	@NotBlank
 	private String state;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "general_practitioner_id")
+	@NotNull
+	private Doctor generalPractitioner;
 
 }

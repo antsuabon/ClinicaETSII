@@ -15,10 +15,20 @@
  */
 package org.springframework.clinicaetsii.model;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -26,6 +36,8 @@ import javax.validation.constraints.NotEmpty;
  * @author Ken Krebs
  */
 
+@Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "doctors")
 public class Doctor extends User {
@@ -33,5 +45,10 @@ public class Doctor extends User {
 	@Column(name = "collegiate_code")
 	@NotEmpty
 	private String collegiateCode;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "doctor_services", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
+	@NotNull
+	private Collection<Service> services;
 
 }

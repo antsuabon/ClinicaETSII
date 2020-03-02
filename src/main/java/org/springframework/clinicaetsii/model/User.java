@@ -4,7 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
@@ -18,35 +19,34 @@ public class User {
 	private String username;
 
 	@Column(name = "password")
-	@NotEmpty
+	@NotBlank
 	private String password;
 
 	@Column(name = "enabled")
 	private boolean enabled;
 
 	@Column(name = "name")
-	@NotEmpty
+	@NotBlank
 	private String name;
 
 	@Column(name = "surname")
-	@NotEmpty
+	@NotBlank
 	private String surname;
 
 	@Column(name = "dni")
-	@NotEmpty
+	@NotBlank
 	private String dni;
 
 	@Column(name = "email")
-	@NotEmpty
+	@NotBlank
+	@Email
 	private String email;
 
 	@Column(name = "phone")
-	@NotEmpty
+	@NotBlank
 	private String phone;
 
-
-	// TODO Propiedad derivada fullName
 	public String getFullName() {
-		return null;
+		return this.getSurname() + ", " + this.getName();
 	}
 }

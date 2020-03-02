@@ -34,7 +34,37 @@ INSERT INTO services VALUES (16, 'Cirugía Menor');
 INSERT INTO services VALUES (17, 'Retinografía');
 INSERT INTO services VALUES (18, 'Infintración');
 INSERT INTO services VALUES (19, 'Teledermatología');
--- 
+
+INSERT INTO constant_types VALUES (1, 'Peso');
+INSERT INTO constant_types VALUES (2, 'IMC');
+INSERT INTO constant_types VALUES (3, 'PerCef');
+INSERT INTO constant_types VALUES (4, 'PerAbd');
+INSERT INTO constant_types VALUES (5, 'Temperatura');
+INSERT INTO constant_types VALUES (6, 'FrecCard');
+INSERT INTO constant_types VALUES (7, 'FrecResp');
+INSERT INTO constant_types VALUES (8, 'TAS');
+INSERT INTO constant_types VALUES (9, 'TAD');
+INSERT INTO constant_types VALUES (10, 'Diuresis');
+INSERT INTO constant_types VALUES (11, 'Pulsioximetría');
+INSERT INTO constant_types VALUES (12, 'PVC');
+INSERT INTO constant_types VALUES (13, 'SNG');
+INSERT INTO constant_types VALUES (14, 'Drenajes');
+INSERT INTO constant_types VALUES (15, 'GI Basal');
+INSERT INTO constant_types VALUES (16, 'SA02');
+INSERT INTO constant_types VALUES (17, 'GCS');
+INSERT INTO constant_types VALUES (18, 'EVA');
+INSERT INTO constant_types VALUES (19, 'HbA1c');
+
+INSERT INTO discharge_types VALUES (1, 'Domicilio');
+INSERT INTO discharge_types VALUES (2, 'Hospital');
+INSERT INTO discharge_types VALUES (3, 'Hospital (Acompañado de personal sanitario)');
+INSERT INTO discharge_types VALUES (4, 'Revisión');
+INSERT INTO discharge_types VALUES (5, 'Especialidad');
+INSERT INTO discharge_types VALUES (6, 'Fuga');
+
+
+
+
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
 -- INSERT INTO vet_specialties VALUES (3, 3);

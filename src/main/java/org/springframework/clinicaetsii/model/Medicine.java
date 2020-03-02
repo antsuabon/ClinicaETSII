@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,12 +15,20 @@ import lombok.EqualsAndHashCode;
 public class Medicine extends BaseEntity{
 
 	@Column(name = "generical_name")
+	@NotBlank
 	private String genericalName;
 
 	@Column(name = "commercial_name")
+	@NotBlank
 	private String comemercialName;
 
 	@Column(name = "quantity")
-	private Double quantity;
+	private float quantity;
+
+	@Column(name = "indications")
+	private String indications;
+
+	@Column(name = "contraindications")
+	private String contraindications;
 
 }
