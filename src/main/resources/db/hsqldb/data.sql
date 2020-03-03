@@ -62,7 +62,17 @@ INSERT INTO discharge_types VALUES (4, 'Revisión');
 INSERT INTO discharge_types VALUES (5, 'Especialidad');
 INSERT INTO discharge_types VALUES (6, 'Fuga');
 
+INSERT INTO doctors (collegiate_code,username, password, enabled, name, surname, dni, email, phone) VALUES 
+('303012345','doctor1','doctor1',true,'Pablo','Rodriguez Garrido','12345678N','pablo@gmail.com','956784325');
+INSERT INTO doctors (collegiate_code,username, password, enabled, name, surname, dni, email, phone) VALUES 
+('303012367','doctor2','doctor2',true,'María','Laso Escot','12345678S','maria@gmail.com','956787025');
+INSERT INTO doctors (collegiate_code,username, password, enabled, name, surname, dni, email, phone) VALUES 
+('303012368','doctor3','doctor3',true,'José','Salado Asenjo','12345678P','jose@gmail.com','956780025');
 
+INSERT INTO doctor_services (doctor_id, service_id) VALUES ('doctor2','1' );
+INSERT INTO doctor_services (doctor_id, service_id) VALUES ('doctor3','10' );
+INSERT INTO doctor_services (doctor_id, service_id) VALUES ('doctor3','13' );
+INSERT INTO doctor_services (doctor_id, service_id) VALUES ('doctor3','2' );
 
 
 -- INSERT INTO vet_specialties VALUES (2, 1);
