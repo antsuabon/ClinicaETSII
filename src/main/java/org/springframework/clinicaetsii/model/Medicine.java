@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.model;
 
 import javax.persistence.Column;
@@ -11,24 +12,24 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table( name = "medicines" )
-public class Medicine extends BaseEntity{
+@Table(name = "medicines")
+public class Medicine extends BaseEntity {
 
 	@Column(name = "generical_name")
 	@NotBlank
-	private String genericalName;
+	private String	genericalName;
 
 	@Column(name = "commercial_name")
 	@NotBlank
-	private String comemercialName;
+	private String	commercialName;
 
 	@Column(name = "quantity")
-	private float quantity;
+	private float	quantity;
 
 	@Column(name = "indications")
-	private String indications;
+	private String	indications;
 
 	@Column(name = "contraindications")
-	private String contraindications;
+	private String	contraindications;
 
 }
