@@ -20,7 +20,7 @@ public class Medicine extends BaseEntity{
 
 	@Column(name = "commercial_name")
 	@NotBlank
-	private String comemercialName;
+	private String commercialName;
 
 	@Column(name = "quantity")
 	private float quantity;

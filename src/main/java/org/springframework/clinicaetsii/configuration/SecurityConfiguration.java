@@ -32,9 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
+				.antMatchers(HttpMethod.GET, "/**","/oups").permitAll()
 //				.antMatchers("/users/new").permitAll()
-//				.antMatchers("/admin/**").hasAnyAuthority("admin")
+				.antMatchers("/admin/**").hasAnyAuthority("admin")
 //				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
 //				.antMatchers("/vets/**").authenticated()
 				.anyRequest().denyAll()
@@ -59,8 +59,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	      .dataSource(this.dataSource)
 	      .usersByUsernameQuery(
 	       "select username,password,enabled "
-	        + "from users "
-	        + "where username = ?")
+	       + "from users "
+	       + "where username = ?")
 	      .authoritiesByUsernameQuery(
 	       "select username, authority "
 	        + "from authorities "

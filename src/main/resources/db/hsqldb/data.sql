@@ -63,7 +63,35 @@ INSERT INTO discharge_types VALUES (5, 'Especialidad');
 INSERT INTO discharge_types VALUES (6, 'Fuga');
 
 
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(1, 'doctor1', 'doctor1', true, 'Pablo', 'Rodriguez Garrido','12345678N','pablo@gmail.com','956784325');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (1,'303012345');
+INSERT INTO authorities VALUES ('doctor1','doctor');
 
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(2, 'doctor2', 'doctor2', true, 'María', 'Laso Escot','12345678S','maria@gmail.com','956787025');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (2,'303092345');
+INSERT INTO authorities VALUES ('doctor2','doctor');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(3, 'doctor3', 'doctor3', true, 'José', 'Salado Asenjo','12345678P','jose@gmail.com','956780025');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
+INSERT INTO authorities VALUES ('doctor3','doctor');
+
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,13);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,2);
+
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
+INSERT INTO authorities VALUES ('patient1','patient');
+
+
+INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
+(1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
 
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
