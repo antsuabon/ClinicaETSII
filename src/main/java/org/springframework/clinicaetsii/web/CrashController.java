@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.clinicaetsii.model;
+package org.springframework.clinicaetsii.web;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Siesenting an person.
+ * Controller used to showcase what happens when an exception is thrown
  *
- * @author Ken Krebs
+ * @author Michael Isvy
+ * <p/>
+ * Also see how the bean of type 'SimpleMappingExceptionResolver' has been declared inside
+ * /WEB-INF/mvc-core-config.xml
  */
+@Controller
+public class CrashController {
 
-@Entity
-@Table(name = "administratives")
-@PrimaryKeyJoinColumn(name = "administrative_id")
-public class Administrative extends User {
+	@GetMapping(value = "/oups")
+	public String triggerException() {
+		throw new RuntimeException(
+				"Expected: controller used to showcase what " + "happens when an exception is thrown");
+	}
 
 }

@@ -21,10 +21,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -33,6 +36,7 @@ import javax.validation.constraints.Past;
  */
 @Entity
 @Table(name = "patients")
+@PrimaryKeyJoinColumn(name = "patient_id")
 public class Patient extends User {
 
 	@Column(name = "nss")
@@ -40,6 +44,7 @@ public class Patient extends User {
 	private String nss;
 
 	@Column(name = "birth_date")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Past
 	private LocalDate birthDate;
 
