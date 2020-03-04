@@ -16,7 +16,10 @@
 
 package org.springframework.clinicaetsii.web;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +60,11 @@ public class DoctorController {
 		if (doctors.isEmpty()) {
 			model.put("emptylist", true);
 		} else {
+			List<Doctor> listOrdered = new ArrayList<>(doctors);
+			Comparator<Doctor> cp = Comparator.comparing(d -> d.getServices().size());
+			listOrdered.sort(cp.reversed());
 
-			model.put("doctors", doctors);
+			model.put("doctors", listOrdered);
 
 		}
 		return "/doctors/doctorsList";
