@@ -93,6 +93,15 @@ INSERT INTO authorities VALUES ('patient1','patient');
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
 
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.'); 
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(2,'Paracetamol','Paracel',1.0,'Dolor y fiebre','Paracetamol debe utilizarse con precaución en alcohólicos crónicos y en 
+pacientes con deficiencia en glucosa-6 fosfato-deshidrogenasa.'); 
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(3,'Omeprazol','Arapride',1.0,'Ulcera duodenal o gástrica','Debe utilizarse con precaución durante el embarazo y 
+lactancia.'); 
+
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
 -- INSERT INTO vet_specialties VALUES (3, 3);
