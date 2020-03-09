@@ -15,6 +15,8 @@
  */
 package org.springframework.clinicaetsii.model;
 
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -23,7 +25,9 @@ import javax.persistence.Table;
  * @author Ken Krebs
  */
 
+@Entity
 @Table(name = "administratives")
+@PrimaryKeyJoinColumn(name = "administrative_id")
 public class Administrative extends User {
 
 }

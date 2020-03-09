@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,7 +45,7 @@ public class Consultation extends BaseEntity {
 
 	@OneToMany
 	@JoinColumn(name = "examination_id")
-	@NotEmpty
+	@NotNull
 	private Collection<Examination> examinations;
 
 	@ManyToMany(fetch = FetchType.EAGER)

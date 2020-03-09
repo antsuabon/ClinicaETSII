@@ -33,7 +33,7 @@ public class Appointment extends BaseEntity {
 	private LocalDateTime endTime;
 
 	@Column(name = "priority")
-	private boolean priotity;
+	private boolean priority;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "patient_id")
