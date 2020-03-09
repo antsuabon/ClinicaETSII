@@ -28,10 +28,17 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
+
+				<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
+					title="list medicines">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>Medicamentos</span>
+
 				<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 					title="list doctors">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Médicos</span>
+					<span>MÃ©dicos</span>
+
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
@@ -52,7 +59,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
