@@ -65,4 +65,66 @@ public class Patient extends User {
 	@NotNull
 	private Doctor generalPractitioner;
 
+
+	public String getNss() {
+		return this.nss;
+	}
+
+
+	public void setNss(final String nss) {
+		this.nss = nss;
+	}
+
+
+	public LocalDate getBirthDate() {
+		return this.birthDate;
+	}
+
+
+	public void setBirthDate(final LocalDate birthDate) {
+		this.birthDate = birthDate;
+	}
+
+
+	public String getPhone2() {
+		return this.phone2;
+	}
+
+
+	public void setPhone2(final String phone2) {
+		this.phone2 = phone2;
+	}
+
+
+	public String getAddress() {
+		return this.address;
+	}
+
+
+	public void setAddress(final String address) {
+		this.address = address;
+	}
+
+
+	public String getState() {
+		return this.state;
+	}
+
+
+	public void setState(final String state) {
+		this.state = state;
+	}
+
+
+	public Doctor getGeneralPractitioner() {
+		return this.generalPractitioner;
+	}
+
+
+	public void setGeneralPractitioner(final Doctor generalPractitioner) {
+		this.generalPractitioner = generalPractitioner;
+	}
+
+
+
 }
