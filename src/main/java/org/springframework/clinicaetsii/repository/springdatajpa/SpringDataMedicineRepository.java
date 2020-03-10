@@ -16,23 +16,10 @@
 
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
-import java.util.Collection;
-
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.repository.MedicineRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-/**
- * Spring Data JPA specialization of the {@link MedicineRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
-public interface SpringDataMedicineRepository extends MedicineRepository, Repository<Medicine, Integer> {
-
-	@Override
-	@Query("SELECT medicine FROM Medicine medicine")
-	Collection<Medicine> listMedicines();
+public interface SpringDataMedicineRepository extends MedicineRepository, CrudRepository<Medicine, Integer> {
 
 }

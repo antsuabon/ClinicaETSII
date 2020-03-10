@@ -31,17 +31,13 @@ public class MedicineService {
 	private MedicineRepository	medicineRepository;
 
 	@Autowired
-	private AuthoritiesService	authoritiesService;
-
-
-	@Autowired
 	public MedicineService(final MedicineRepository medicineRepository) {
 		this.medicineRepository = medicineRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Medicine> listMedicines() throws DataAccessException {
-		return this.medicineRepository.listMedicines();
+	public Collection<Medicine> findAllMedicines() throws DataAccessException {
+		return this.medicineRepository.findAll();
 	}
 
 }

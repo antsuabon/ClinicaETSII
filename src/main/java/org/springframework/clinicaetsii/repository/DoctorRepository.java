@@ -23,6 +23,8 @@ import org.springframework.dao.DataAccessException;
 
 public interface DoctorRepository {
 
-	Collection<Doctor> list() throws DataAccessException;
+	Collection<Doctor> findAll() throws DataAccessException;
+
+	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
 
 }
