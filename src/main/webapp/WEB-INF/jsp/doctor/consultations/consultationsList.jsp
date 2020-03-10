@@ -46,7 +46,8 @@
             <tr>
 
                 <td>
-					<spring:url value="/doctors/consultationsList/{consultationId}" var="consultationUrl">
+					<spring:url value="/doctor/patients/{patientId}/consultations/{consultationId}" var="consultationUrl">
+						<spring:param name="patientId" value="${patientId}"/>
                         <spring:param name="consultationId" value="${consultation.id}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(consultationUrl)}"><c:out value="${consultation.startTime}"/></a>

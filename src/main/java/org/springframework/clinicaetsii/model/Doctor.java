@@ -27,7 +27,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,7 +50,6 @@ public class Doctor extends User {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "doctor_services", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
-	@NotNull
 	private Collection<Service>	services;
 
 }

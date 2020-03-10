@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,13 +21,11 @@ public class Appointment extends BaseEntity {
 
 	@Column(name = "start_time")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	@NotNull
 	// TODO: Restricción de fecha en el futuro
 	private LocalDateTime startTime;
 
 	@Column(name = "end_time")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	@NotNull
 	// TODO: Restricción de fecha en el futuro
 	private LocalDateTime endTime;
 
@@ -37,7 +34,6 @@ public class Appointment extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "patient_id")
-	@NotNull
 	private Patient patient;
 
 }

@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="patients">
+<petclinic:layout pageName="doctor patients">
     <h2>Lista de Pacientes</h2>
 
     <c:choose>
@@ -33,36 +33,22 @@
 
         <tbody>
 
-        
-
-        
-
         <c:forEach items="${patients}" var="patient">
 
             <tr>
 
                 <td>
-					<spring:url value="/doctors/patientsList/{patientId}" var="patientUrl">
+					<spring:url value="/doctor/patients/{patientId}/consultations" var="patientUrl">
                         <spring:param name="patientId" value="${patient.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(patientUrl)}"><c:out value="${patient.name} ${patient.surname}"/></a>
+                    <a href="${fn:escapeXml(patientUrl)}"><c:out value="${patient.fullName}"/></a>
 
                 </td>
 
-            
-                
-
             </tr>
-
-            
 
         </c:forEach>
 
-        
-
-        
-
-          
 
         </tbody>
 
