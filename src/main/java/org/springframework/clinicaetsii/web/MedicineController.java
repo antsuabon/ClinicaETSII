@@ -28,12 +28,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 public class MedicineController {
 
@@ -53,7 +47,7 @@ public class MedicineController {
 	@GetMapping(value = "/anonymous/medicines")
 	public String listMedicines(final Medicine medicine, final BindingResult result, final Map<String, Object> model) {
 
-		Collection<Medicine> results = this.medicineService.listMedicines();
+		Collection<Medicine> results = this.medicineService.findAllMedicines();
 		if (results.isEmpty()) {
 			model.put("emptylist", true);
 		} else {

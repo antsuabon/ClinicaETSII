@@ -20,19 +20,13 @@ import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-/**
- * Spring Data JPA specialization of the {@link DoctorRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
-public interface SpringDataDoctorRepository extends DoctorRepository, Repository<Doctor, Integer> {
+public interface SpringDataDoctorRepository extends DoctorRepository, CrudRepository<Doctor, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT doctor FROM Doctor doctor")
-	Collection<Doctor> list();
-
+	@Query("select doctor from Doctor doctor order by doctor.services.size desc")
+	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
 }
