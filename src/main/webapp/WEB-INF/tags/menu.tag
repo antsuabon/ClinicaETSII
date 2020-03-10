@@ -31,7 +31,7 @@
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						AnÃ³nimo
+						Anónimo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -40,7 +40,7 @@
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 							title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>MÃ©dicos</span>
+							<span>Médicos</span>
 						</petclinic:menuItem>
 						
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
@@ -52,13 +52,23 @@
 					</ul>
 				</li>
         
-        <sec:authorize access="hasAuthority('doctor')">
-				<petclinic:menuItem active="${name eq 'patients'}" url="/doctors/listPatients"
-					title="list my patients">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Mis Pacientes</span>
-
-				</petclinic:menuItem>
+        		<sec:authorize access="hasAuthority('doctor')">
+        		<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Médico
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					
+					<ul class="dropdown-menu">
+					
+						<petclinic:menuItem active="${name eq 'doctor patients'}" url="/doctor/patients"
+							title="list my patients">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Mis Pacientes</span>
+						</petclinic:menuItem>
+					
+					</ul>
+				</li>
 				</sec:authorize>
 				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
@@ -74,8 +84,8 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
+					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

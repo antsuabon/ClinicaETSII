@@ -18,19 +18,12 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 
-import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
-public interface DoctorPatientRepository {
+public interface PatientRepository {
 
-	Collection<Patient> listPatients(@Param("doctorId") int doctorId) throws DataAccessException;
-
-	int findUserIdByUsername(@Param("username") String username) throws DataAccessException;
-
-	Collection<Consultation> findConsultsByPatientId(@Param("patientId") int patientId) throws DataAccessException;
-
-	Consultation showConsultation(@Param("consultationId") int consultationId) throws DataAccessException;
+	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
 
 }
