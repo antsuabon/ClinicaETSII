@@ -33,19 +33,31 @@
 					title="list medicines">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Medicamentos</span>
+					</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 					title="list doctors">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Médicos</span>
+					<span>M�dicos</span>
 
 				</petclinic:menuItem>
+				
+				<sec:authorize access="hasAuthority('doctor')">
+				<petclinic:menuItem active="${name eq 'patients'}" url="/doctors/listPatients"
+					title="list my patients">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>Mis Pacientes</span>
+
+				</petclinic:menuItem>
+				</sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
+				
+				
 
 			</ul>
 
@@ -59,7 +71,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
