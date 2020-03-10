@@ -31,7 +31,7 @@
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Anónimo
+						AnÃ³nimo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -40,7 +40,7 @@
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 							title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>Médicos</span>
+							<span>MÃ©dicos</span>
 						</petclinic:menuItem>
 						
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
@@ -51,6 +51,15 @@
 					
 					</ul>
 				</li>
+        
+        <sec:authorize access="hasAuthority('doctor')">
+				<petclinic:menuItem active="${name eq 'patients'}" url="/doctors/listPatients"
+					title="list my patients">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>Mis Pacientes</span>
+
+				</petclinic:menuItem>
+				</sec:authorize>
 				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
