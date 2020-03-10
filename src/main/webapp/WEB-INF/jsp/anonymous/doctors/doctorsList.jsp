@@ -26,7 +26,7 @@
             <tr>
                 <td>
 
-                    <c:out value="${doctor.name} ${doctor.surname}"/>
+                    <c:out value="${doctor.fullName}"/>
                 </td>
                 <td>
                     <c:forEach var="service" items="${doctor.services}">
@@ -34,8 +34,6 @@
                     </c:forEach>
                 </td>
            
-       
-                
             </tr>
             
         </c:forEach>

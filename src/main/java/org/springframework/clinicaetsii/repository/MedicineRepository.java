@@ -23,6 +23,6 @@ import org.springframework.dao.DataAccessException;
 
 public interface MedicineRepository {
 
-	Collection<Medicine> listMedicines() throws DataAccessException;
+	Collection<Medicine> findAll() throws DataAccessException;
 
 }

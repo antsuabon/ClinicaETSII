@@ -16,10 +16,7 @@
 
 package org.springframework.clinicaetsii.web;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +28,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 public class DoctorController {
 
@@ -56,15 +47,11 @@ public class DoctorController {
 	@GetMapping(value = "/anonymous/doctors")
 	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
 
-		Collection<Doctor> doctors = this.doctorService.findDoctors();
+		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
 		if (doctors.isEmpty()) {
 			model.put("emptylist", true);
 		} else {
-			List<Doctor> listOrdered = new ArrayList<>(doctors);
-			Comparator<Doctor> cp = Comparator.comparing(d -> d.getServices().size());
-			listOrdered.sort(cp.reversed());
-
-			model.put("doctors", listOrdered);
+			model.put("doctors", doctors);
 
 		}
 		return "/anonymous/doctors/doctorsList";
