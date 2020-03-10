@@ -64,5 +64,13 @@ public class Patient extends User {
 	@JoinColumn(name = "general_practitioner_id")
 	@NotNull
 	private Doctor generalPractitioner;
+	
+	public Doctor getGeneralPractitioner() {
+		return this.generalPractitioner;
+	}
+	
+	public void setGeneralPractitioner(Doctor generalPractitioner) {
+		this.generalPractitioner = generalPractitioner;
+	}
 
 }
