@@ -41,7 +41,13 @@
 
             <tr>
                 <td>
-					<c:out value="${examination.description}"/>
+                <spring:url value="/doctor/patients/{patientId}/consultations/{consultationId}/examinations/{examinationId}" var="consultationUrl">
+						<spring:param name="patientId" value="${patientId}"/>
+                        <spring:param name="consultationId" value="${consultation.id}"/>
+                         <spring:param name="consultationId" value="${consultation.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(examinationUrl)}"><c:out value="${examination.description}"/></a>
+					
 
                 </td>
 
@@ -87,6 +93,11 @@
             </tr>
             </c:forEach>
              </table>
+
+  			<br/> 
+  			
+    
+		<a class="btn btn-default" href='<spring:url value="/examinations/new" htmlEscape="true"/>'>Add Examination</a>
 
 
 </petclinic:layout>
