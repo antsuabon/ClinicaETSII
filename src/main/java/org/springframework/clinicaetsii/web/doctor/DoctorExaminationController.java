@@ -2,12 +2,14 @@ package org.springframework.clinicaetsii.web.doctor;
 
 
 
+import java.time.LocalDateTime;
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Examination;
-import org.springframework.clinicaetsii.repository.ConsultationRepository;
 import org.springframework.clinicaetsii.service.ConsultationService;
 import org.springframework.clinicaetsii.service.ExaminationService;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
  
 @Controller
-@RequestMapping("/doctor/patients/{patientId}/consultations{consultationId}/examinations")
+@RequestMapping("/doctor/patients/{patientId}/consultations/{consultationId}/examinations")
 public class DoctorExaminationController {
 
 	
@@ -38,24 +40,41 @@ public class DoctorExaminationController {
 	public Consultation findConsultation(@PathVariable("consultationId") int consultationId) {
 		return this.consultationService.findConsultationById(consultationId);
 	}
+	
+	@GetMapping(value = "/{examinationId}")
+	public String showExaminationDetails(@PathVariable int examinationId, @PathVariable int patientId, Map<String, Object> model) {
+		
+		Examination result = this.examinationService.findExaminationsById(examinationId);
+		
+		if (result == null) {
+			model.put("empty", true);
+		} else {
+			model.put("patientId", patientId);
+			model.put("examination", result);
+		}
 
-	@GetMapping(value = "/examination/new")
+		return "doctor/examinations/examinationDetails";
+	}
+
+	@GetMapping(value = "/new")
 	public String initCreationForm(final ModelMap model) {
 
 		Examination examination = new Examination();
 		model.put("examination", examination);
-		return "doctor/examination/createExaminationForm";
+		return "/doctor/examinations/createExaminationForm";
 	}
 
-	@PostMapping(value = "/examination/new")
-	public String processCreationForm( @Valid Examination examination,Consultation consultation, BindingResult result) {
+	@PostMapping(value = "/new")
+	public String processCreationForm(@PathVariable int consultationId, @Valid Examination examination, BindingResult result) {
 		if (result.hasErrors()) {
-			return  "doctor/examination/createExaminationForm";
+			return  "/doctor/examinations/createExaminationForm";
 		}
 		else {
-			consultation.getExaminations().add(examination);
+			Consultation current = this.consultationService.findConsultationById(consultationId);
+			examination.setStartTime(LocalDateTime.now());
+			current.getExaminations().add(examination);
 			this.examinationService.saveExamination(examination);
-			return "redirect:/doctor/patients/{patientId}/consultations{consultationId}/examinations/" + examination.getId();
+			return "redirect:/doctor/patients/{patientId}/consultations/{consultationId}/examinations/" + examination.getId();
 		}
 	}
 }

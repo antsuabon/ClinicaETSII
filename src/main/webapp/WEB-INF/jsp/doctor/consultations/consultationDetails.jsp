@@ -44,9 +44,9 @@
                 <spring:url value="/doctor/patients/{patientId}/consultations/{consultationId}/examinations/{examinationId}" var="consultationUrl">
 						<spring:param name="patientId" value="${patientId}"/>
                         <spring:param name="consultationId" value="${consultation.id}"/>
-                         <spring:param name="consultationId" value="${consultation.id}"/>
+                         <spring:param name="examinationId" value="${examination.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(examinationUrl)}"><c:out value="${examination.description}"/></a>
+                    <a href="${fn:escapeXml(consultationUrl)}"><c:out value="${examination.description}"/></a>
 					
 
                 </td>
@@ -97,7 +97,11 @@
   			<br/> 
   			
     
-		<a class="btn btn-default" href='<spring:url value="/examinations/new" htmlEscape="true"/>'>Add Examination</a>
+      		<spring:url value="/doctor/patients/{patientId}/consultations/{consultationId}/examinations/new" var="newExaminationUrl">
+				<spring:param name="patientId" value="${patientId}"/>
+                <spring:param name="consultationId" value="${consultation.id}"/>
+            </spring:url>
+		<a class="btn btn-default" href="${fn:escapeXml(newExaminationUrl)}">Add Examination</a>
 
 
 </petclinic:layout>

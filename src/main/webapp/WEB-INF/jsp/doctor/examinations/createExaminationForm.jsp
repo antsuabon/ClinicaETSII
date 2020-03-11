@@ -10,11 +10,9 @@
     <h2>
         <c:if test="${examination['new']}">New </c:if> Examination
     </h2>
-    <form:form modelAttribute="owner" class="form-horizontal" id="add-examination-form">
+    <form:form modelAttribute="examination" class="form-horizontal" id="add-examination-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Start Date" name="startDate"/>
             <petclinic:inputField label="Description" name="description"/>
- 
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

@@ -17,7 +17,7 @@
 
         <tr>
             <th>Descripción</th>
-            <td><c:out value="${examination.Description}"/></td>
+            <td><c:out value="${examination.description}"/></td>
         </tr>
 
     </table>
