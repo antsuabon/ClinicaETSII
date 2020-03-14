@@ -82,6 +82,7 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,13);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,2);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
@@ -91,7 +92,7 @@ INSERT INTO authorities VALUES ('patient1','patient');
 
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
-(1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
+(1, false, '2020-03-09 09:21:00', '2020-03-09 09:28:00', 4);
 
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
