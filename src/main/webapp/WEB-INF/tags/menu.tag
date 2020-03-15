@@ -31,7 +31,7 @@
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Anónimo
+						AnÃ³nimo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -40,7 +40,7 @@
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 							title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>Médicos</span>
+							<span>MÃ©dicos</span>
 						</petclinic:menuItem>
 						
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
@@ -55,7 +55,7 @@
         		<sec:authorize access="hasAuthority('doctor')">
         		<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Médico
+						MÃ©dico
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -83,7 +83,7 @@
 						<petclinic:menuItem active="${name eq 'patient appointments'}" url="/patient/appointments"
 							title="list my appointments">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>Mis Pacientes</span>
+							<span>Mis Citas</span>
 						</petclinic:menuItem>
 					
 					</ul>
@@ -103,7 +103,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesiÃ³n</a></li>
 					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
