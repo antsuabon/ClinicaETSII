@@ -1,9 +1,6 @@
 package org.springframework.clinicaetsii.web;
 
 
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
@@ -54,7 +51,7 @@ public class PatientController {
 			Patient patient2 = this.patientService.findPatient(patientId);
 			patient2.setGeneralPractitioner(practitioner);
 			this.patientService.savePatient(patient2);
-			return "redirect:/patient/patients";
+			return "redirect:/";
 		}
 	}
 	

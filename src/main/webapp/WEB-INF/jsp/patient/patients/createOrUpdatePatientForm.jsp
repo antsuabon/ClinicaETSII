@@ -8,17 +8,17 @@
 
 <petclinic:layout pageName="patients">
     <h2>
-        Patient
+        Patient <c:out  value="${patient.fullName}"/> 
     </h2>
     
      
     <form:form modelAttribute="patient" class="form-horizontal" id="add-patient-form">
         <div class="form-group has-feedback">
-            <petclinic:selectField label="Doctors" name="generalPractitioner" size="1" names="${doctors}"/>
+            <petclinic:selectField label="Doctors to choose" name="generalPractitioner" size="1" names="${doctors}"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-default" type="submit">Update Patient</button>
+                <button class="btn btn-default" type="submit">Update Patient general practitioner</button>
             </div>
         </div>
     </form:form>
