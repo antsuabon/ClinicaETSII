@@ -1,18 +1,15 @@
-
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Prescription;
-import org.springframework.clinicaetsii.repository.PrescriptionRepository;
+import org.springframework.clinicaetsii.model.Medicine;
+import org.springframework.clinicaetsii.repository.MedicineRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-public interface SpringDataMedicineRepository extends PrescriptionRepository, Repository<Prescription, Integer> {
-
+public interface SpringDataMedicineRepository extends MedicineRepository, CrudRepository<Medicine, Integer> {
+	
 	@Override
-	@Autowired
-	@Query("select pr from Prescription pr where exists (select p from Patient p where p.id =?1)")
-	Collection<Prescription> listPrescriptionsByPatient(int patientId);
+	@Query("SELECT m FROM Medicine m WHERE m.id =:id")
+	Medicine findMedicineById(@Param("id" )int id);
+
 }

@@ -11,14 +11,12 @@
     <table id="prescriptionsTable" class="table table-striped">
         <thead>
         <tr>
+        	<th style="width: 150px;">Medicamento</th>
             <th style="width: 150px;">Fecha de inicio</th>
             <th style="width: 150px;">Dosis</th>
             <th style="width: 150px;">Dias de duración</th>
             <th style="width: 150px;">Indicaciones</th>
             <th style="width: 150px;">Advertencias al paciente</th>
-            <th style="width: 150px;">Medicamento</th>
-            <th style="width: 150px;">Paciente</th>
-            <th style="width: 150px;">Doctor</th>
 
         </tr>
         </thead>
@@ -26,34 +24,25 @@
         <c:forEach items="${prescriptions}" var="prescription">
             <tr>
                 <td>
-                    <spring:url value="/prescriptions/{prescriptionId}" var="prescriptionsUrl">
-                        <spring:param name="medicinesId" value="${medicines.id}"/>
+                    <spring:url value="/patient/medicines/{medicineId}" var="medicineUrl">
+                        <spring:param name="medicineId" value="${prescription.medicine.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(prescriptionsUrl)}"><c:out value="${prescriptions.genericalName} ${prescriptions.commercialName}"/></a>
+                    <a href="${fn:escapeXml(medicineUrl)}"><c:out value="${prescription.medicine.genericalName} - ${prescription.medicine.commercialName}"/></a>
                 </td>
                 <td>
-                    <c:out value="${prescriptions.start_date}"/>
+                    <c:out value="${prescription.startDate}"/>
                 </td>
                 <td>
-                    <c:out value="${prescriptions.dosage}"/>
+                    <c:out value="${prescription.dosage}"/>
                 </td>
                 <td>
-                    <c:out value="${prescriptions.days}"/>
+                    <c:out value="${prescription.days}"/>
                 </td>
                   <td>
-                    <c:out value="${prescriptions.pharmaceutical_warning}"/>
+                    <c:out value="${prescription.pharmaceuticalWarning}"/>
                 </td>
                   <td>
-                    <c:out value="${prescriptions.patient_warning}"/>
-                </td>
-                 <td>
-                    <c:out value="${prescriptions.medicine_id}"/>
-                </td>
-                 <td>
-                    <c:out value="${prescriptions.patient_id}"/>
-                </td>
-                 <td>
-                    <c:out value="${prescriptions.doctor_id}"/>
+                    <c:out value="${prescription.patientWarning}"/>
                 </td>
                 
             </tr>

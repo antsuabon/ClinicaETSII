@@ -1,4 +1,3 @@
-
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
@@ -20,10 +19,15 @@ public class PrescriptionService {
 	public PrescriptionService(final PrescriptionRepository prescriptionRepository) {
 		this.prescriptionRepository = prescriptionRepository;
 	}
-
+	
 	@Transactional(readOnly = true)
-	public Collection<Prescription> findPrescriptionsFromPatient(int patientId) throws DataAccessException {
-		return this.prescriptionRepository.listPrescriptionsByPatient(patientId);
+	public Collection<Prescription> findPrescriptionsFromPatient(String username) throws DataAccessException {
+		return this.prescriptionRepository.listPrescriptionsByPatient(username);
+	}
+	
+	@Transactional(readOnly = true)
+	public Prescription findPrescriptionById(int prescriptionId) throws DataAccessException {
+		return this.prescriptionRepository.findById(prescriptionId);
 	}
 
 }

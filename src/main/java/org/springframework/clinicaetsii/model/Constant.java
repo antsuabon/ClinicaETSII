@@ -14,12 +14,12 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "constants")
 public class Constant extends BaseEntity {
-	
-	@Column(name = "value")
-	private float value;
-	
+
+	@Column(name = "value_constant")
+	private float			value;
+
 	@ManyToOne
 	@JoinColumn(name = "constant_type_id")
-	private ConstantType constantType;
+	private ConstantType	constantType;
 
 }
