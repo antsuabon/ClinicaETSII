@@ -18,6 +18,7 @@ package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.Collection;
 
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +30,9 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 	@Override
 	@Query("SELECT patient FROM Patient patient WHERE patient.generalPractitioner.username LIKE :doctorUsername")
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
+
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.username LIKE :patientUsername")
+	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername);
 
 }

@@ -18,6 +18,7 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +27,5 @@ public interface PatientRepository {
 
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
 
+	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername) throws DataAccessException;
 }

@@ -19,6 +19,7 @@ package org.springframework.clinicaetsii.service;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.dao.DataAccessException;
@@ -49,6 +50,15 @@ public class PatientService {
 		return this.patientRepository.findPatientsByDoctorUsername(username);
 	}
 
+	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('patient')")
+	public Collection<Appointment> findAppointments() throws DataAccessException {
 
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
+
+		return this.patientRepository.findAppointmentsByPatientUsername(username);
+	}
 
 }
