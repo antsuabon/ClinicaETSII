@@ -25,5 +25,5 @@ import org.springframework.data.repository.query.Param;
 public interface PatientRepository {
 
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
-
+	Collection<Patient> findAll() throws DataAccessException;
 }
