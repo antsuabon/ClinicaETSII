@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,33 +25,35 @@ public class PatientController {
 		this.patientService = patientService;
 	}
 
-	@GetMapping(value = "/{patientId}/edit")
-	public String initUpdateOwnerForm(@PathVariable("patientId") final int patientId, final Model model) {
-		Patient patient = this.patientService.findById(patientId);
-		model.addAttribute(patient);
+	@GetMapping(value = "/edit")
+	public String initUpdateOwnerForm(final Model model) {
+		Patient patient = this.patientService.findPatient();
+		model.addAttribute("patient", patient);
 		return  "patients/updatePatientForm";
 	}
 
-	@PostMapping(value = "/{patientId}/edit")
-	public String processUpdateOwnerForm(@Valid final Patient patient, final BindingResult result,
-			@PathVariable("patientId") final int patientId) {
+	@PostMapping(value = "/edit")
+	public String processUpdateOwnerForm(@Valid final Patient patient, final BindingResult result) {
+
 		if (result.hasErrors()) {
+
 			return "patients/updatePatientForm";
-		}
-		else {
+
+		} else {
+
+			int patientId = this.patientService.findPatient().getId();
 			patient.setId(patientId);
 			this.patientService.save(patient);
-			return "redirect:/{patientId}";
+			return "redirect:/";
 		}
 	}
 
-	@GetMapping("/{patientId}")
-	public String show(@PathVariable("patientId") final int patientId, final Map<String, Object> model) {
+	@GetMapping
+	public String show(final Map<String, Object> model) {
 
-		Patient results = this.patientService.findById(patientId);
+		Patient results = this.patientService.findPatient();
 		model.put("patient", results);
 
-		this.patientService.save(results);
 		return "patients/patientDetails";
 	}
 

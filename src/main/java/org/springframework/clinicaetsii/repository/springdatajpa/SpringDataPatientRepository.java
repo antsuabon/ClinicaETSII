@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface SpringDataPatientRepository extends PatientRepository, CrudRepository<Patient, Integer>{
 
 	@Override
-	@Query("SELECT patient FROM Patient patient WHERE patient.id = :id")
-	public Patient findById(@Param("id") int id);
+	@Query("SELECT patient FROM Patient patient WHERE patient.username = :username")
+	public Patient findPatient(@Param("username") String username);
 
 }

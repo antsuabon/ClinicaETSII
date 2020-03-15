@@ -17,15 +17,15 @@
         </tr>
         <tr>
             <th>Birth Date</th>
-            <td><petclinic:localDate date="${birthDate}" pattern="yyyy-MM-dd"/></td>
+            <td><petclinic:localDate date="${patient.birthDate}" pattern="yyyy-MM-dd"/></td>
         </tr>
         <tr>
             <th>NSS</th>
-            <td><c:out value="${nss}"/></td>
+            <td><c:out value="${patient.nss}"/></td>
         </tr>
         <tr>
             <th>Address</th>
-            <td><c:out value="${address}"/></td>
+            <td><c:out value="${patient.address}"/></td>
         </tr>
         <tr>
             <th>Email</th>
@@ -41,12 +41,12 @@
         </tr>
         <tr>
             <th>Telephone 2</th>
-            <td><c:out value="${phone2}"/></td>
+            <td><c:out value="${patient.phone2}"/></td>
         </tr>
     </table>
 
-    <spring:url value="{patientId}/edit" var="editUrl">
-        <spring:param name="patientId" value="${patient.id}"/>
-    </spring:url>
+    <spring:url value="/patients/edit" var="editUrl"></spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Patient</a>
+    
+    
 </petclinic:layout>
