@@ -45,7 +45,7 @@
         </tr>
     </table>
 
-    <spring:url value="/patients/edit" var="editUrl"></spring:url>
+    <spring:url value="/patient/edit" var="editUrl"></spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Patient</a>
     
     

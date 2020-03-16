@@ -9,13 +9,14 @@ import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/patients")
+@RequestMapping("/patient")
 public class PatientController {
 
 	private PatientService patientService;
@@ -26,26 +27,28 @@ public class PatientController {
 	}
 
 	@GetMapping(value = "/edit")
-	public String initUpdateOwnerForm(final Model model) {
+	public String initUpdatePatientForm(final Model model) {
 		Patient patient = this.patientService.findPatient();
 		model.addAttribute("patient", patient);
 		return  "patients/updatePatientForm";
 	}
 
 	@PostMapping(value = "/edit")
-	public String processUpdateOwnerForm(@Valid final Patient patient, final BindingResult result) {
+	public String processUpdatePatientForm(@Valid final Patient patient, final BindingResult result, final ModelMap model) {
 
 		if (result.hasErrors()) {
 
+			model.addAttribute("patient", patient);
 			return "patients/updatePatientForm";
 
 		} else {
 
-			int patientId = this.patientService.findPatient().getId();
-			patient.setId(patientId);
 			this.patientService.save(patient);
-			return "redirect:/";
+
+
 		}
+
+		return "redirect:/patient";
 	}
 
 	@GetMapping

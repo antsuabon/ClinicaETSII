@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PatientService {
 
+	@Autowired
 	private PatientRepository patientRepository;
 
 	@Autowired
@@ -33,7 +34,7 @@ public class PatientService {
 		return this.patientRepository.findPatient(username);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	@PreAuthorize("hasAuthority('patient')")
 	public void save(@Valid final Patient patient) {
 

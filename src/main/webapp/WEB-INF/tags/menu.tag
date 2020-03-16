@@ -37,7 +37,7 @@
 					
 					<ul class="dropdown-menu">
 					
-						<petclinic:menuItem active="${name eq 'profile'}" url="/patients"
+						<petclinic:menuItem active="${name eq 'profile'}" url="/patient"
 							title="list my appointments">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							<span>Mi Perfil</span>
