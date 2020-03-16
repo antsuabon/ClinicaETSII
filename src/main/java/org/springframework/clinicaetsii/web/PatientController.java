@@ -42,12 +42,22 @@ public class PatientController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+
 	@GetMapping(value = "/patient/patients/{patientId}/edit")
 	public String initUpdatePatientForm(@PathVariable("patientId") final int patientId, final Model model) {
 		Patient patient = this.patientService.findPatient(patientId);
 		model.addAttribute("doctors", this.doctorService.findAllDoctors());
 		model.addAttribute("patient", patient);
 		return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+	}
+
+	@GetMapping(value = "/patients/doctors")
+	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
+
+		Patient p = this.patientService.findPatientByUsername();
+		System.out.println("El paciente es: " + p.getFullName() + " con id: " + p.getId() + " con username " + p.getUsername() + " y direccion " + p.getAddress());
+		Doctor d = this.patientService.findDoctorByPatient(p.getId());
+		System.out.println("Su médico es: " + p.getGeneralPractitioner().getId());
 	}
 
 	@PostMapping(value = "/patient/patients/{patientId}/edit")

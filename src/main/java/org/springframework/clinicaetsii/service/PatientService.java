@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PatientService {
 
-	private PatientRepository	patientRepository;
-	private DoctorRepository	doctorRepository;
+	private PatientRepository patientRepository;
 
 
 	@Autowired
@@ -75,6 +73,7 @@ public class PatientService {
 	}
 
 	@PreAuthorize("hasAuthority('patient')")
+	@Transactional(readOnly = true)
 	public Patient findCurrentPatient() throws DataAccessException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -83,4 +82,4 @@ public class PatientService {
 
 		return this.patientRepository.findByUsername(username);
 	}
-}
+

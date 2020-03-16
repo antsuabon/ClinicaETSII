@@ -77,6 +77,26 @@
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
+				
+				
+				<sec:authorize access="hasAnyAuthority('admin') ">
+        		<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Paciente
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					
+					<ul class="dropdown-menu">
+					
+						<petclinic:menuItem active="${name eq 'doctor patients'}" url="/administrative/patients"
+							title="list my patients">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Crear Cita</span>
+						</petclinic:menuItem>
+					
+					</ul>
+				</li>
+				</sec:authorize>
 
 			</ul>
 
