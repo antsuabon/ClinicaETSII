@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PrescriptionController {
-	
+
 	private final PrescriptionService prescriptionService;
 
 	@Autowired
 	public PrescriptionController(final PrescriptionService prescriptionService) {
 		this.prescriptionService = prescriptionService;
 	}
-	
+
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
@@ -33,9 +33,9 @@ public class PrescriptionController {
 
 	@GetMapping(value = "/patient/prescriptions")
 	public String processFind(final Map<String, Object> model) {
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Collection<Prescription> prescriptions = this.prescriptionService.findPrescriptionsFromPatient(auth.getName());;
+		Collection<Prescription> prescriptions = this.prescriptionService.findPrescriptionsByPatientUsername(auth.getName());;
 		if (prescriptions.isEmpty()) {
 			model.put("emptylist", true);
 		} else {
@@ -45,12 +45,12 @@ public class PrescriptionController {
 		}
 		return "/prescriptions/prescriptionList";
 	}
-	
+
 	@GetMapping(value = "/patient/prescriptions/{prescriptionId}")
-	public String processDetails(@PathVariable(name = "prescriptionId") int prescriptionId, final Map<String, Object> model) {
-		
+	public String processDetails(@PathVariable(name = "prescriptionId") final int prescriptionId, final Map<String, Object> model) {
+
 		Prescription pres = this.prescriptionService.findPrescriptionById(prescriptionId);
-		
+
 		if (pres == null) {
 			model.put("empty", true);
 		} else {

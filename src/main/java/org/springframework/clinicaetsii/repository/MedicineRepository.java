@@ -25,4 +25,6 @@ public interface MedicineRepository {
 
 	Collection<Medicine> findAll() throws DataAccessException;
 
+	Medicine findById(int id) throws DataAccessException;
+
 }

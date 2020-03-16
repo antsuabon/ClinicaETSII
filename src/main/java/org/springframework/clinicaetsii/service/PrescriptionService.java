@@ -18,30 +18,35 @@ public class PrescriptionService {
 	public PrescriptionService(final PrescriptionRepository prescriptionRepository) {
 		this.prescriptionRepository = prescriptionRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Prescription> findPrescriptionsFromPatient(String username) throws DataAccessException {
-		return this.prescriptionRepository.listPrescriptionsByPatient(username);
+	public Collection<Prescription> findPrescriptionsByPatientUsername(final String username) throws DataAccessException {
+		return this.prescriptionRepository.findPrescriptionsByPatientUsername(username);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Prescription findPrescriptionById(int prescriptionId) throws DataAccessException {
+	public Collection<Prescription> findPrescriptionsByPatientId(final int patientId) throws DataAccessException {
+		return this.prescriptionRepository.findPrescriptionsByPatientId(patientId);
+	}
+
+	@Transactional(readOnly = true)
+	public Prescription findPrescriptionById(final int prescriptionId) throws DataAccessException {
 		return this.prescriptionRepository.findById(prescriptionId);
 	}
-  
+
   @Transactional(readOnly = true)
 	public Collection<Prescription> findAllPrescriptions() throws DataAccessException {
 		return this.prescriptionRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
-	public void savePrescription(Prescription prescription) throws DataAccessException {
+	public void savePrescription(final Prescription prescription) throws DataAccessException {
 		 this.prescriptionRepository.save(prescription);
 	}
-  
+
   @Transactional
 	public void deletePrescription(final Prescription prescription) throws DataAccessException {
 		this.prescriptionRepository.delete(prescription);
 	}
-  
+
 }

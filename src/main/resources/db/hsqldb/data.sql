@@ -91,7 +91,7 @@ INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, gener
 INSERT INTO authorities VALUES ('patient1','patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
 (5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');
-INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',1);
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',2);
 INSERT INTO authorities VALUES ('patient2','patient');
 
 
