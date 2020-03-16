@@ -48,6 +48,11 @@ public class PatientService {
 
 		return this.patientRepository.findPatientsByDoctorUsername(username);
 	}
+	
+	public Patient findPatientById(int id) throws DataAccessException{
+		
+		return this.patientRepository.findAll().stream().filter(x->x.getId() == id).findFirst().orElse(null);
+	}
 
 
 
