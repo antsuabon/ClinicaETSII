@@ -139,7 +139,7 @@ INSERT INTO examinations (id, description,consultation_id) VALUES (1,'Tiene el v
 INSERT INTO examinations (id, description,consultation_id) VALUES (2,'Tiene la cara pálida',1);
 INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la rodilla enrojecida',2);
 
-
+INSERT INTO prescriptions (id, start_date, dosage, days, pharmaceutical_warning, patient_warning, medicine_id, patient_id, doctor_id) VALUES (1, '2020-02-20 13:00:00', 3, 20, 'No tomar sin agua', 'No fragmentar', 2, 4, 1);
 
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
@@ -183,4 +183,4 @@ INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la r
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
--- 
+--

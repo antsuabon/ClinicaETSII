@@ -1,6 +1,5 @@
 package org.springframework.clinicaetsii.service;
 
-
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +12,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PrescriptionService {
 
-	
 	private PrescriptionRepository prescriptionRepository;
-	
-	
+
 	@Autowired
 	public PrescriptionService(final PrescriptionRepository prescriptionRepository) {
 		this.prescriptionRepository = prescriptionRepository;
 	}
-
+	
 	@Transactional(readOnly = true)
+	public Collection<Prescription> findPrescriptionsFromPatient(String username) throws DataAccessException {
+		return this.prescriptionRepository.listPrescriptionsByPatient(username);
+	}
+	
+	@Transactional(readOnly = true)
+	public Prescription findPrescriptionById(int prescriptionId) throws DataAccessException {
+		return this.prescriptionRepository.findById(prescriptionId);
+	}
+  
+  @Transactional(readOnly = true)
 	public Collection<Prescription> findAllPrescriptions() throws DataAccessException {
 		return this.prescriptionRepository.findAll();
 	}
@@ -31,4 +38,5 @@ public class PrescriptionService {
 	public void savePrescription(Prescription prescription) throws DataAccessException {
 		 this.prescriptionRepository.save(prescription);
 	}
+  
 }
