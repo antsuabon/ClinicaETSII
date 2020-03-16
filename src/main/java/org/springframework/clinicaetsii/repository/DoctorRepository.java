@@ -26,5 +26,7 @@ public interface DoctorRepository {
 	Collection<Doctor> findAll() throws DataAccessException;
 
 	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
+	
+	Doctor findDoctorByUsername(String username) throws DataAccessException;
 
 }

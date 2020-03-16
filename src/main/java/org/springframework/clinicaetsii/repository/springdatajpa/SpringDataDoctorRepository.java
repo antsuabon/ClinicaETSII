@@ -23,10 +23,15 @@ import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface SpringDataDoctorRepository extends DoctorRepository, CrudRepository<Doctor, Integer> {
 
 	@Override
 	@Query("select doctor from Doctor doctor order by doctor.services.size desc")
 	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
+	
+	@Override
+	@Query("select d from Doctor d where d.username =:username")
+	Doctor findDoctorByUsername(@Param("username") String username);
 }

@@ -44,5 +44,10 @@ public class DoctorService {
 	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
 		return this.doctorRepository.findDoctorsSortedByNumOfServices();
 	}
+	
+	@Transactional(readOnly = true)
+	public Doctor findDoctorByUsername(String username) throws DataAccessException {
+		return this.doctorRepository.findDoctorByUsername(username);
+	}
 
 }
