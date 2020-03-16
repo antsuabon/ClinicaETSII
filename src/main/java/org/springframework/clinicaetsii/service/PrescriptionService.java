@@ -39,4 +39,9 @@ public class PrescriptionService {
 		 this.prescriptionRepository.save(prescription);
 	}
   
+  @Transactional
+	public void deletePrescription(final Prescription prescription) throws DataAccessException {
+		this.prescriptionRepository.delete(prescription);
+	}
+  
 }

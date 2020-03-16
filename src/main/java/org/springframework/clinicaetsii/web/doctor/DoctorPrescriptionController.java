@@ -88,5 +88,43 @@ public class DoctorPrescriptionController {
 			return "redirect:/";
 		}
 	}
-	
+  
+  @GetMapping("/doctor/patients/{patientId}/prescriptions")
+	public String listPrescriptionPatient(@PathVariable("patientId") final int patientId, final Map<String, Object> model) {
+		Collection<Prescription> results = this.prescriptionService.findPrescriptionsByPatientId(patientId);
+
+		if (results.isEmpty()) {
+			model.put("emptyList", true);
+		} else {
+			model.put("patientId", patientId);
+			model.put("prescriptions", results);
+		}
+
+		return "/doctor/prescriptions/prescriptionsList";
+	}
+
+	@GetMapping("/doctor/patients/{patientId}/prescriptions/{prescriptionId}")
+	public String showConsultationDetails(@PathVariable("prescriptionId") final int prescriptionId, final Map<String, Object> model) {
+		Prescription result = this.prescriptionService.findPrescriptionById(prescriptionId);
+
+		if (result == null) {
+			model.put("empty", true);
+		} else {
+			model.put("prescription", result);
+		}
+
+		return "/doctor/prescriptions/prescriptionDetails";
+	}
+
+	@GetMapping(value = "/doctor/patients/{patientId}/prescriptions/{prescriptionId}/delete")
+	public String initDelete(@PathVariable("prescriptionId") final int prescriptionId, final Map<String, Object> model) {
+
+		Prescription prescription = this.prescriptionService.findPrescriptionById(prescriptionId);
+
+		this.prescriptionService.deletePrescription(prescription);
+
+		DoctorPatientController c = new DoctorPatientController(this.patientService);
+
+		return c.listPatients(model);
+	}
 }

@@ -15,5 +15,7 @@ public interface PrescriptionRepository{
   Prescription findById(int id) throws DataAccessException;
 	
 	void save(Prescription prescription) throws DataAccessException;
+  
+  void delete(Prescription prescription) throws DataAccessException;
 	
 }
