@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.clinicaetsii.web;
+package org.springframework.clinicaetsii.web.administrative;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Michael Isvy
  */
 @Controller
-public class AppointmentController {
+public class AdministrativeAppointmentController {
 
 	private final AppointmentService		appointmentService;
 	private final DoctorService				doctorService;
@@ -58,7 +58,7 @@ public class AppointmentController {
 
 
 	@Autowired
-	public AppointmentController(final AppointmentService appointmentService, final DoctorService doctorService, final PatientService patientService) {
+	public AdministrativeAppointmentController(final AppointmentService appointmentService, final DoctorService doctorService, final PatientService patientService) {
 		this.appointmentService = appointmentService;
 		this.doctorService = doctorService;
 		this.patientService = patientService;
@@ -70,8 +70,8 @@ public class AppointmentController {
 
 	}
 
-	@GetMapping(value = "/appointment/doctor/{doctorId}/table")
-	public String generateTable(@PathVariable("doctorId") final int doctorId, final Map<String, Object> model) {
+	@GetMapping(value = "/administrative/appointment/doctor/{doctorId}/patient/{patientId}/table")
+	public String generateTableAdmin(@PathVariable("doctorId") final int doctorId, @PathVariable("patientId") final int patientId, final Map<String, Object> model) {
 		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(doctorId));
 		List<LocalDateTime> table = this.timeTable(LocalDate.now());
 
@@ -81,18 +81,19 @@ public class AppointmentController {
 		} else {
 
 			model.put("doctor", doctorId);
-			model.put("formato", AppointmentController.FORMATTER);
+			model.put("formato", AdministrativeAppointmentController.FORMATTER);
 			model.put("hours", table);
+			model.put("patientId", patientId);
 
 		}
-		return "/patients/doctors/timeTable";
+		return "/administrative/timeTable";
 	}
 
-	@GetMapping(value = "/appointment/new")
-	public String initCreationForm(final Map<String, Object> model, @RequestParam(name = "fecha") final String fecha, @RequestParam(name = "doctorId") final String doctorId, final String role) {
+	@GetMapping(value = "/administrative/appointment/new")
+	public String initCreationForm(final Map<String, Object> model, @RequestParam(name = "fecha") final String fecha, @RequestParam(name = "doctorId") final String doctorId, @RequestParam(name = "patientId") final int patientId, final String role) {
 		Appointment appointment = new Appointment();
 
-		LocalDateTime formatedDate = LocalDateTime.parse(fecha, AppointmentController.TO_LOCAL_DATE_TIME_ISO);
+		LocalDateTime formatedDate = LocalDateTime.parse(fecha, AdministrativeAppointmentController.TO_LOCAL_DATE_TIME_ISO);
 
 		int id = Integer.parseInt(doctorId);
 		Doctor doctor = this.doctorService.findDoctorById(id);
@@ -101,28 +102,32 @@ public class AppointmentController {
 		appointment.setEndTime(formatedDate.plusMinutes(7));
 
 		model.put("doctor", doctor);
-		model.put("formato", AppointmentController.FORMATTER);
+		model.put("patientId", patientId);
+		model.put("formato", AdministrativeAppointmentController.FORMATTER);
 		model.put("appointment", appointment);
 
-		return "/patients/doctors/requestAppointment";
+		return "/administrative/requestAppointment";
 
 	}
 
-	@PostMapping(value = "/appointment/save")
-	public String processCreationForm(@ModelAttribute("startTime") final String startTime, @ModelAttribute("endTime") final String endTime, final BindingResult result) {
-		Patient p = this.patientService.findPatientByUsername();
+	@PostMapping(value = "/administrative/appointment/save")
+	public String processCreationForm(@ModelAttribute("startTime") final String startTime, @ModelAttribute("endTime") final String endTime, @ModelAttribute("patientId") final int patientId, @ModelAttribute("prioridad") final String prioridad,
+		final BindingResult result) {
+		Patient p = this.patientService.findPatientById(patientId);
 		Appointment res = new Appointment();
-		res.setStartTime(LocalDateTime.parse(startTime, AppointmentController.TO_LOCAL_DATE_TIME_ISO));
-		res.setEndTime(LocalDateTime.parse(endTime, AppointmentController.TO_LOCAL_DATE_TIME_ISO));
+		res.setStartTime(LocalDateTime.parse(startTime, AdministrativeAppointmentController.TO_LOCAL_DATE_TIME_ISO));
+		res.setEndTime(LocalDateTime.parse(endTime, AdministrativeAppointmentController.TO_LOCAL_DATE_TIME_ISO));
 		res.setPatient(p);
-
+		res.setPriority(Boolean.parseBoolean(prioridad));
+		System.out.println(res);
 		if (result.hasErrors()) {
-			return "redirect:/patients/doctors/";
+
+			return "redirect:/administrative/patients/" + patientId + "/doctors";
 
 		} else {
 
 			this.appointmentService.saveAppointment(res);
-			return "redirect:/patients/doctors/";
+			return "redirect:/administrative/patients/" + patientId + "/doctors";
 		}
 
 	}

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.springframework.clinicaetsii.web;
+package org.springframework.clinicaetsii.web.administrative;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,45 +28,50 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
-public class PatientController {
+public class AdministrativePatientController {
 
-	private final PatientService patientService;
+	private PatientService patientService;
 
 
 	@Autowired
-	public PatientController(final PatientService patientService) {
+	public AdministrativePatientController(final PatientService patientService) {
 		this.patientService = patientService;
 	}
 
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-
 	}
 
-	@GetMapping(value = "/patients/doctors")
-	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
+	@GetMapping("/administrative/patients")
+	public String listPatients(final Map<String, Object> model) {
+		Collection<Patient> results = this.patientService.findPatients();
 
-		Patient p = this.patientService.findPatientByUsername();
-		System.out.println("El paciente es: " + p.getFullName() + " con id: " + p.getId() + " con username " + p.getUsername() + " y direccion " + p.getAddress());
-		Doctor d = this.patientService.findDoctorByPatient(p.getId());
-		System.out.println("Su médico es: " + p.getGeneralPractitioner().getId());
+		if (results.isEmpty()) {
+			model.put("emptyList", true);
+		} else {
+			model.put("patients", results);
+		}
+
+		return "/administrative/patientsList";
+	}
+
+	@GetMapping(value = "/administrative/patients/{patientId}/doctors")
+	public String processFind(@PathVariable("patientId") final int patientId, final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
+
+		Doctor d = this.patientService.findDoctorByPatient(patientId);
 
 		if (d.equals(null)) {
 			model.put("emptylist", true);
 		} else {
+			model.put("patientId", patientId);
 			model.put("doctor", d);
 
 		}
-		return "/patients/doctors/doctorsList";
+		return "/administrative/doctorsList";
 	}
 
 }

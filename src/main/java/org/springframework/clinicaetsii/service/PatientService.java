@@ -21,7 +21,6 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,8 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PatientService {
 
-	private PatientRepository	patientRepository;
-	private DoctorRepository	doctorRepository;
+	private PatientRepository patientRepository;
 
 
 	@Autowired
@@ -62,6 +60,11 @@ public class PatientService {
 	@Transactional(readOnly = true)
 	public Doctor findDoctorByPatient(final int id) throws DataAccessException {
 		return this.patientRepository.findDoctorByPatient(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Patient findPatientById(final int patientId) throws DataAccessException {
+		return this.patientRepository.findById(patientId);
 	}
 
 }
