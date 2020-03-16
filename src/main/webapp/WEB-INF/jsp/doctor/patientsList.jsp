@@ -25,7 +25,7 @@
         <tr>
 
             <th style="width: 150px;">Nombre Completo</th>
-
+			<th></th>
 
         </tr>
 
@@ -44,6 +44,16 @@
                     <a href="${fn:escapeXml(patientUrl)}"><c:out value="${patient.fullName}"/></a>
 
                 </td>
+                
+                
+                 <td>
+					<spring:url value="/doctor/patients/{patientId}/prescriptions" var="patientUrl">
+                        <spring:param name="patientId" value="${patient.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(patientUrl)}">Prescripciones del paciente</a>
+
+                </td>
+                
 
             </tr>
 
