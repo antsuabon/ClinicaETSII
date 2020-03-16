@@ -28,11 +28,16 @@ import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * Simple JavaBean domain object representing an person.
  *
  * @author Ken Krebs
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "patients")
 @PrimaryKeyJoinColumn(name = "patient_id")

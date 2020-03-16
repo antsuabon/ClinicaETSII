@@ -93,6 +93,9 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',1);
 INSERT INTO authorities VALUES ('patient2','patient');
 
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(6, 'admin', 'admin', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
+INSERT INTO authorities VALUES ('admin','admin');
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);

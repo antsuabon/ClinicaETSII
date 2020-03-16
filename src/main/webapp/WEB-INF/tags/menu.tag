@@ -31,7 +31,7 @@
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						AnÃ³nimo
+						Anónimo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -40,7 +40,7 @@
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 							title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>MÃ©dicos</span>
+							<span>Médicos</span>
 						</petclinic:menuItem>
 						
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
@@ -55,7 +55,7 @@
         		<sec:authorize access="hasAuthority('doctor')">
         		<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						MÃ©dico
+						Médico
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -90,6 +90,26 @@
 				</li>
 				</sec:authorize>
 				
+				
+				<sec:authorize access="hasAuthority('admin')">
+        		<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Admin
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					
+					<ul class="dropdown-menu">
+					
+						<petclinic:menuItem active="${name eq 'admin'}" url="/admin/patient/new"
+							title="add new patient">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Añadir Paciente</span>
+						</petclinic:menuItem>
+					
+					</ul>
+				</li>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
@@ -103,7 +123,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar sesiÃ³n</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
 					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">

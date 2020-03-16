@@ -18,6 +18,8 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
@@ -59,6 +61,13 @@ public class PatientService {
 		String username = user.getUsername();
 
 		return this.patientRepository.findAppointmentsByPatientUsername(username);
+	}
+
+	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('admin')")
+	public void savePatient(@Valid final Patient patient) {
+		this.patientRepository.save(patient);
+
 	}
 
 }
