@@ -19,28 +19,21 @@ package org.springframework.clinicaetsii.service;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Doctor;
+
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class PatientService {
 
 	private PatientRepository	patientRepository;
 	private DoctorRepository	doctorRepository;
-
 
 	@Autowired
 	public PatientService(final PatientRepository patientRepository) {
@@ -49,17 +42,32 @@ public class PatientService {
 
 	@Transactional(readOnly = true)
 	public Collection<Patient> findPatients() throws DataAccessException {
-		return this.patientRepository.list();
+		return this.patientRepository.findAll();
 	}
 
-	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('doctor')")
+	public Collection<Patient> findCurrentDoctorPatients() throws DataAccessException {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
+
+		return this.patientRepository.findPatientsByDoctorUsername(username);
+	}
+	
+  @Transactional(readOnly = true)
+	public Patient findPatientById(int id) throws DataAccessException{
+		return this.patientRepository.findAll().stream().filter(x->x.getId() == id).findFirst().orElse(null);
+	}
+
+  @Transactional(readOnly = true)
 	public Patient findPatientByUsername() throws DataAccessException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails user = (UserDetails) principal;
 		return this.patientRepository.findByUserName(user.getUsername());
 	}
-
-	@Transactional(readOnly = true)
+  
+  @Transactional(readOnly = true)
 	public Doctor findDoctorByPatient(final int id) throws DataAccessException {
 		return this.patientRepository.findDoctorByPatient(id);
 	}

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,7 +21,6 @@ public class Prescription extends BaseEntity {
 
 	@Column(name = "start_date")
 	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm")
-	@NotNull
 	private LocalDateTime startDate;
 
 	@Column(name = "dosage")
@@ -39,19 +37,16 @@ public class Prescription extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "medicine_id")
-	@NotNull
 	private Medicine medicine;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "patient_id")
-	@NotNull
 	private Patient patient;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "doctor_id")
-	@NotNull
 	private Doctor doctor;
-	
+
 	public float getNumDoses() {
 		return 24*this.getDays()/this.getDosage();
 	}

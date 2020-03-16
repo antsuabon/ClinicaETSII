@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="doctors">
-    <h2>Médicos</h2>
+    <h2>MÃ©dicos</h2>
 	<c:choose>
 	<c:when test="${emptylist=='true'}">
 		<p>No se han encontrado resultados</p>
@@ -25,17 +25,13 @@
         <c:forEach items="${doctors}" var="doctor">
             <tr>
                 <td>
-
-                    <c:out value="${doctor.name} ${doctor.surname}"/>
+                    <c:out value="${doctor.fullName}"/>
                 </td>
                 <td>
                     <c:forEach var="service" items="${doctor.services}">
                         <c:out value="${service.name} "/><br>
                     </c:forEach>
                 </td>
-           
-       
-                
             </tr>
             
         </c:forEach>

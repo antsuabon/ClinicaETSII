@@ -25,17 +25,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class DoctorService {
 
 	private DoctorRepository doctorRepository;
-
 
 	@Autowired
 	public DoctorService(final DoctorRepository doctorRepository) {
@@ -43,13 +36,18 @@ public class DoctorService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Doctor> findDoctors() throws DataAccessException {
-		return this.doctorRepository.list();
+	public Collection<Doctor> findAllDoctors() throws DataAccessException {
+		return this.doctorRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
-	public Doctor findDoctorById(final int id) throws DataAccessException {
-		return this.doctorRepository.findById(id);
+	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
+		return this.doctorRepository.findDoctorsSortedByNumOfServices();
+	}
+	
+	@Transactional(readOnly = true)
+	public Doctor findDoctorByUsername(String username) throws DataAccessException {
+		return this.doctorRepository.findDoctorByUsername(username);
 	}
 
 }

@@ -18,32 +18,23 @@ package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-/**
- * Spring Data JPA specialization of the {@link DoctorRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
-public interface SpringDataPatientRepository extends PatientRepository, Repository<Patient, Integer> {
+public interface SpringDataPatientRepository extends PatientRepository, CrudRepository<Patient, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT patient FROM Patient patient")
-	Collection<Patient> list();
-
-	@Override
+	@Query("SELECT patient FROM Patient patient WHERE patient.generalPractitioner.username LIKE :doctorUsername")
+	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
+  
+  @Override
 	@Query("SELECT DISTINCT patient FROM Patient patient WHERE patient.username LIKE :username%")
 	Patient findByUserName(@Param("username") String username);
 
 	@Override
 	@Query("SELECT DISTINCT patient.generalPractitioner FROM Patient patient WHERE patient.id =:id")
 	Doctor findDoctorByPatient(@Param("id") int id);
-
 }

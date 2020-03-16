@@ -14,30 +14,27 @@
  * limitations under the License.
  */
 
-package org.springframework.clinicaetsii.web;
-
+package org.springframework.clinicaetsii.web.doctor;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Doctor;
-import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 
 @Controller
-public class DoctorController {
+public class DoctorPatientController {
 
-	private final DoctorService doctorService;
-
+	private PatientService patientService;
 
 	@Autowired
-	public DoctorController(final DoctorService doctorService) {
-		this.doctorService = doctorService;
+	public DoctorPatientController(final PatientService patientService) {
+		this.patientService = patientService;
 	}
 
 	@InitBinder
@@ -45,17 +42,17 @@ public class DoctorController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/anonymous/doctors")
-	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
+	@GetMapping("/doctor/patients")
+	public String listPatients(final Map<String, Object> model) {
+		Collection<Patient> results = this.patientService.findCurrentDoctorPatients();
 
-		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
-		if (doctors.isEmpty()) {
-			model.put("emptylist", true);
+		if (results.isEmpty()) {
+			model.put("emptyList", true);
 		} else {
-			model.put("doctors", doctors);
-
+			model.put("patients", results);
 		}
-		return "/anonymous/doctors/doctorsList";
+
+		return "/doctor/patientsList";
 	}
 
 }

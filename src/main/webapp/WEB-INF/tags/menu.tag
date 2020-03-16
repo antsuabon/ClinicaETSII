@@ -1,9 +1,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
+
 <%@ attribute name="name" required="true" rtexprvalue="true"
 	description="Name of the active menu: home, owners, vets or error"%>
 
@@ -28,27 +29,69 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
+<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 					title="list doctors">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>M�dicos</span>
+					<span>Médicos</span>
 				</petclinic:menuItem>
 				
 					<sec:authorize access="hasAuthority('patient')" >
 				<petclinic:menuItem active="${name eq 'appointments'}" url="/patients/doctors"
 					title="request appointment">
 					<span  aria-hidden="true"></span>
-					<span>Solicitar cita m�dica</span>
+					<span>Solicitar cita médica</span>
 				</petclinic:menuItem>
 					</sec:authorize>
-					
 
+
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Anónimo
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					
+					<ul class="dropdown-menu">
+					
+						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
+							title="list doctors">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Médicos</span>
+						</petclinic:menuItem>
+						
+						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
+							title="list medicines">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Medicamentos</span>
+						</petclinic:menuItem>
+					
+					</ul>
+				</li>
+        
+        		<sec:authorize access="hasAuthority('doctor')">
+        		<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Médico
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					
+					<ul class="dropdown-menu">
+					
+						<petclinic:menuItem active="${name eq 'doctor patients'}" url="/doctor/patients"
+							title="list my patients">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Mis Pacientes</span>
+						</petclinic:menuItem>
+					
+					</ul>
+				</li>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
-
+				
 			</ul>
 
 
@@ -56,12 +99,12 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
+					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>�
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
