@@ -1,4 +1,3 @@
-
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.Collection;

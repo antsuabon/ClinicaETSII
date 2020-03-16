@@ -38,6 +38,17 @@ public class MedicineController {
 		}
 
 		return "/medicines/medicineDetails";
+
+	@GetMapping(value = "/anonymous/medicines")
+	public String listMedicines(final Medicine medicine, final BindingResult result, final Map<String, Object> model) {
+
+		Collection<Medicine> results = this.medicineService.findAllMedicines();
+		if (results.isEmpty()) {
+			model.put("emptylist", true);
+		} else {
+			model.put("medicines", results);
+		}
+		return "/anonymous/medicines/medicinesList";
 	}
 
 }

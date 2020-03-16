@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.model;
 
 import javax.persistence.Column;

@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.repository.MedicineRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,10 @@ public class MedicineService {
 	public MedicineService(final MedicineRepository medicineRepository) {
 		this.medicineRepository = medicineRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Medicine findMedicineById(int id) {
-		return this.medicineRepository.findMedicineById(id);
+	public Collection<Medicine> findAllMedicines() throws DataAccessException {
+		return this.medicineRepository.findAll();
 	}
 
 }

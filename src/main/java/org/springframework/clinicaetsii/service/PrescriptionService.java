@@ -14,7 +14,6 @@ public class PrescriptionService {
 
 	private PrescriptionRepository prescriptionRepository;
 
-
 	@Autowired
 	public PrescriptionService(final PrescriptionRepository prescriptionRepository) {
 		this.prescriptionRepository = prescriptionRepository;
@@ -29,5 +28,15 @@ public class PrescriptionService {
 	public Prescription findPrescriptionById(int prescriptionId) throws DataAccessException {
 		return this.prescriptionRepository.findById(prescriptionId);
 	}
+  
+  @Transactional(readOnly = true)
+	public Collection<Prescription> findAllPrescriptions() throws DataAccessException {
+		return this.prescriptionRepository.findAll();
+	}
 
+	@Transactional(readOnly = true)
+	public void savePrescription(Prescription prescription) throws DataAccessException {
+		 this.prescriptionRepository.save(prescription);
+	}
+  
 }
