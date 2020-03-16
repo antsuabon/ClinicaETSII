@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="doctors">
-    <h2>MÃ©dicos</h2>
+    <h2>Médicos</h2>
 	<c:choose>
 	<c:when test="${emptylist=='true'}">
 		<p>No se han encontrado resultados</p>
@@ -17,29 +17,49 @@
         <tr>
             <th style="width: 150px;">Nombre Completo</th>
             <th style="width: 150px;">Servicios</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         
-        
-        <c:forEach items="${doctors}" var="doctor">
+    
             <tr>
                 <td>
-                    <c:out value="${doctor.fullName}"/>
+
+                    <c:out value="${doctor.name} ${doctor.surname}"/>
                 </td>
                 <td>
                     <c:forEach var="service" items="${doctor.services}">
                         <c:out value="${service.name} "/><br>
                     </c:forEach>
                 </td>
+                
+                
+                <td>
+                  <spring:url value="/appointment/doctor/{doctorId}/table" var="doctorUrl">
+                        <spring:param name="doctorId" value="${doctor.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(doctorUrl)}">Seleccionar Médico</a>
+                
+                </td>
+           
+       
+                
             </tr>
             
-        </c:forEach>
-        
         
           
         </tbody>
     </table>
     </c:otherwise>
      </c:choose> 
+     
+     
+  
+     
+     
+     
+     
+     
 </petclinic:layout>

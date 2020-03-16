@@ -16,46 +16,54 @@
 
 package org.springframework.clinicaetsii.web;
 
-
-import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
-import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 
+/**
+ * @author Juergen Hoeller
+ * @author Ken Krebs
+ * @author Arjen Poutsma
+ * @author Michael Isvy
+ */
 @Controller
-public class DoctorController {
+public class PatientController {
 
-	private final DoctorService doctorService;
+	private final PatientService patientService;
 
 
 	@Autowired
-	public DoctorController(final DoctorService doctorService) {
-		this.doctorService = doctorService;
+	public PatientController(final PatientService patientService) {
+		this.patientService = patientService;
 	}
 
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+
 	}
 
-	@GetMapping(value = "/anonymous/doctors")
+	@GetMapping(value = "/patients/doctors")
 	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
 
-		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
-		if (doctors.isEmpty()) {
+		Patient p = this.patientService.findPatientByUsername();
+		Doctor d = this.patientService.findDoctorByPatient(p.getId());
+
+		if (d.equals(null)) {
 			model.put("emptylist", true);
 		} else {
-			model.put("doctors", doctors);
+			model.put("doctor", d);
 
 		}
-		return "/anonymous/doctors/doctorsList";
+		return "/patients/doctors/doctorsList";
 	}
 
 }

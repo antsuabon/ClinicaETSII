@@ -29,9 +29,24 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
+<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
+					title="list doctors">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>M√©dicos</span>
+				</petclinic:menuItem>
+				
+					<sec:authorize access="hasAuthority('patient')" >
+				<petclinic:menuItem active="${name eq 'appointments'}" url="/patients/doctors"
+					title="request appointment">
+					<span  aria-hidden="true"></span>
+					<span>Solicitar cita m√©dica</span>
+				</petclinic:menuItem>
+					</sec:authorize>
+
+
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						AnÛnimo
+						An√≥nimo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -40,7 +55,7 @@
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors"
 							title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>MÈdicos</span>
+							<span>M√©dicos</span>
 						</petclinic:menuItem>
 						
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines"
@@ -55,7 +70,7 @@
         		<sec:authorize access="hasAuthority('doctor')">
         		<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						MÈdico
+						M√©dico
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
@@ -84,7 +99,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar sesiÛn</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesi√≥n</a></li>
 					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">

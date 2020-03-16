@@ -82,6 +82,7 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,13);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,2);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 

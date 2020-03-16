@@ -16,15 +16,16 @@
 
 package org.springframework.clinicaetsii.repository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import org.springframework.clinicaetsii.model.Patient;
+
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
-public interface PatientRepository {
-	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
-  Patient findByUserName(String username) throws DataAccessException;
-	Collection<Patient> findAll() throws DataAccessException;
-  Patient findById(@Param("id") int id);
-  Doctor findDoctorByPatient(@Param("id") int id);
+public interface AppointmentRepository {
+
+	Collection<LocalDateTime> findAppointmentByDoctors(@Param("id") int id) throws DataAccessException;
+
+	void save(Appointment appointment) throws DataAccessException;
 }

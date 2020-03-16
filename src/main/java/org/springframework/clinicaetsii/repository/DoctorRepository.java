@@ -1,4 +1,3 @@
-
 package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection; 
@@ -13,5 +12,7 @@ public interface DoctorRepository {
 	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
 	
 	Doctor findDoctorByUsername(String username) throws DataAccessException;
+  
+  Doctor findById(@Param("id") int id);
 
 }
