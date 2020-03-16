@@ -82,16 +82,68 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,13);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,2);
+INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
 (4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
 INSERT INTO authorities VALUES ('patient1','patient');
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',1);
+INSERT INTO authorities VALUES ('patient2','patient');
 
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
+INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
+(2, false, '2020-03-09 11:00:00', '2020-03-09 11:07:00', 4);
+INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
+(3, false, '2020-03-12 11:00:00', '2020-03-13 11:07:00', 5);
+
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.'); 
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(2,'Paracetamol','Paracel',1.0,'Dolor y fiebre','Paracetamol debe utilizarse con precaución en alcohólicos crónicos y en 
+pacientes con deficiencia en glucosa-6 fosfato-deshidrogenasa.'); 
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
+	VALUES(3,'Omeprazol','Arapride',1.0,'Ulcera duodenal o gástrica','Debe utilizarse con precaución durante el embarazo y 
+lactancia.'); 
+
+
+INSERT INTO consultations (id,start_time,end_time,anamnesis,remarks,discharge_type_id,appointment_id) VALUES
+(1,'2020-03-07 11:00:00','2020-03-07 11:07:00', 'Dolor de estómago','Fiebres altas',4,1);
+INSERT INTO consultations (id,start_time,end_time,anamnesis,remarks,discharge_type_id,appointment_id) VALUES
+(2,'2020-03-09 11:00:00','2020-03-09 11:07:00', 'Dolor de rodilla','Inflamación',2,2);
+INSERT INTO consultations (id,start_time,end_time,anamnesis,remarks,discharge_type_id,appointment_id) VALUES
+(3,'2020-03-12 11:00:00','2020-03-12 11:07:00', 'Vómitos','Fiebre moderada',4,3);
+
+INSERT INTO diagnoses (id, name) VALUES (1,'Gripe invernal');
+INSERT INTO diagnoses (id, name) VALUES (2,'Resfriado Severo');
+INSERT INTO diagnoses (id, name) VALUES (3,'Rotura de rodilla');
+
+INSERT INTO consultation_diagnoses (consultation_id, diagnosis_id) VALUES (1,1);
+INSERT INTO consultation_diagnoses (consultation_id, diagnosis_id) VALUES (1,2);
+INSERT INTO consultation_diagnoses (consultation_id, diagnosis_id) VALUES (2,3);
+
+INSERT INTO constants (id, value_constant, constant_type_id) VALUES (1,75.0,1);
+INSERT INTO constants (id, value_constant, constant_type_id) VALUES (2,39.0,5);
+INSERT INTO constants (id, value_constant, constant_type_id) VALUES (3,60.0,1);
+
+INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (1,1);
+INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (1,2);
+INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (3,3);
+
+
+INSERT INTO examinations (id, description,consultation_id) VALUES (1,'Tiene el vientre muy hinchado',1);
+INSERT INTO examinations (id, description,consultation_id) VALUES (2,'Tiene la cara pálida',1);
+INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la rodilla enrojecida',2);
+
+INSERT INTO prescriptions (id, start_date,dosage,days,pharmaceutical_warning,patient_warning,medicine_id,patient_id,doctor_id) VALUES 
+(1,'2020-03-09 11:00:00',1,7,'Vender solo con receta','Puede provocar efectos secundarios',1,4,1);
+INSERT INTO prescriptions (id, start_date, dosage, days, pharmaceutical_warning, patient_warning, medicine_id, patient_id, doctor_id) VALUES 
+(2,'2020-02-20 13:00:00', 3, 20, 'No tomar sin agua', 'No fragmentar', 2, 4, 1);
 
 -- INSERT INTO vet_specialties VALUES (2, 1);
 -- INSERT INTO vet_specialties VALUES (3, 2);
@@ -135,4 +187,4 @@ INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 -- INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
--- 
+--

@@ -5,20 +5,33 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class DoctorService {
 
 	private DoctorRepository doctorRepository;
 
-
 	@Autowired
-	public DoctorService(DoctorRepository doctorRepository) {
+	public DoctorService(final DoctorRepository doctorRepository) {
 		this.doctorRepository = doctorRepository;
 	}
+
+	@Transactional(readOnly = true)
+	public Collection<Doctor> findAllDoctors() throws DataAccessException {
+		return this.doctorRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
+		return this.doctorRepository.findDoctorsSortedByNumOfServices();
+	}
 	
-	public Collection<Integer> findAllDoctorsId() {
+	@Transactional(readOnly = true)
+	public Doctor findDoctorByUsername(String username) throws DataAccessException {
+		return this.doctorRepository.findDoctorByUsername(username);
+	}
+  
+  public Collection<Integer> findAllDoctorsId() {
 		return this.doctorRepository.findAllDoctorsId();
 	}
 	
@@ -29,4 +42,5 @@ public class DoctorService {
 	public Collection<Doctor> findAllDoctors() {
 		return this.doctorRepository.findAllDoctors();
 	}
+
 }

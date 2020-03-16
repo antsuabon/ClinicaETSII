@@ -1,3 +1,18 @@
+/*
+ * Copyright 2002-2013 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
@@ -7,21 +22,27 @@ import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 public interface SpringDataPatientRepository extends PatientRepository, CrudRepository<Patient, Integer> {
 
 	@Override
-	@Query("SELECT p FROM Patient p WHERE (p.id =:id)")
-	Patient findById(@Param("id") int id);
+	@Query("SELECT patient FROM Patient patient WHERE patient.generalPractitioner.username LIKE :doctorUsername")
+	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
+  
+  @Override
+	@Query("SELECT DISTINCT patient FROM Patient patient WHERE patient.username LIKE :username%")
+	Patient findByUserName(@Param("username") String username);
 
 	@Override
+	@Query("SELECT DISTINCT patient.generalPractitioner FROM Patient patient WHERE patient.id =:id")
+	Doctor findDoctorByPatient(@Param("id") int id);
+  
+  @Override
 	@Query("select p from Patient p where exists (select d from Doctor d where d.id =:id)")
 	Collection<Patient> findDoctorPatients(@Param("id") int id);
-	
-	/*@Override
-	@Query("UPDATE Patient p SET p.generalPractitioner =:doctor")
-	void updatePatient(@Param("id") int id ); */
-
+  
+  @Override
+	@Query("SELECT p FROM Patient p WHERE (p.id =:id)")
+	Patient findById(@Param("id") int id);
 }
