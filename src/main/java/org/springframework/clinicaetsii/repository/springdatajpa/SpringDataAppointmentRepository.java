@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface SpringDataAppointmentRepository extends AppointmentRepository, CrudRepository<Appointment, Integer> {
 
 	@Override
-	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.generalPractitioner.username LIKE :doctorUsername ORDER BY appointment.priority, appointment.startTime DESC")
+	@Query("SELECT appointment FROM Appointment appointment WHERE (appointment.patient.generalPractitioner.username LIKE :doctorUsername) AND NOT EXISTS (SELECT consultation FROM Consultation consultation WHERE consultation.appointment = appointment) ORDER BY appointment.priority, appointment.startTime DESC")
 	Collection<Appointment> findAppointmentsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
 
 }

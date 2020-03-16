@@ -13,7 +13,7 @@ public interface ConsultationRepository {
 
 	Collection<Consultation> findConsultationsByPatientId(@Param("patientId") int patientId) throws DataAccessException;
 
-	void save(Consultation consultation) throws DataAccessException;
+	Consultation save(Consultation consultation) throws DataAccessException;
 
 	Collection<DischargeType> findDischargeTypes() throws DataAccessException;
 }

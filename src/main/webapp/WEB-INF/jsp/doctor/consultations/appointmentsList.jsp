@@ -24,8 +24,9 @@
 
         <tr>
 
-            <th style="width: 150px;">Nombre Completo</th>
-
+			<th>Hora de inicio</th>
+			<th>Hora de fin</th>
+			<th style="width: 60%;">Nombre Completo</th>
 
         </tr>
 
@@ -36,6 +37,9 @@
         <c:forEach items="${appointments}" var="appointment">
 
             <tr>
+            
+            	<td><c:out value="${appointment.startTime}"/></td>
+            	<td><c:out value="${appointment.endTime}"/></td>
 
                 <td>
 					<spring:url value="/doctor/patients/{patientId}/consultations/new?appointmentId={appointmentId}" var="appointmentUrl">

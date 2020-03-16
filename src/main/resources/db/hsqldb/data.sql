@@ -100,6 +100,8 @@ INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (2, false, '2020-03-09 11:00:00', '2020-03-09 11:07:00', 4);
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (3, false, '2020-03-12 11:00:00', '2020-03-13 11:07:00', 5);
+INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
+(4, false, '2020-03-14 11:00:00', '2020-03-14 11:07:00', 4);
 
 INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
 	VALUES(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.'); 

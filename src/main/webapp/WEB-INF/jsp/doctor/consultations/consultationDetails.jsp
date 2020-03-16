@@ -33,6 +33,11 @@
 
     </table>
     
+    <spring:url value="{consultationId}/edit" var="editUrl">
+        <spring:param name="consultationId" value="${consultation.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Consulta</a>
+    
     <br>
 
     <h3>Examinaciones</h3>
