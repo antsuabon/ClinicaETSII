@@ -14,5 +14,9 @@ public interface DoctorRepository {
 	Doctor findDoctorByUsername(String username) throws DataAccessException;
   
   Doctor findById(@Param("id") int id);
+  
+  Collection<Integer> findAllDoctorsId();
+  
+  Doctor findDoctorById(int id);
 
 }

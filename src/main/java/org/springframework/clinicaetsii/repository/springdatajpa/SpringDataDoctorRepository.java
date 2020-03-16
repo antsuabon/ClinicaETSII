@@ -34,4 +34,16 @@ public interface SpringDataDoctorRepository extends DoctorRepository, CrudReposi
 	@Override
 	@Query("select d from Doctor d where d.username =:username")
 	Doctor findDoctorByUsername(@Param("username") String username);
+  
+  @Override
+	@Query("SELECT d FROM Doctor d")
+	Collection<Doctor> findAllDoctors();
+
+	@Override
+	@Query("SELECT d.id FROM Doctor d")
+	Collection<Integer> findAllDoctorsId();
+	
+	@Override
+	@Query("SELECT d from Doctor d where d.id =:id")
+	Doctor findDoctorById(@Param("id") int id);
 }

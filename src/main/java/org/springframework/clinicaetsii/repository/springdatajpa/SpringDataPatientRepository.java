@@ -37,4 +37,12 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 	@Override
 	@Query("SELECT DISTINCT patient.generalPractitioner FROM Patient patient WHERE patient.id =:id")
 	Doctor findDoctorByPatient(@Param("id") int id);
+  
+  @Override
+	@Query("select p from Patient p where exists (select d from Doctor d where d.id =:id)")
+	Collection<Patient> findDoctorPatients(@Param("id") int id);
+  
+  @Override
+	@Query("SELECT p FROM Patient p WHERE (p.id =:id)")
+	Patient findById(@Param("id") int id);
 }

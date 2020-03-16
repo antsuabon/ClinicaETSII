@@ -62,5 +62,13 @@ public class Patient extends User {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "general_practitioner_id")
 	private Doctor generalPractitioner;
+	
+	public Doctor getGeneralPractitioner() {
+		return this.generalPractitioner;
+	}
+	
+	public void setGeneralPractitioner(Doctor generalPractitioner) {
+		this.generalPractitioner = generalPractitioner;
+	}
 
 }

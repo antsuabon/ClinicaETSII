@@ -1,22 +1,4 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.clinicaetsii.web;
-
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -64,6 +46,32 @@ public class PatientController {
 
 		}
 		return "/patients/doctors/doctorsList";
+	}
+  
+  @GetMapping(value = "/patient/patients/{patientId}/edit")
+	public String initUpdatePatientForm(@PathVariable("patientId") int patientId, Model model) {
+		Patient patient = this.patientService.findPatient(patientId);
+		model.addAttribute("doctors", this.doctorService.findAllDoctors());
+		model.addAttribute("patient", patient);
+		return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/patient/patients/{patientId}/edit")
+	public String processUpdatePatientForm(Patient patient, @PathVariable("patientId") int patientId, BindingResult result, Model model, @ModelAttribute(name = "generalPractitioner") Doctor practitioner) {
+		model.addAttribute("doctors", this.doctorService.findAllDoctors());
+		/*if (result.hasErrors()) {
+			return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+		}*/
+		if(this.patientService.findAllPatientFromDoctors(practitioner.getId()).size()>1000) {
+			result.rejectValue("generalPractitioner", "too_many_patients", "Este doctor tiene 1000 pacientes asignados");
+			return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+		}
+		else {
+			Patient patient2 = this.patientService.findPatient(patientId);
+			patient2.setGeneralPractitioner(practitioner);
+			this.patientService.savePatient(patient2);
+			return "redirect:/";
+		}
 	}
 
 }

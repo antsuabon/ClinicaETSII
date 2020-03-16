@@ -27,4 +27,7 @@ public interface PatientRepository {
 	Collection<Patient> findAll() throws DataAccessException;
   Patient findById(@Param("id") int id);
   Doctor findDoctorByPatient(@Param("id") int id);
+  void save(Patient patient);
+  Collection<Patient> findDoctorPatients(int id) throws DataAccessException;
+  Patient findById(int id) throws DataAccessException;
 }
