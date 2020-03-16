@@ -20,32 +20,32 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
- 
+
 @Controller
 @RequestMapping("/doctor/patients/{patientId}/consultations/{consultationId}/examinations")
 public class DoctorExaminationController {
 
-	
-	
+
+
 	private ExaminationService examinationService;
 	private ConsultationService consultationService;
-	
+
 	@Autowired
-	public DoctorExaminationController(final ExaminationService examinationService, ConsultationService consultationService) {
+	public DoctorExaminationController(final ExaminationService examinationService, final ConsultationService consultationService) {
 		this.examinationService = examinationService;
 		this.consultationService = consultationService;
 	}
-	
+
 	@ModelAttribute("Consultation")
-	public Consultation findConsultation(@PathVariable("consultationId") int consultationId) {
+	public Consultation findConsultation(@PathVariable("consultationId") final int consultationId) {
 		return this.consultationService.findConsultationById(consultationId);
 	}
-	
+
 	@GetMapping(value = "/{examinationId}")
-	public String showExaminationDetails(@PathVariable int examinationId, @PathVariable int patientId, Map<String, Object> model) {
-		
+	public String showExaminationDetails(@PathVariable final int examinationId, @PathVariable final int patientId, final Map<String, Object> model) {
+
 		Examination result = this.examinationService.findExaminationsById(examinationId);
-		
+
 		if (result == null) {
 			model.put("empty", true);
 		} else {
@@ -58,14 +58,13 @@ public class DoctorExaminationController {
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(final ModelMap model) {
-
 		Examination examination = new Examination();
 		model.put("examination", examination);
 		return "/doctor/examinations/createExaminationForm";
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@PathVariable int consultationId, @Valid Examination examination, BindingResult result) {
+	public String processCreationForm(@PathVariable final int consultationId, @Valid final Examination examination, final BindingResult result) {
 		if (result.hasErrors()) {
 			return  "/doctor/examinations/createExaminationForm";
 		}
@@ -74,7 +73,7 @@ public class DoctorExaminationController {
 			examination.setStartTime(LocalDateTime.now());
 			current.getExaminations().add(examination);
 			this.examinationService.saveExamination(examination);
-			return "redirect:/doctor/patients/{patientId}/consultations/{consultationId}/examinations/" + examination.getId();
+			return "redirect:/doctor/patients/{patientId}/consultations/{consultationId}";
 		}
 	}
 }

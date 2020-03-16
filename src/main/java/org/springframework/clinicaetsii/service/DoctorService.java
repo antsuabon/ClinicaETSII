@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
@@ -5,11 +6,15 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DoctorService {
 
 	private DoctorRepository doctorRepository;
+
 
 	@Autowired
 	public DoctorService(final DoctorRepository doctorRepository) {
@@ -25,22 +30,20 @@ public class DoctorService {
 	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
 		return this.doctorRepository.findDoctorsSortedByNumOfServices();
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Doctor findDoctorByUsername(String username) throws DataAccessException {
+	public Doctor findDoctorByUsername(final String username) throws DataAccessException {
 		return this.doctorRepository.findDoctorByUsername(username);
 	}
-  
-  public Collection<Integer> findAllDoctorsId() {
+
+	@Transactional(readOnly = true)
+	public Collection<Integer> findAllDoctorsId() {
 		return this.doctorRepository.findAllDoctorsId();
 	}
-	
-	public Doctor findDoctorById(int id) {
+
+	@Transactional(readOnly = true)
+	public Doctor findDoctorById(final int id) {
 		return this.doctorRepository.findDoctorById(id);
-	}
-	
-	public Collection<Doctor> findAllDoctors() {
-		return this.doctorRepository.findAllDoctors();
 	}
 
 }

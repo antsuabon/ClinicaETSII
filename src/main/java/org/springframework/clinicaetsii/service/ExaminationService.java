@@ -2,8 +2,6 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.clinicaetsii.repository.ExaminationRepository;
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ExaminationService {
 
-	
+
 	private ExaminationRepository examinationRepository;
 
 	@Autowired
@@ -28,13 +26,14 @@ public class ExaminationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Examination findExaminationsById(int id) throws DataAccessException {
-		return this.examinationRepository.findExaminationById(id);
+	public Examination findExaminationsById(final int id) throws DataAccessException {
+		return this.examinationRepository.findById(id);
 	}
 
-	public void saveExamination(@Valid Examination examination) {
+	@Transactional
+	public void saveExamination(final Examination examination) {
 		this.examinationRepository.save(examination);
-		
+
 	}
-	
+
 }

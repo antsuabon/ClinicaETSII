@@ -32,7 +32,7 @@ import org.springframework.data.repository.query.Param;
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface SpringAppointmentRepository extends AppointmentRepository, Repository<Appointment, Integer> {
+public interface SpringDataAppointmentRepository extends AppointmentRepository, Repository<Appointment, Integer> {
 
 	@Override
 	@Query("SELECT appointment.startTime FROM Appointment appointment WHERE appointment.patient.generalPractitioner.id =:id")

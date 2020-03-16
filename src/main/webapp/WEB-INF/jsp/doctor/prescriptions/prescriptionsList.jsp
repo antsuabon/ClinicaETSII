@@ -51,7 +51,7 @@
                 </td>
 
                 <td>
-					<c:out value="${prescription.getEndDate()}"/>
+					<c:out value="${prescription.endDate}"/>
 
                 </td>
 				
