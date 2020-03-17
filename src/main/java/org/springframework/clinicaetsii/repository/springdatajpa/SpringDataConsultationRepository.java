@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.repository.springdatajpa;
 import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Consultation;
+import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.repository.ConsultationRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +14,9 @@ public interface SpringDataConsultationRepository extends ConsultationRepository
 	@Override
 	@Query("SELECT consultation FROM Consultation consultation WHERE consultation.appointment.patient.id =:patientId")
 	Collection<Consultation> findConsultationsByPatientId(@Param("patientId") int patientId);
+
+	@Override
+	@Query("SELECT dischargeType FROM DischargeType dischargeType")
+	Collection<DischargeType> findDischargeTypes();
 
 }
