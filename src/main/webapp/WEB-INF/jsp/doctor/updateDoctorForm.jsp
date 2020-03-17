@@ -29,7 +29,7 @@
 			
 			<br />
 			<h3>Datos Médicos</h3>
-			<petclinic:inputField label="Nombre de usuario" name="doctor.collegiateCode" />
+			<petclinic:inputField label="Número de colegiado" name="doctor.collegiateCode" />
 
 			<br />
 			<div class="control-group">

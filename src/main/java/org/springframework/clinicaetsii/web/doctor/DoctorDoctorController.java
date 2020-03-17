@@ -43,7 +43,7 @@ public class DoctorDoctorController {
 
 	@InitBinder
 	public void initBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new DoctorValidator());
+		dataBinder.setValidator(new DoctorValidator(this.doctorService));
 	}
 
 
