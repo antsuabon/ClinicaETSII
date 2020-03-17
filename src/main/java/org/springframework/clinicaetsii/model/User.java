@@ -25,7 +25,6 @@ public class User {
 	private String username;
 
 	@Column(name = "password")
-	@NotBlank
 	private String password;
 
 	@Column(name = "enabled")
