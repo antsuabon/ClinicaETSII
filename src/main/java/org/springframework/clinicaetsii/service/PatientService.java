@@ -49,6 +49,7 @@ public class PatientService {
 	}
 
 	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('patient')")
 	public Patient findPatientByUsername() throws DataAccessException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails user = (UserDetails) principal;

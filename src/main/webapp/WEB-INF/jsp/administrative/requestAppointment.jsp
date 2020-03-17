@@ -25,7 +25,7 @@
         		<tr>
         		
         		<td>
-        			<c:out value="${formato.format(appointment.getStartTime())}" />   
+        			<c:out value="${appointment.startTime}" />   
         		</td>
         		
         		<td>
@@ -33,7 +33,7 @@
         		</td>
         		
         		<td>
-        		<form:form class="form-horizontal" action="/administrative/appointment/save">
+        		<form:form class="form-horizontal" action="/administrative/patients/{patientId}/appointment/save">
           	
             			    <input type="hidden" name="startTime" value="${appointment.getStartTime()}"/>
             			            <input type="hidden" name="endTime" value="${appointment.getEndTime()}"/>

@@ -22,13 +22,13 @@
         
           
              
-     <c:forEach items="${hours}" var="horas">
+     <c:forEach items="${hours}" var="hora">
            <tr>
                
-                 <td><c:out value="${formato.format(horas)}" /> </td>
+                 <td><c:out value="${hora}" /> </td>
                  
                  <td>
-                   <spring:url value="/administrative/appointment/new?fecha={fecha}" var="appointmentUrl">
+                   <spring:url value="/administrative/patients/{}/new?fecha={fecha}" var="appointmentUrl">
                         <spring:param name="doctorId" value="${doctor}"/>
                         <spring:param name="fecha" value="${horas}"/>
                       <spring:param name="patientId" value="${patientId}"/>

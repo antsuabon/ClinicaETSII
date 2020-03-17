@@ -1,6 +1,8 @@
 
 package org.springframework.clinicaetsii.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
@@ -58,6 +60,8 @@ public class PatientController {
 		System.out.println("El paciente es: " + p.getFullName() + " con id: " + p.getId() + " con username " + p.getUsername() + " y direccion " + p.getAddress());
 		Doctor d = this.patientService.findDoctorByPatient(p.getId());
 		System.out.println("Su médico es: " + p.getGeneralPractitioner().getId());
+
+		return "";
 	}
 
 	@PostMapping(value = "/patient/patients/{patientId}/edit")

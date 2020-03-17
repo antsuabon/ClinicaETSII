@@ -79,22 +79,22 @@
 				</petclinic:menuItem>
 				
 				
-				<sec:authorize access="hasAnyAuthority('admin') ">
+				<sec:authorize access="hasAnyAuthority('administrative') ">
         		<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Paciente
+						Administrativo
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
 					<ul class="dropdown-menu">
 					
-						<petclinic:menuItem active="${name eq 'doctor patients'}" url="/administrative/patients"
+						<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients"
 							title="list my patients">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							<span>Crear Cita</span>
 						</petclinic:menuItem>
 						
-						<petclinic:menuItem active="${name eq 'doctor consultations'}" url="/doctor/appointments"
+						<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"
 							title="list my patients">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							<span>Citas pendientes</span>
