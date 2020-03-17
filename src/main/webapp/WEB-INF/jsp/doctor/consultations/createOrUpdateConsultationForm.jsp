@@ -39,6 +39,7 @@
                 <petclinic:inputField label="Observaciones" name="remarks"/>
                 
                 <div class="control-group">
+                	<petclinic:selectFieldMap name="diagnoses" label="Diagnosticos " names="${allDiagnoses}" size="6"/>
                     <petclinic:selectFieldMap name="dischargeType" label="Alta " names="${dischargeTypes}" size="6"/>
                 </div>
             </div>

@@ -12,13 +12,13 @@
 
 	<c:when test="${emptyList=='true'}">
 
-		<p>No se han encontrado citas registradas</p>
+		<p>No se han encontrado citas por atender registradas</p>
 
 	 </c:when>
 
 	 <c:otherwise>
 
-    <table id="patientsTable" class="table table-striped">
+    <table id="appointmentsTable" class="table table-striped">
 
         <thead>
 
@@ -26,7 +26,8 @@
 
 			<th>Hora de inicio</th>
 			<th>Hora de fin</th>
-			<th style="width: 60%;">Nombre Completo</th>
+			<th style="width: 40%;">Nombre Completo</th>
+			<th></th>
 
         </tr>
 
@@ -40,13 +41,13 @@
             
             	<td><c:out value="${appointment.startTime}"/></td>
             	<td><c:out value="${appointment.endTime}"/></td>
-
+				<td><c:out value="${appointment.patient.fullName}"/></td>
                 <td>
 					<spring:url value="/doctor/patients/{patientId}/consultations/new?appointmentId={appointmentId}" var="appointmentUrl">
                         <spring:param name="patientId" value="${appointment.patient.id}"/>
                         <spring:param name="appointmentId" value="${appointment.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(appointmentUrl)}"><c:out value="${appointment.patient.fullName}"/></a>
+                    <a href="${fn:escapeXml(appointmentUrl)}">Añadir consulta</a>
 
                 </td>
 

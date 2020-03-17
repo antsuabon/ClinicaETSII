@@ -34,7 +34,7 @@ public class AppointmentService {
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.appointmentRepository.findAppointmentsByDoctorUsername(username);
+		return this.appointmentRepository.findAppointmentsWithoutConsultationByDoctorUsername(username);
 	}
 
 

@@ -66,6 +66,12 @@
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							<span>Mis Pacientes</span>
 						</petclinic:menuItem>
+						
+						<petclinic:menuItem active="${name eq 'doctor consultations'}" url="/doctor/appointments"
+							title="list my patients">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							<span>Citas pendientes</span>
+						</petclinic:menuItem>
 					
 					</ul>
 				</li>

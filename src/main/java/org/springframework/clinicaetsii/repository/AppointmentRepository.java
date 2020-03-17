@@ -10,6 +10,6 @@ public interface AppointmentRepository {
 
 	Appointment findById(int appointmentId) throws DataAccessException;
 
-	Collection<Appointment> findAppointmentsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
+	Collection<Appointment> findAppointmentsWithoutConsultationByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
 
 }
