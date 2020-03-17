@@ -13,7 +13,7 @@ public interface AppointmentRepository {
 
 	Collection<Appointment> findAppointmentsWithoutConsultationByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
 
-	void save(Appointment appointment) throws DataAccessException;
+	Appointment save(Appointment appointment) throws DataAccessException;
 
 	Collection<LocalDateTime> findAppointmentByDoctors(@Param("id") int id);
 
