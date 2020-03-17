@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.repository;
 import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Doctor;
+import org.springframework.clinicaetsii.model.Service;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
@@ -20,6 +21,10 @@ public interface DoctorRepository {
 
 	Doctor findDoctorById(int id) throws DataAccessException;
 
-	Doctor findDoctorByPatientId(@Param("id") int id);
+	Doctor findDoctorByPatientId(@Param("id") int id)throws DataAccessException;
+
+	Doctor save(Doctor doctor) throws DataAccessException;
+
+	Collection<Service> findAllServices() throws DataAccessException;
 
 }

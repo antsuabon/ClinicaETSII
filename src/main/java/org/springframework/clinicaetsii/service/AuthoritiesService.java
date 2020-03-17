@@ -45,9 +45,14 @@ public class AuthoritiesService {
 	}
 
 	@Transactional
-	public void saveAuthorities(final String username, final String role) throws DataAccessException {
+	public Authorities findAuthority(final String userId) throws DataAccessException {
+		return this.authoritiesRepository.findById(userId).orElseGet(null);
+	}
+
+	@Transactional
+	public void saveAuthorities(final String userId, final String role) throws DataAccessException {
 		Authorities authority = new Authorities();
-		authority.setUsername(username);
+		authority.setUserId(userId);
 		authority.setAuthority(role);
 		this.authoritiesRepository.save(authority);
 	}

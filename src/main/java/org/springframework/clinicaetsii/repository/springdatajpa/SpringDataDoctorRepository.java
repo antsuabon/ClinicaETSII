@@ -19,6 +19,7 @@ package org.springframework.clinicaetsii.repository.springdatajpa;
 import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Doctor;
+import org.springframework.clinicaetsii.model.Service;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
@@ -46,5 +47,9 @@ public interface SpringDataDoctorRepository extends DoctorRepository, CrudReposi
 	@Override
 	@Query("SELECT DISTINCT patient.generalPractitioner FROM Patient patient WHERE patient.id =:id")
 	Doctor findDoctorByPatientId(@Param("id") int id);
+
+	@Override
+	@Query("SELECT service FROM Service service")
+	Collection<Service> findAllServices();
 
 }

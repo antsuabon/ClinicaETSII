@@ -77,31 +77,27 @@
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
-				
-				
+
+
 				<sec:authorize access="hasAnyAuthority('administrative') ">
-        		<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Administrativo
-						<span class="glyphicon glyphicon-chevron-down"></span>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrativo <span
+							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
-					
-					<ul class="dropdown-menu">
-					
-						<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients"
-							title="list my patients">
-							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>Crear Cita</span>
-						</petclinic:menuItem>
-						
-						<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"
-							title="list my patients">
-							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>Citas pendientes</span>
-						</petclinic:menuItem>
-					
-					</ul>
-				</li>
+
+						<ul class="dropdown-menu">
+
+							<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients" title="list my patients">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Crear Cita</span>
+							</petclinic:menuItem>
+
+							<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"
+								title="list my patients">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Citas pendientes</span>
+							</petclinic:menuItem>
+
+						</ul></li>
 				</sec:authorize>
 
 			</ul>
@@ -140,6 +136,14 @@
 								</div>
 							</li>
 							<li class="divider"></li>
+
+							<sec:authorize access="hasAuthority('doctor')">
+								<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/doctor"
+									title="show doctor profile">
+									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									<span>Mi perfil</span>
+								</petclinic:menuItem>
+							</sec:authorize>
 							<!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
