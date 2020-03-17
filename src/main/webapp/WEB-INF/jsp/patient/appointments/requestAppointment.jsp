@@ -8,14 +8,11 @@
 
 <petclinic:layout pageName="appointments">
 
-
-
-
 	<table id="table" class="table table-striped">
 		<thead>
 			<tr>
-				<th style="width: 150px;">Hora de inicio</th>
-				<th style="width: 150px;">Médico</th>
+				<th style="width: 20%;">Hora de inicio</th>
+				<th style="width: 40%;">Médico</th>
 				<th></th>
 
 			</tr>
@@ -23,7 +20,7 @@
 		<tbody>
 			<tr>
 
-				<td><c:out value="${appointment.startTime}" /></td>
+				<td><spring:eval expression="appointment.startTime"/></td>
 
 				<td><c:out value="${appointment.patient.generalPractitioner.name} ${appointment.patient.generalPractitioner.surname}" /></td>
 
@@ -39,9 +36,5 @@
 			</tr>
 		</tbody>
 	</table>
-
-
-
-
 
 </petclinic:layout>

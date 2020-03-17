@@ -13,40 +13,26 @@
 	<table id="table" class="table table-striped">
 		<thead>
 			<tr>
-				<th style="width: 150px;">Horas</th>
+				<th style="width: 75%;">Horas</th>
 				<th></th>
 
 			</tr>
 		</thead>
 		<tbody>
 
-
-
 			<c:forEach items="${hours}" var="hora">
 				<tr>
-
-					<td><c:out value="${hora}" /></td>
+					<td><spring:eval expression="hora"/></td>
 
 					<td><form:form class="form-horizontal" modelAttribute="appointment" method="get" action="/patient/appointments/new">
-
 							<input type="hidden" name="fecha" value="${hora}" />
-
 							<button class="btn btn-default" type="submit">Seleccionar hora</button>
-
 						</form:form></td>
-
-
-
 
 				</tr>
 			</c:forEach>
 
 		</tbody>
 	</table>
-
-
-
-
-
 
 </petclinic:layout>

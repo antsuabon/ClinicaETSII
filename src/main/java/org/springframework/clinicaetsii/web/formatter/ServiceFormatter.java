@@ -1,4 +1,4 @@
-package org.springframework.clinicaetsii.web;
+package org.springframework.clinicaetsii.web.formatter;
 
 import java.text.ParseException;
 import java.util.Collection;

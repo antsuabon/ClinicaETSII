@@ -27,6 +27,7 @@ import lombok.EqualsAndHashCode;
 public class Consultation extends BaseEntity {
 
 	@Column(name = "start_time")
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime			startTime;
 
 	@Column(name = "end_time")

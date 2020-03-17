@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.model.Prescription;
@@ -14,8 +15,7 @@ import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.MedicineService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.service.PrescriptionService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.clinicaetsii.web.validator.PrescriptionValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -46,8 +46,9 @@ public class DoctorPrescriptionController {
 	}
 
 	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
+	public void initBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setValidator(new PrescriptionValidator());
 	}
 
 	@ModelAttribute("patient")
@@ -55,36 +56,32 @@ public class DoctorPrescriptionController {
 		return this.patientService.findPatientById(patientId);
 	}
 
+	@ModelAttribute("medicines")
+	public Collection<Medicine> populateMedicines() {
+		return this.medicineService.findAllMedicines();
+	}
+
 	@GetMapping(value = "/new")
 	public String initCreationForm(final ModelMap model) {
 
 		Prescription prescription = new Prescription();
-		Collection<Medicine> medicines = this.medicineService.findAllMedicines();
-		model.put("medicines", medicines);
 		model.put("prescription", prescription);
 
 		return "/doctor/prescriptions/createPrescriptionForm";
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@PathVariable("patientId") final int patientId, @ModelAttribute("medicine") final Medicine medicine, final Prescription prescription, final BindingResult result, final ModelMap model) {
-
-		Collection<Medicine> medicines = this.medicineService.findAllMedicines();
-		model.put("medicines", medicines);
+	public String processCreationForm(final Patient patient, @Valid final Prescription prescription, final BindingResult result, final ModelMap model) {
 
 		if (result.hasErrors()) {
 			return "/doctor/prescriptions/createPrescriptionForm";
 		} else {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			Doctor currentD = this.doctorService.findDoctorByUsername(auth.getName());
-			Patient currentP = this.findPatient(patientId);
 			prescription.setStartDate(LocalDateTime.now());
-			prescription.setDoctor(currentD);
-			prescription.setPatient(currentP);
-			prescription.setMedicine(medicine);
+			prescription.setDoctor(this.doctorService.findCurrentDoctor());
+			prescription.setPatient(patient);
 
 			this.prescriptionService.savePrescription(prescription);
-			return "redirect:/";
+			return "redirect:/doctor/patients/{patientId}/prescriptions";
 		}
 	}
 
@@ -122,8 +119,6 @@ public class DoctorPrescriptionController {
 
 		this.prescriptionService.deletePrescription(prescription);
 
-		DoctorPatientController c = new DoctorPatientController(this.patientService);
-
-		return c.listPatients(model);
+		return "redirect:/doctor/patients/{patientId}/prescriptions";
 	}
 }

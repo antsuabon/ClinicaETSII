@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
-import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -29,13 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PatientAppointmentController {
 
 	private final AppointmentService		appointmentService;
-	private final DoctorService				doctorService;
 	private final PatientService			patientService;
 
 	@Autowired
-	public PatientAppointmentController(final AppointmentService appointmentService, final DoctorService doctorService, final PatientService patientService) {
+	public PatientAppointmentController(final AppointmentService appointmentService, final PatientService patientService) {
 		this.appointmentService = appointmentService;
-		this.doctorService = doctorService;
 		this.patientService = patientService;
 	}
 

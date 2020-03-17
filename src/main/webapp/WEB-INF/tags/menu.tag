@@ -70,14 +70,13 @@
 								<span>Mis Pacientes</span>
 							</petclinic:menuItem>
 
+							<petclinic:menuItem active="${name eq 'doctor patients'}" url="/doctor/appointments" title="list my patients">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Citas Pendientes</span>
+							</petclinic:menuItem>
+
 						</ul></li>
 				</sec:authorize>
-
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
-				</petclinic:menuItem>
-
 
 				<sec:authorize access="hasAnyAuthority('administrative') ">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrativo <span
@@ -94,11 +93,16 @@
 							<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"
 								title="list my patients">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Citas pendientes</span>
+								<span>Citas Pendientes</span>
 							</petclinic:menuItem>
 
 						</ul></li>
 				</sec:authorize>
+
+				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>Error</span>
+				</petclinic:menuItem>
 
 			</ul>
 
@@ -138,12 +142,19 @@
 							<li class="divider"></li>
 
 							<sec:authorize access="hasAuthority('doctor')">
-								<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/doctor"
-									title="show doctor profile">
+								<petclinic:menuItem active="${name eq 'doctor profile'}" url="/doctor" title="show doctor profile">
 									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 									<span>Mi perfil</span>
 								</petclinic:menuItem>
 							</sec:authorize>
+
+							<sec:authorize access="hasAuthority('patient')">
+								<petclinic:menuItem active="${name eq 'patient profile'}" url="/patient/edit" title="show doctor profile">
+									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									<span>Cambiar médico</span>
+								</petclinic:menuItem>
+							</sec:authorize>
+
 							<!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">

@@ -8,15 +8,14 @@
 
     <h2>Detalles de la prescripción</h2>
 
-
     <table class="table table-striped">
         <tr>
             <th>Fecha de inicio</th>
-            <td><c:out value="${prescription.startDate}"/></td>
+            <td><spring:eval expression="prescription.startDate"/></td>
         </tr>
          <tr>
             <th>Fecha de fin</th>
-            <td><c:out value="${prescription.getEndDate()}"/></td>
+            <td><spring:eval expression="prescription.endDate"/></td>
         </tr>
         <tr>
             <th>Días</th>

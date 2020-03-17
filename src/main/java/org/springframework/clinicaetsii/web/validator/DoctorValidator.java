@@ -1,11 +1,12 @@
 
-package org.springframework.clinicaetsii.web.doctor;
+package org.springframework.clinicaetsii.web.validator;
 
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.web.doctor.DoctorDoctorController;
 import org.springframework.clinicaetsii.web.doctor.DoctorDoctorController.DoctorForm;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;

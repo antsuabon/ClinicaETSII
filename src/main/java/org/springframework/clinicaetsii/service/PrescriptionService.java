@@ -26,7 +26,7 @@ public class PrescriptionService {
 
 	@Transactional(readOnly = true)
 	public Collection<Prescription> findPrescriptionsByPatientId(final int patientId) throws DataAccessException {
-		return this.prescriptionRepository.findPrescriptionsByPatientId(patientId);
+		return this.prescriptionRepository.findPrescriptionsByPatientIdOrdered(patientId);
 	}
 
 	@Transactional(readOnly = true)

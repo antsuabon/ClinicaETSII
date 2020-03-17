@@ -13,42 +13,31 @@
          <table id="table" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 150px;">Horas</th>
+            <th style="width: 60%;">Horas</th>
             <th></th>
             
         </tr>
         </thead>
         <tbody>
-        
-          
-             
      <c:forEach items="${hours}" var="hora">
            <tr>
                
-                 <td><c:out value="${hora}" /> </td>
+                 <td><spring:eval expression="hora"/></td>
                  
                  <td>
-                   <spring:url value="/administrative/patients/{}/new?fecha={fecha}" var="appointmentUrl">
-                        <spring:param name="doctorId" value="${doctor}"/>
-                        <spring:param name="fecha" value="${horas}"/>
+                   <spring:url value="/administrative/patients/{patientId}/appointments/new?fecha={fecha}" var="appointmentUrl">
+                        <spring:param name="fecha" value="${hora}"/>
                       <spring:param name="patientId" value="${patientId}"/>
                        
                     </spring:url>
          			<a href="${fn:escapeXml(appointmentUrl)}">Seleccionar hora</a>
                  </td>
                 
-               
-        
                 
             </tr> 
         </c:forEach>
         
         </tbody>
     </table>
-     
-     
-     
-     
-     
      
 </petclinic:layout>

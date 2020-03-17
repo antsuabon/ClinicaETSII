@@ -15,7 +15,7 @@
 			<table id="patientsTable" class="table table-striped">
 				<thead>
 					<tr>
-						<th style="width: 150px;">Nombre Completo</th>
+						<th style="width: 75%;">Nombre Completo</th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -28,7 +28,7 @@
 							<td><c:out value="${patient.fullName}" /></td>
 
 
-							<td><spring:url value="/administrative/patients/appointments/{patientId}/table" var="patientUrl">
+							<td><spring:url value="/administrative/patients/{patientId}/appointments/table" var="patientUrl">
 									<spring:param name="patientId" value="${patient.id}" />
 								</spring:url> <a href="${fn:escapeXml(patientUrl)}">Crear Cita</a></td>
 

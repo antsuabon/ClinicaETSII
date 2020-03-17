@@ -11,7 +11,7 @@ public interface PrescriptionRepository {
 
 	Collection<Prescription> findPrescriptionsByPatientUsername(String username) throws DataAccessException;
 
-	Collection<Prescription> findPrescriptionsByPatientId(int patientId) throws DataAccessException;
+	Collection<Prescription> findPrescriptionsByPatientIdOrdered(int patientId) throws DataAccessException;
 
 	List<Prescription> findAll() throws DataAccessException;
 

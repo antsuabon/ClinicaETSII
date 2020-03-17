@@ -67,7 +67,7 @@ public class PatientService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Patient> findAllPatientFromDoctors(final int id) throws DataAccessException {
+	public Collection<Patient> findAllPatientsFromDoctor(final int id) throws DataAccessException {
 		return this.patientRepository.findDoctorPatients(id);
 	}
 
