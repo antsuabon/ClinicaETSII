@@ -79,8 +79,8 @@ INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
 INSERT INTO authorities VALUES ('doctor3','doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
-(6, 'admin1', 'admin1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
-INSERT INTO authorities VALUES ('admin1','admin');
+(6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO authorities VALUES ('administrative1','administrative');
 
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);

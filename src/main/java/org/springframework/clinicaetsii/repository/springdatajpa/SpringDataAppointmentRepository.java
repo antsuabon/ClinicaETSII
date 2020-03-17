@@ -1,5 +1,6 @@
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Appointment;

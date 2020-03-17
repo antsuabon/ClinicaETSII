@@ -50,7 +50,7 @@ public class DoctorConsultationController {
 
 
 	@GetMapping("/doctor/patients/{patientId}/consultations/{consultationId}")
-	public String showConsultationDetails(@PathVariable("consultationId") final int consultationId, final Map<String, Object> model) {
+	public String showConsultationDetails(@PathVariable("patientId") final int patientId, @PathVariable("consultationId") final int consultationId, final Map<String, Object> model) {
 		Consultation result = this.consultationService.findConsultationById(consultationId);
 
 		if (result == null) {

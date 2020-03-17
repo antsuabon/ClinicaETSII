@@ -1,7 +1,9 @@
 package org.springframework.clinicaetsii.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.repository.AppointmentRepository;
 import org.springframework.dao.DataAccessException;

@@ -35,7 +35,6 @@ public class AdministrativePatientController {
 
 	private PatientService patientService;
 
-
 	@Autowired
 	public AdministrativePatientController(final PatientService patientService) {
 		this.patientService = patientService;
