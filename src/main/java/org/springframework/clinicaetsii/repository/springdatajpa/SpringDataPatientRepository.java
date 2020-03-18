@@ -13,4 +13,7 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 	@Query("SELECT patient FROM Patient patient WHERE patient.username = :username")
 	public Patient findPatient(@Param("username") String username);
 
+	@Override
+	@Query("SELECT patient FROM Patient patient WHERE patient.username = :username")
+	public Patient findPatientByUsername(@Param("username") String username);
 }

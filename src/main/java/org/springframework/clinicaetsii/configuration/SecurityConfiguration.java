@@ -33,11 +33,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/**","/oups").permitAll()
-//				.antMatchers("/users/new").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/patient/**").hasAnyAuthority("patient")
-//				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
-//				.antMatchers("/vets/**").authenticated()
+				.antMatchers("/anonymous/**").permitAll()
+			    .antMatchers("/patient/**").hasAnyAuthority("patient")
+			    .antMatchers("/doctor/**").hasAnyAuthority("doctor")
+			    .antMatchers("/administrative/**").hasAnyAuthority("administrative")
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
@@ -56,18 +55,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
-	      .dataSource(this.dataSource)
-	      .usersByUsernameQuery(
-	       "select username,password,enabled "
-	       + "from users "
-	       + "where username = ?")
-	      .authoritiesByUsernameQuery(
-	       "select username, authority "
-	        + "from authorities "
-	        + "where username = ?")
-	      .passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled from users where username = ?")
+			.authoritiesByUsernameQuery("select * from authorities a where exists (select * from users u where a.user_id = u.id and u.username= ? )").passwordEncoder(this.passwordEncoder());
 	}
+
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

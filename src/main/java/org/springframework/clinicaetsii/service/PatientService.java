@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PatientService {
 
-	@Autowired
+
 	private PatientRepository patientRepository;
 
 	@Autowired
@@ -23,8 +23,9 @@ public class PatientService {
 		this.patientRepository = patientRepository;
 	}
 
-	@Transactional(readOnly = true)
+
 	@PreAuthorize("hasAuthority('patient')")
+	@Transactional(readOnly = true)
 	public Patient findPatient() throws DataAccessException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -35,11 +36,13 @@ public class PatientService {
 	}
 
 	@Transactional
-	@PreAuthorize("hasAuthority('patient')")
-	public void save(@Valid final Patient patient) {
-
+	public void save(@Valid final Patient patient) throws DataAccessException {
 		this.patientRepository.save(patient);
+	}
 
+	@Transactional(readOnly = true)
+	public Patient findPatientByUsername(final String username) throws DataAccessException {
+			return this.patientRepository.findPatientByUsername(username);
 	}
 
 }

@@ -24,7 +24,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -65,9 +64,8 @@ public class Patient extends User {
 	@NotBlank
 	private String state;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(name = "general_practitioner_id")
-	@NotNull
 	private Doctor generalPractitioner;
 
 }

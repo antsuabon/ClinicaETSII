@@ -1,5 +1,7 @@
+
 package org.springframework.clinicaetsii.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,6 +13,7 @@ import lombok.Data;
 @Table(name = "authorities")
 public class Authorities {
 	@Id
-	String username;
+	@Column(name = "user_id")
+	String userId;
 	String authority;
 }

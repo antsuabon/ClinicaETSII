@@ -10,7 +10,8 @@ public interface PatientRepository  {
 
 	Patient findPatient(@Param("username") String username) throws DataAccessException;
 
-	void save(@Valid Patient patient) throws DataAccessException;
+	Patient save(@Valid Patient patient) throws DataAccessException;
 
+	Patient findPatientByUsername(@Param("username") String username) throws DataAccessException;
 
 }
