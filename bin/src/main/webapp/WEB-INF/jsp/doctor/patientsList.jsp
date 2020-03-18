@@ -1,71 +1,65 @@
-<%@ page session="false" trimDirectiveWhitespaces="true" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page session="false" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="doctor patients">
-    <h2>Lista de Pacientes</h2>
+	<h2>Lista de Pacientes</h2>
 
-    <c:choose>
+	<c:choose>
 
-	<c:when test="${emptyList=='true'}">
+		<c:when test="${emptyList=='true'}">
 
-		<p>No se han encontrado pacientes registrados</p>
+			<p>No se han encontrado pacientes registrados</p>
 
-	 </c:when>
+		</c:when>
 
-	 <c:otherwise>
+		<c:otherwise>
 
-    <table id="patientsTable" class="table table-striped">
+			<table id="patientsTable" class="table table-striped">
 
-        <thead>
+				<thead>
 
-        <tr>
+					<tr>
 
-            <th style="width: 150px;">Nombre Completo</th>
-			<th></th>
+						<th style="width: 60%;">Nombre Completo</th>
+						<th></th>
+						<th></th>
 
-        </tr>
+					</tr>
 
-        </thead>
+				</thead>
 
-        <tbody>
+				<tbody>
 
-        <c:forEach items="${patients}" var="patient">
+					<c:forEach items="${patients}" var="patient">
 
-            <tr>
+						<tr>
 
-                <td>
-					<spring:url value="/doctor/patients/{patientId}/consultations" var="patientUrl">
-                        <spring:param name="patientId" value="${patient.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(patientUrl)}"><c:out value="${patient.fullName}"/></a>
+							<td><c:out value="${patient.fullName}" /></td>
 
-                </td>
-                
-                
-                 <td>
-					<spring:url value="/doctor/patients/{patientId}/prescriptions" var="patientUrl">
-                        <spring:param name="patientId" value="${patient.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(patientUrl)}">Prescripciones del paciente</a>
+							<td><spring:url value="/doctor/patients/{patientId}/consultations" var="patientUrl">
+									<spring:param name="patientId" value="${patient.id}" />
+								</spring:url> <a href="${fn:escapeXml(patientUrl)}"><c:out value="Consultas del paciente" /></a></td>
 
-                </td>
-                
-
-            </tr>
-
-        </c:forEach>
+							<td><spring:url value="/doctor/patients/{patientId}/prescriptions" var="patientUrl">
+									<spring:param name="patientId" value="${patient.id}" />
+								</spring:url> <a href="${fn:escapeXml(patientUrl)}">Prescripciones del paciente</a></td>
 
 
-        </tbody>
+						</tr>
 
-    </table>
+					</c:forEach>
 
-    </c:otherwise>
 
-     </c:choose> 
+				</tbody>
+
+			</table>
+
+		</c:otherwise>
+
+	</c:choose>
 
 </petclinic:layout>

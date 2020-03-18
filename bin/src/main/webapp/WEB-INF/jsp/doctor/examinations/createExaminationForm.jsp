@@ -8,7 +8,7 @@
 
 <petclinic:layout pageName="examinations">
     <h2>
-        <c:if test="${examination['new']}">New </c:if> Examination
+        <c:if test="${examination['new']}">Nueva </c:if> exploración
     </h2>
     <form:form modelAttribute="examination" class="form-horizontal" id="add-examination-form">
         <div class="form-group has-feedback">
@@ -18,7 +18,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${examination['new']}">
-                        <button class="btn btn-default" type="submit">Add Examination</button>
+                        <button class="btn btn-default" type="submit">Añadir exploración</button>
                     </c:when>
                 </c:choose>
             </div>
