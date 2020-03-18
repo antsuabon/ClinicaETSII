@@ -40,6 +40,8 @@ public class PatientProfileController {
 		return "patients/patientDetails";
 	}
 
+
+
 	@InitBinder
 	public void initBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new PatientValidator(this.patientService));
