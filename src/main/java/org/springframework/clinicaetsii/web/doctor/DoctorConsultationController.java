@@ -13,6 +13,7 @@ import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.ConsultationService;
+import org.springframework.clinicaetsii.service.ExaminationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,12 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DoctorConsultationController {
 
 	private ConsultationService consultationService;
+	private ExaminationService examinationService;
 	private AppointmentService appointmentService;
 
 	@Autowired
-	public DoctorConsultationController(final ConsultationService consultationService, final AppointmentService appointmentService) {
+	public DoctorConsultationController(final ConsultationService consultationService, final AppointmentService appointmentService, final ExaminationService examinationService) {
 		this.consultationService = consultationService;
 		this.appointmentService = appointmentService;
+		this.examinationService = examinationService;
 	}
 
 	@GetMapping("/doctor/patients/{patientId}/consultations")
@@ -58,6 +61,7 @@ public class DoctorConsultationController {
 		} else {
 			model.put("patientId", patientId);
 			model.put("consultation", result);
+			model.put("examinationsSorted", this.examinationService.findExaminationsSortedByStartDate(consultationId));
 		}
 
 		return "/doctor/consultations/consultationDetails";

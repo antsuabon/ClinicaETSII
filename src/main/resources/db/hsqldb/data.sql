@@ -144,9 +144,9 @@ INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (1,2);
 INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (3,3);
 
 
-INSERT INTO examinations (id, description,consultation_id) VALUES (1,'Tiene el vientre muy hinchado',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (2,'Tiene la cara pálida',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la rodilla enrojecida',2);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (1, '2020-03-07 11:00:00', 'Tiene el vientre muy hinchado',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (2, '2020-04-07 11:00:00', 'Tiene la cara pálida',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (3, '2020-05-07 11:00:00', 'Tiene la rodilla enrojecida',2);
 
 INSERT INTO prescriptions (id, start_date,dosage,days,pharmaceutical_warning,patient_warning,medicine_id,patient_id,doctor_id) VALUES 
 (1,'2020-03-09 11:00:00',1,7,'Vender solo con receta','Puede provocar efectos secundarios',1,4,1);

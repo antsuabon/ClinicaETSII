@@ -13,5 +13,7 @@ public interface ExaminationRepository {
 	Examination findById(int id) throws DataAccessException;
 
 	Examination save(Examination examination) throws DataAccessException;
+	
+	Collection<Examination> findAllSorted(int id) throws DataAccessException;
 
 }

@@ -60,7 +60,7 @@
 			
 			
 			<table class="table table-striped">
-				<c:forEach items="${consultation.examinations}" var="examination">
+				<c:forEach items="${examinationsSorted}" var="examination">
 
 					<tr>
 						<td width="25%" ><spring:eval expression="examination.startTime"></spring:eval></td>
