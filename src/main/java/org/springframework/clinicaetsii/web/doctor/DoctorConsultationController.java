@@ -1,7 +1,7 @@
 package org.springframework.clinicaetsii.web.doctor;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -13,10 +13,13 @@ import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.ConsultationService;
+import org.springframework.clinicaetsii.web.validator.ConsultationValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,11 +71,17 @@ public class DoctorConsultationController {
 		return this.consultationService.findDischargeTypes();
 	}
 
+	@InitBinder("consultation")
+	public void initBinder(final WebDataBinder dataBinder, @ModelAttribute("appointmentId") final Integer appointmentId, @PathVariable(name = "consultationId", required = false) final Integer consultationId) {
+		dataBinder.setValidator(new ConsultationValidator(this.appointmentService, this.consultationService, appointmentId, consultationId));
+	}
+
 	@GetMapping("/doctor/patients/{patientId}/consultations/new")
 	public String initCreationForm(@RequestParam("appointmentId") final int appointmentId, final ModelMap model) {
 		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
 		Consultation consultation = new Consultation();
       	consultation.setAppointment(appointment);
+      	consultation.setStartTime(LocalDateTime.now());
 		model.put("consultation", consultation);
 		return "/doctor/consultations/createOrUpdateConsultationForm";
 	}
@@ -105,9 +114,10 @@ public class DoctorConsultationController {
 	}
 
 	@PostMapping("/doctor/patients/{patientId}/consultations/{consultationId}/edit")
-	public String processUpdateForm(@PathVariable("consultationId") final int consultationId, @RequestParam(value = "diagnoses", required = false) final List<Diagnosis> diagnoses, @Valid final Consultation consultation, final BindingResult result, final ModelMap model) {
+	public String processUpdateForm(@PathVariable("consultationId") final int consultationId, @Valid final Consultation consultation, final BindingResult result, final ModelMap model) {
 		Consultation oldConsultation = this.consultationService.findConsultationById(consultationId);
 
+		consultation.setExaminations(oldConsultation.getExaminations());
 		consultation.setAppointment(oldConsultation.getAppointment());
       	consultation.setConstants(oldConsultation.getConstants());
 
@@ -116,6 +126,12 @@ public class DoctorConsultationController {
 			return "/doctor/consultations/createOrUpdateConsultationForm";
 		}
 		else {
+
+
+			if (consultation.getDischargeType() != null) {
+				consultation.setEndTime(LocalDateTime.now());
+			}
+
 			this.consultationService.save(consultation);
 			return "redirect:/doctor/patients/{patientId}/consultations/" + consultation.getId();
 		}

@@ -19,9 +19,19 @@ public class ConstantService {
 		this.constantRepository = constantRepository;
 	}
 
+	@Transactional(readOnly = true)
+	public Constant findConstantById(final int constantId) {
+		return this.constantRepository.findById(constantId);
+	}
+
 	@Transactional
 	public void saveConstant(final Constant constant) {
 		this.constantRepository.save(constant);
+	}
+
+	@Transactional
+	public void deleteConstant(final Constant constant) {
+		this.constantRepository.delete(constant);
 	}
 
 	@Transactional(readOnly = true)
