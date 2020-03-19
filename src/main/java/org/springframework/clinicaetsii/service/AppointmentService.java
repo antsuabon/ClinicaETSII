@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class AppointmentService {
 
 	private AppointmentRepository appointmentRepository;
 
+
 	@Autowired
 	public AppointmentService(final AppointmentRepository AppointmentRepository) {
 		this.appointmentRepository = AppointmentRepository;
@@ -32,6 +34,11 @@ public class AppointmentService {
 	public void saveAppointment(final Appointment appointment) throws DataAccessException {
 		this.appointmentRepository.save(appointment);
 
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Appointment> findAll() throws DataAccessException {
+		return this.appointmentRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)

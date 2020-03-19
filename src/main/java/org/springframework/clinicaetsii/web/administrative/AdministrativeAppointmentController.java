@@ -29,6 +29,7 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -47,8 +48,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AdministrativeAppointmentController {
 
-	private final AppointmentService		appointmentService;
-	private final PatientService			patientService;
+	private final AppointmentService	appointmentService;
+	private final PatientService		patientService;
 
 
 	@Autowired
@@ -57,15 +58,17 @@ public class AdministrativeAppointmentController {
 		this.patientService = patientService;
 	}
 
-	@InitBinder
+	@InitBinder("appointment")
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setValidator(new AppointmentValidator());
 
 	}
 
 	@GetMapping(value = "/administrative/patients/{patientId}/appointments/table")
 	public String generateTableAdmin(@PathVariable("patientId") final int patientId, final Map<String, Object> model) {
-		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(patientId));
+		Patient patient = this.patientService.findPatient(patientId);
+		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(patient.getGeneralPractitioner().getId()));
 		List<LocalDateTime> table = this.timeTable(LocalDate.now());
 		table.removeAll(citas);
 		if (table.isEmpty()) {
@@ -83,7 +86,7 @@ public class AdministrativeAppointmentController {
 
 		appointment.setStartTime(fecha);
 		appointment.setEndTime(fecha.plusMinutes(7));
-		appointment.setPatient(this.patientService.findPatientById(patientId));
+		appointment.setPatient(this.patientService.findPatient(patientId));
 
 		model.put("patientId", patientId);
 		model.put("appointment", appointment);
@@ -93,9 +96,11 @@ public class AdministrativeAppointmentController {
 	}
 
 	@PostMapping(value = "/administrative/patients/{patientId}/appointments/save")
-	public String processCreationForm(@PathVariable("patientId") final int patientId, @Valid final Appointment appointment,final BindingResult result) {
-		Patient patient = this.patientService.findPatientById(patientId);
+	public String processCreationForm(@PathVariable("patientId") final int patientId, @Valid final Appointment appointment, final BindingResult result) {
+		Patient patient = this.patientService.findPatient(patientId);
 		if (result.hasErrors()) {
+			System.out.println(result.getFieldError());
+
 			return "redirect:/administrative/patients/{patientId}/appointments/table";
 		} else {
 
@@ -105,7 +110,6 @@ public class AdministrativeAppointmentController {
 		}
 
 	}
-
 
 	public List<LocalDateTime> timeTable(final LocalDate l) {
 
@@ -117,7 +121,6 @@ public class AdministrativeAppointmentController {
 			start = start.plusMinutes(7);
 			hours.add(start);
 		}
-		hours.add(end);
 
 		return hours;
 	}

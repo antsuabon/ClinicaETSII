@@ -39,6 +39,7 @@
 						<input type="radio" id="prioridadBaja" name="priority" value="false">
 						<label for="prioridadBaja"> Prioridad Baja</label>
 						<br>
+						
 
 						<button class="btn btn-default" type="submit">Solicitar cita</button>
 

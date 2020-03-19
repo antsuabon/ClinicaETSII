@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.repository;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
 public interface AppointmentRepository {
+
+	Collection<Appointment> findAll() throws DataAccessException;
 
 	Appointment findById(int appointmentId) throws DataAccessException;
 

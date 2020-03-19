@@ -14,21 +14,22 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/patient/appointments")
+
 public class PatientAppointmentController {
 
-	private final AppointmentService		appointmentService;
-	private final PatientService			patientService;
+	private final AppointmentService	appointmentService;
+	private final PatientService		patientService;
+
 
 	@Autowired
 	public PatientAppointmentController(final AppointmentService appointmentService, final PatientService patientService) {
@@ -36,13 +37,14 @@ public class PatientAppointmentController {
 		this.patientService = patientService;
 	}
 
-	@InitBinder
+	@InitBinder("appointment")
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setValidator(new AppointmentValidator());
 
 	}
 
-	@GetMapping(value = "/table")
+	@GetMapping(value = "/patient/appointments/table")
 	public String generateTable(final Map<String, Object> model) {
 		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(this.patientService.findCurrentPatient().getGeneralPractitioner().getId()));
 		List<LocalDateTime> table = this.timeTable(LocalDate.now());
@@ -56,8 +58,8 @@ public class PatientAppointmentController {
 		return "/patient/appointments/timeTable";
 	}
 
-	@GetMapping(value = "/new")
-	public String initCreationForm(final Map<String, Object> model, @RequestParam("fecha") final LocalDateTime fecha) {
+	@GetMapping(value = "/patient/appointments/new")
+	public String initCreationForm(@RequestParam("fecha") final LocalDateTime fecha, final Map<String, Object> model) {
 		Appointment appointment = new Appointment();
 		appointment.setPatient(this.patientService.findCurrentPatient());
 
@@ -70,8 +72,8 @@ public class PatientAppointmentController {
 
 	}
 
-	@PostMapping(value = "/save")
-	public String processCreationForm(@Valid final Appointment appointment,final BindingResult result) {
+	@PostMapping(value = "/patient/appointments/save")
+	public String processCreationForm(@Valid final Appointment appointment, final BindingResult result) {
 		Patient p = this.patientService.findPatientByUsername();
 		if (result.hasErrors()) {
 			return "redirect:/patient/appointments/new";
@@ -96,7 +98,6 @@ public class PatientAppointmentController {
 			start = start.plusMinutes(7);
 			hours.add(start);
 		}
-		hours.add(end);
 
 		return hours;
 	}
