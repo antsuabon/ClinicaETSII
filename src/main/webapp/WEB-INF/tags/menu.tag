@@ -91,16 +91,16 @@
 				</sec:authorize>
 				
 				
-				<sec:authorize access="hasAuthority('admin')">
+				<sec:authorize access="hasAuthority('administrative')">
         		<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Admin
+						Administrative
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					
 					<ul class="dropdown-menu">
 					
-						<petclinic:menuItem active="${name eq 'admin'}" url="/admin/patient/new"
+						<petclinic:menuItem active="${name eq 'admin'}" url="/administrative/patients/new"
 							title="add new patient">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							<span>Añadir Paciente</span>

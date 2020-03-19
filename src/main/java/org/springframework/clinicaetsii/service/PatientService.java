@@ -63,10 +63,16 @@ public class PatientService {
 		return this.patientRepository.findAppointmentsByPatientUsername(username);
 	}
 
-	@Transactional(readOnly = true)
-	@PreAuthorize("hasAuthority('admin')")
-	public void savePatient(@Valid final Patient patient) {
+	@Transactional
+	public void save(@Valid final Patient patient) {
 		this.patientRepository.save(patient);
+	}
+
+	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('administrative')")
+	public Patient findPatientById(final int patientId) throws DataAccessException {
+
+		return this.patientRepository.findPatientById(patientId);
 
 	}
 

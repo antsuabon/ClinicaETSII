@@ -64,7 +64,7 @@ public class Patient extends User {
 	@NotBlank
 	private String state;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(name = "general_practitioner_id")
 	private Doctor generalPractitioner;
 

@@ -31,5 +31,8 @@ public interface PatientRepository {
 
 	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername) throws DataAccessException;
 
-	void save(@Valid Patient patient) throws DataAccessException;
+	Patient save(@Valid Patient patient) throws DataAccessException;
+
+	Patient findPatientById(@Param("patientId") int patientId) throws DataAccessException;
+
 }

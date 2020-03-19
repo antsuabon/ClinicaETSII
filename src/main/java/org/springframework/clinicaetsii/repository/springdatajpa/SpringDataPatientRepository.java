@@ -35,4 +35,8 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.username LIKE :patientUsername")
 	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername);
 
+	@Override
+	@Query("SELECT patient FROM Patient patient WHERE patient.id LIKE :patientId")
+	Patient findPatientById(@Param("patientId") int patientId);
+
 }
