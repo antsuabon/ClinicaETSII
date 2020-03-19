@@ -52,13 +52,22 @@ public class PatientService {
 
 	@Transactional(readOnly = true)
 	@PreAuthorize("hasAuthority('patient')")
-	public Collection<Appointment> findAppointments() throws DataAccessException {
+	public Collection<Appointment> findAppointmentsDone() throws DataAccessException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.patientRepository.findAppointmentsByPatientUsername(username);
+		return this.patientRepository.findAppointmentsByPatientUsernameDone(username);
+	}
+
+	public Collection<Appointment> findAppointmentsDelete() {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
+
+		return this.patientRepository.findAppointmentsByPatientUsernameDelete(username);
 	}
 
 }

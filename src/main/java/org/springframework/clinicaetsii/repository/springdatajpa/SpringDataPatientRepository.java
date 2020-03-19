@@ -35,4 +35,11 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.username LIKE :patientUsername")
 	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername);
 
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE (appointment.patient.username LIKE :patientUsername) AND NOT EXISTS (SELECT consultation FROM Consultation consultation WHERE consultation.appointment = appointment)")
+	Collection<Appointment> findAppointmentsByPatientUsernameDelete(@Param("patientUsername") String patientUsername);
+
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE (appointment.patient.username LIKE :patientUsername) AND EXISTS (SELECT consultation FROM Consultation consultation WHERE consultation.appointment = appointment)")
+	Collection<Appointment> findAppointmentsByPatientUsernameDone(@Param("patientUsername") String username);
 }

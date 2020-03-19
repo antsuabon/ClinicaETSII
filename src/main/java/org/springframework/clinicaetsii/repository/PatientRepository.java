@@ -28,4 +28,8 @@ public interface PatientRepository {
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
 
 	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername) throws DataAccessException;
+
+	Collection<Appointment> findAppointmentsByPatientUsernameDone(@Param("patientUsername") String username) throws DataAccessException;
+
+	Collection<Appointment> findAppointmentsByPatientUsernameDelete(@Param("patientUsername") String patientUsername) throws DataAccessException;
 }
