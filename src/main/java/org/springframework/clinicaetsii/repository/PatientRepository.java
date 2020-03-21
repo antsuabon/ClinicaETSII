@@ -18,6 +18,8 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.dao.DataAccessException;

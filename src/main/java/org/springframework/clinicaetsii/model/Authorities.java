@@ -12,8 +12,10 @@ import lombok.Data;
 @Entity
 @Table(name = "authorities")
 public class Authorities {
+
 	@Id
 	@Column(name = "user_id")
 	String userId;
 	String authority;
+	
 }

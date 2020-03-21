@@ -101,7 +101,6 @@ INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, gener
 (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',2);
 INSERT INTO authorities VALUES (5,'patient');
 
-
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES

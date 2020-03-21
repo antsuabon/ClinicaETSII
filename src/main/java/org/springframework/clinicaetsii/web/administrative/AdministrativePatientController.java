@@ -40,8 +40,9 @@ public class AdministrativePatientController {
 		this.patientService = patientService;
 	}
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
+	@InitBinder("patient")
+	public void initBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new PatientValidator(this.patientService));
 		dataBinder.setDisallowedFields("id");
 	}
 
@@ -71,6 +72,41 @@ public class AdministrativePatientController {
 
 		}
 		return "/administrative/doctorsList";
+	}
+
+	@GetMapping("/patients/new")
+	public String initCreation(final Map<String, Object> model) {
+
+		Patient patient = new Patient();
+		model.put("patient", patient);
+
+		return "/administrative/patients/createPatientForm";
+
+	}
+
+
+	@PostMapping("/patients/new")
+	public String processCreation(@Valid final Patient patient, final BindingResult result) {
+
+		if(result.hasErrors()) {
+
+			return "/administrative/patients/createPatientForm";
+
+		} else {
+
+			patient.setEnabled(true);
+			patient.setPassword("123456789");
+			this.patientService.save(patient);
+			this.authoritiesService.saveAuthorities(String.valueOf(patient.getId()), "patient");
+			return "redirect:/administrative/patients/" + patient.getId();
+		}
+	}
+
+	@GetMapping("/patients/{patientId}")
+	public ModelAndView showOwner(@PathVariable("patientId") final int patientId) {
+		ModelAndView mav = new ModelAndView("administrative/patients/patientDetails");
+		mav.addObject(this.patientService.findPatientById(patientId));
+		return mav;
 	}
 
 }

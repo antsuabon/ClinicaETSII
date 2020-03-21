@@ -1,4 +1,3 @@
-
 package org.springframework.clinicaetsii.configuration;
 
 import javax.sql.DataSource;
@@ -8,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -26,15 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-//    securedEnabled = true,
-//    jsr250Enabled = true,
-    prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
 	@Autowired
 	DataSource dataSource;
-
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
@@ -71,8 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
-		return encoder;
+		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
+	    return encoder;
 	}
 
 }
