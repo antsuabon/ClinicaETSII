@@ -78,6 +78,10 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
 INSERT INTO authorities VALUES ('doctor3','doctor');
 
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
+(6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO authorities VALUES ('administrative1','administrative');
+
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,13);
@@ -87,11 +91,13 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
 (4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
-INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES 
+(4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
 INSERT INTO authorities VALUES ('patient1','patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES 
 (5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');
-INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',1);
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES 
+(5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',2);
 INSERT INTO authorities VALUES ('patient2','patient');
 
 
@@ -101,6 +107,8 @@ INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (2, false, '2020-03-09 11:00:00', '2020-03-09 11:07:00', 4);
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (3, false, '2020-03-12 11:00:00', '2020-03-13 11:07:00', 5);
+INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
+(4, false, '2020-03-14 11:00:00', '2020-03-14 11:07:00', 4);
 
 INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) 
 	VALUES(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.'); 

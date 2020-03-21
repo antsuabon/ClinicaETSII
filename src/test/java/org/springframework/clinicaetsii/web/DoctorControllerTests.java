@@ -5,20 +5,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.clinicaetsii.configuration.SecurityConfiguration;
-import org.springframework.clinicaetsii.model.Authorities;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = DoctorController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class DoctorControllerTests {
@@ -45,14 +47,7 @@ class DoctorControllerTests {
 
 	private Doctor				doctor3;
 
-	private Authorities			authority1;
 
-	private Authorities			authority2;
-
-	private Authorities			authority3;
-
-
-	@BeforeEach
 	void setup() {
 
 		this.doctor1 = new Doctor();
@@ -67,9 +62,6 @@ class DoctorControllerTests {
 		this.doctor1.setPhone("955668756");
 		this.doctor1.setCollegiateCode("303092345");
 
-		this.authority1.setAuthority("doctor");
-		this.authority1.setUsername("doctor1");
-
 		this.doctor2 = new Doctor();
 		this.doctor2.setId(DoctorControllerTests.TEST_DOCTOR_ID_2);
 		this.doctor2.setUsername("doctor2");
@@ -81,9 +73,6 @@ class DoctorControllerTests {
 		this.doctor2.setEmail("ale@gmail.com");
 		this.doctor2.setPhone("955668777");
 		this.doctor2.setCollegiateCode("303051345");
-
-		this.authority1.setAuthority("doctor");
-		this.authority1.setUsername("doctor2");
 
 		this.doctor3 = new Doctor();
 		this.doctor3.setId(DoctorControllerTests.TEST_DOCTOR_ID_3);
@@ -97,9 +86,6 @@ class DoctorControllerTests {
 		this.doctor3.setPhone("955668756");
 		this.doctor3.setCollegiateCode("303024345");
 
-		this.authority3.setAuthority("doctor");
-		this.authority3.setUsername("doctor3");
-
 		List<Doctor> doctors = new ArrayList<>();
 
 		doctors.add(this.doctor1);
@@ -110,6 +96,21 @@ class DoctorControllerTests {
 
 		BDDMockito.given(this.doctorService.findDoctorsSortedByNumOfServices()).willReturn(doctors2);
 
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testListDoctors() throws Exception {
+		this.setup();
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/doctors")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("doctors"))
+			.andExpect(MockMvcResultMatchers.view().name("/anonymous/doctors/doctorsList"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testNotListDoctors() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/doctors")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
+			.andExpect(MockMvcResultMatchers.view().name("/anonymous/doctors/doctorsList"));
 	}
 
 }
