@@ -18,6 +18,7 @@ package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.Collection;
 
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,18 +28,22 @@ import org.springframework.data.repository.query.Param;
 public interface SpringDataPatientRepository extends PatientRepository, CrudRepository<Patient, Integer> {
 
 	@Override
-	@Query("SELECT patient FROM Patient patient WHERE patient.generalPractitioner.username LIKE :doctorUsername")
-	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
-
-	@Override
-	@Query("SELECT DISTINCT patient FROM Patient patient WHERE patient.username LIKE :username%")
-	Patient findByUsername(@Param("username") String username);
-
-	@Override
 	@Query("select p from Patient p where exists (select d from Doctor d where d.id =:id)")
 	Collection<Patient> findDoctorPatients(@Param("id") int id);
 
 	@Override
-	@Query("SELECT p FROM Patient p WHERE (p.id =:id)")
-	Patient findById(@Param("id") int id);
+	@Query("SELECT patient FROM Patient patient WHERE patient.generalPractitioner.username LIKE :doctorUsername")
+	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername);
+
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.username LIKE :patientUsername")
+	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername);
+
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE (appointment.patient.username LIKE :patientUsername) AND NOT EXISTS (SELECT consultation FROM Consultation consultation WHERE consultation.appointment = appointment)")
+	Collection<Appointment> findAppointmentsByPatientUsernameDelete(@Param("patientUsername") String patientUsername);
+
+	@Override
+	@Query("SELECT appointment FROM Appointment appointment WHERE (appointment.patient.username LIKE :patientUsername) AND EXISTS (SELECT consultation FROM Consultation consultation WHERE consultation.appointment = appointment)")
+	Collection<Appointment> findAppointmentsByPatientUsernameDone(@Param("patientUsername") String username);
 }

@@ -18,21 +18,26 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
 public interface PatientRepository {
 
-	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
-
-	Patient findByUsername(String username) throws DataAccessException;
-
 	Collection<Patient> findAll() throws DataAccessException;
 
 	Patient save(Patient patient) throws DataAccessException;
 
+	Patient findById(int id) throws DataAccessException;
+
 	Collection<Patient> findDoctorPatients(int id) throws DataAccessException;
 
-	Patient findById(int id) throws DataAccessException;
+	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
+
+	Collection<Appointment> findAppointmentsByPatientUsername(@Param("patientUsername") String patientUsername) throws DataAccessException;
+
+	Collection<Appointment> findAppointmentsByPatientUsernameDone(@Param("patientUsername") String username) throws DataAccessException;
+
+	Collection<Appointment> findAppointmentsByPatientUsernameDelete(@Param("patientUsername") String patientUsername) throws DataAccessException;
 }

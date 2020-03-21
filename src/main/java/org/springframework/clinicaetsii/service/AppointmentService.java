@@ -35,6 +35,7 @@ public class AppointmentService {
 	}
 
 	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('patient')")
 	public Appointment findAppointmentById(final int appointmentId) throws DataAccessException {
 		return this.appointmentRepository.findById(appointmentId);
 	}
@@ -48,6 +49,12 @@ public class AppointmentService {
 		String username = user.getUsername();
 
 		return this.appointmentRepository.findAppointmentsWithoutConsultationByDoctorUsername(username);
+	}
+
+	@Transactional
+	@PreAuthorize("hasAuthority('patient')")
+	public void deleteAppointment(final Appointment appointment) {
+		this.appointmentRepository.delete(appointment);
 	}
 
 }

@@ -100,4 +100,40 @@ public class PatientAppointmentController {
 
 		return hours;
 	}
+
+	@GetMapping("/{appointmentId}/delete")
+	public String deleteAppointent(@PathVariable("appointmentId") final int appointmentId) {
+
+		Appointment appointment = this.appointmentService.findById(appointmentId);
+
+		if(appointment !=null) {
+		this.appointmentService.deleteAppointment(appointment);
+		}
+
+		return "redirect:/patient/appointments";
+
+	}
+
+	@GetMapping
+	public String listAppointmentsPatient(final Map<String, Object> model) {
+
+		Collection<Appointment> appointmentsDelete = this.patientService.findAppointmentsDelete();
+		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
+
+		if (appointmentsDelete.isEmpty()) {
+			model.put("emptyListDelete", true);
+		} else {
+			model.put("appointmentsDelete", appointmentsDelete);
+		}
+
+		if (appointmentsDone.isEmpty()) {
+			model.put("emptyListDone", true);
+		} else {
+			model.put("appointments", appointmentsDone);
+		}
+
+		return "/patient/appointments/appointmentsList";
+	}
+	
+	}
 }
