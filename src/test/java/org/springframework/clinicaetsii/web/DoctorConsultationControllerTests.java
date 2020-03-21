@@ -18,6 +18,7 @@ import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.ConsultationService;
 import org.springframework.clinicaetsii.web.doctor.DoctorConsultationController;
@@ -43,51 +44,63 @@ class DoctorConsultationControllerTests {
 	private ConsultationService				consultationService;
 
 	@MockBean
+	private AppointmentService				appointmentService;
+
+	@MockBean
 	private AuthoritiesService				authoritiesService;
 
 	@Autowired
 	private MockMvc							mockMvc;
 
 	private Consultation					consultation1;
-
 	private Consultation					consultation2;
+
+	private Doctor							doctor1;
+
+	private Patient							patient1;
+
+	private Appointment						appointment1;
+	private Appointment						appointment2;
+
+	private DischargeType					dischargeType1;
+	private DischargeType					dischargeType2;
 
 
 	void setup() {
 
-		Doctor doctor1 = new Doctor();
-		doctor1.setId(3);
-		doctor1.setUsername("doctor1");
-		doctor1.setPassword("doctor1");
-		doctor1.setEnabled(true);
-		doctor1.setName("Antonio");
-		doctor1.setSurname("Suarez Bono");
-		doctor1.setDni("45612378P");
-		doctor1.setEmail("antonio@gmail.com");
-		doctor1.setPhone("955668756");
-		doctor1.setCollegiateCode("303024345");
+		this.doctor1 = new Doctor();
+		this.doctor1.setId(1);
+		this.doctor1.setUsername("doctor1");
+		this.doctor1.setPassword("doctor1");
+		this.doctor1.setEnabled(true);
+		this.doctor1.setName("Antonio");
+		this.doctor1.setSurname("Suarez Bono");
+		this.doctor1.setDni("45612378P");
+		this.doctor1.setEmail("antonio@gmail.com");
+		this.doctor1.setPhone("955668756");
+		this.doctor1.setCollegiateCode("303024345");
 
-		Patient patient1 = new Patient();
-		patient1.setId(1);
-		patient1.setAddress("Calle Oscar Arias");
-		patient1.setBirthDate(LocalDate.now());
-		patient1.setDni("41235678L");
-		patient1.setEmail("pedro@gmail.com");
-		patient1.setEnabled(true);
-		patient1.setGeneralPractitioner(doctor1);
-		patient1.setName("Pedro");
-		patient1.setNss("12345778S");
-		patient1.setPassword("patient1");
-		patient1.setPhone("123456789");
-		patient1.setState("España");
-		patient1.setSurname("Roldán");
-		patient1.setUsername("patient1");
+		this.patient1 = new Patient();
+		this.patient1.setId(1);
+		this.patient1.setAddress("Calle Oscar Arias");
+		this.patient1.setBirthDate(LocalDate.now());
+		this.patient1.setDni("41235678L");
+		this.patient1.setEmail("pedro@gmail.com");
+		this.patient1.setEnabled(true);
+		this.patient1.setGeneralPractitioner(this.doctor1);
+		this.patient1.setName("Pedro");
+		this.patient1.setNss("12345778S");
+		this.patient1.setPassword("patient1");
+		this.patient1.setPhone("123456789");
+		this.patient1.setState("España");
+		this.patient1.setSurname("Roldán");
+		this.patient1.setUsername("patient1");
 
-		Appointment appointment1 = new Appointment();
-		appointment1.setStartTime(LocalDateTime.now());
-		appointment1.setEndTime(LocalDateTime.now().plusMinutes(7));
-		appointment1.setPatient(patient1);
-		appointment1.setPriority(false);
+		this.appointment1 = new Appointment();
+		this.appointment1.setStartTime(LocalDateTime.now());
+		this.appointment1.setEndTime(LocalDateTime.now().plusMinutes(7));
+		this.appointment1.setPatient(this.patient1);
+		this.appointment1.setPriority(false);
 
 		this.consultation1 = new Consultation();
 		this.consultation1.setId(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1);
@@ -95,17 +108,17 @@ class DoctorConsultationControllerTests {
 		this.consultation1.setEndTime(LocalDateTime.now().plusMinutes(7));
 		this.consultation1.setAnamnesis("Dolor de estómago");
 		this.consultation1.setRemarks("Fiebres altas");
-		DischargeType dischargetype1 = new DischargeType();
-		dischargetype1.setId(1);
-		dischargetype1.setName("Revisión");
-		this.consultation1.setDischargeType(dischargetype1);
-		this.consultation1.setAppointment(appointment1);
+		this.dischargeType1 = new DischargeType();
+		this.dischargeType1.setId(1);
+		this.dischargeType1.setName("Revisión");
+		this.consultation1.setDischargeType(this.dischargeType1);
+		this.consultation1.setAppointment(this.appointment1);
 
-		Appointment appointment2 = new Appointment();
-		appointment2.setStartTime(LocalDateTime.now().plusMinutes(7));
-		appointment2.setEndTime(LocalDateTime.now().plusMinutes(7));
-		appointment2.setPatient(patient1);
-		appointment2.setPriority(false);
+		this.appointment2 = new Appointment();
+		this.appointment2.setStartTime(LocalDateTime.now().plusMinutes(7));
+		this.appointment2.setEndTime(LocalDateTime.now().plusMinutes(7));
+		this.appointment2.setPatient(this.patient1);
+		this.appointment2.setPriority(false);
 
 		this.consultation2 = new Consultation();
 		this.consultation2.setId(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_2);
@@ -113,11 +126,11 @@ class DoctorConsultationControllerTests {
 		this.consultation2.setEndTime(LocalDateTime.now().plusMinutes(7));
 		this.consultation2.setAnamnesis("Dolor de rodilla");
 		this.consultation2.setRemarks("Inflamación");
-		DischargeType dischargetype2 = new DischargeType();
-		dischargetype2.setId(2);
-		dischargetype2.setName("Especialidad");
-		this.consultation2.setDischargeType(dischargetype2);
-		this.consultation2.setAppointment(appointment2);
+		this.dischargeType2 = new DischargeType();
+		this.dischargeType2.setId(2);
+		this.dischargeType2.setName("Especialidad");
+		this.consultation2.setDischargeType(this.dischargeType2);
+		this.consultation2.setAppointment(this.appointment2);
 
 		List<Consultation> consultations = new ArrayList<>();
 
@@ -159,7 +172,7 @@ class DoctorConsultationControllerTests {
 	@Test
 	void testNotDetailsConsultation() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, -1)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList")).andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
+			.andExpect(MockMvcResultMatchers.model().attributeExists("empty")).andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
 	}
 
 }
