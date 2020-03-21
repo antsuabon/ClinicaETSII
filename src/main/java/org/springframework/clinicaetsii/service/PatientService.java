@@ -79,7 +79,7 @@ public class PatientService {
 	@PreAuthorize("hasAuthority('patient')")
 	@Transactional(readOnly = true)
 	public Patient findCurrentPatient() throws DataAccessException {
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
@@ -106,6 +106,25 @@ public class PatientService {
 			return this.patientRepository.findAppointmentsByPatientUsernameDelete(username);
 		}
 
+		@PreAuthorize("hasAuthority('patient')")
+		@Transactional(readOnly = true)
+		public Patient findPatient() throws DataAccessException {
 
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails user = (UserDetails) principal;
+			String username = user.getUsername();
+
+			return this.patientRepository.findPatient(username);
+		}
+
+		@Transactional
+		public void save(@Valid final Patient patient) throws DataAccessException {
+			this.patientRepository.save(patient);
+		}
+
+		@Transactional(readOnly = true)
+		public Patient findPatientByUsername(final String username) throws DataAccessException {
+				return this.patientRepository.findPatientByUsername(username);
+		}
 
 }

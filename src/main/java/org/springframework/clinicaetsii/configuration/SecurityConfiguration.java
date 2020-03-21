@@ -68,6 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authoritiesByUsernameQuery("select * from authorities a where exists (select * from users u where a.user_id = u.id and u.username= ? )").passwordEncoder(this.passwordEncoder());
 	}
 
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();

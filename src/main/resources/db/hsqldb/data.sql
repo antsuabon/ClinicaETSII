@@ -73,6 +73,7 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO doctors (doctor_id, collegiate_code) VALUES (2,'303092345');
 INSERT INTO authorities VALUES (2,'doctor');
 
+
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (3, 'doctor3', 'doctor3', true, 'José', 'Salado Asenjo','12345678P','jose@gmail.com','956780025');
 INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');

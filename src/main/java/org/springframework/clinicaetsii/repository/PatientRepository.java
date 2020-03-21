@@ -31,6 +31,8 @@ public interface PatientRepository {
 
 	Patient findById(int id) throws DataAccessException;
 
+	Patient findPatientByUsername(@Param("username") String username) throws DataAccessException;
+
 	Collection<Patient> findDoctorPatients(int id) throws DataAccessException;
 
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;

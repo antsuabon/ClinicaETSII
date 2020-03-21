@@ -1,6 +1,5 @@
 package org.springframework.clinicaetsii.service;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,16 @@ public class AppointmentService {
 	@PreAuthorize("hasAuthority('patient')")
 	public void deleteAppointment(final Appointment appointment) {
 		this.appointmentRepository.delete(appointment);
+	}
+
+	@Transactional
+	public Collection<Appointment> findAllAppointmentsByDoctorId(final int id) {
+		return this.appointmentRepository.findAllByDoctorId(id);
+	}
+
+	@Transactional
+	public Appointment findOneById(final int id) {
+		return this.appointmentRepository.findOneById(id);
 	}
 
 }
