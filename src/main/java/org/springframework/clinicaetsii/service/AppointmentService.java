@@ -1,5 +1,6 @@
 package org.springframework.clinicaetsii.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class AppointmentService {
 
 	@Transactional(readOnly = true)
 	public Collection<LocalDateTime> findAppointmentByDoctors(final int id) throws DataAccessException {
-		return this.appointmentRepository.findAppointmentByDoctors(id);
+		return this.appointmentRepository.findAppointmentsDatesByDoctorId(id);
 	}
 
 	@Transactional
@@ -58,12 +59,12 @@ public class AppointmentService {
 
 	@Transactional
 	public Collection<Appointment> findAllAppointmentsByDoctorId(final int id) {
-		return this.appointmentRepository.findAllByDoctorId(id);
+		return this.appointmentRepository.findAppointmentsByDoctorId(id);
 	}
 
 	@Transactional
 	public Appointment findOneById(final int id) {
-		return this.appointmentRepository.findOneById(id);
+		return this.appointmentRepository.findById(id);
 	}
 
 }

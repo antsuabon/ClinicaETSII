@@ -19,9 +19,12 @@ package org.springframework.clinicaetsii.web.administrative;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -29,15 +32,19 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdministrativePatientController {
 
 	private PatientService patientService;
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public AdministrativePatientController(final PatientService patientService) {
+	public AdministrativePatientController(final PatientService patientService, final AuthoritiesService authoritiesService) {
 		this.patientService = patientService;
+		this.authoritiesService = authoritiesService;
 	}
 
 	@InitBinder("patient")
