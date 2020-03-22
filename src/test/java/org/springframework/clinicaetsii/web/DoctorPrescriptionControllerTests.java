@@ -156,14 +156,19 @@ class DoctorPrescriptionControllerTests {
 	@Test
 	void testListPrescriptions() throws Exception {
 		this.setup();
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("prescriptions"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("patientId")).andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionsList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions", 1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("prescriptions"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("patientId"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionsList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testNotListPrescriptions() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions", 1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionsList"));
 	}
 
@@ -171,14 +176,18 @@ class DoctorPrescriptionControllerTests {
 	@Test
 	void showPrescriptionDetails() throws Exception {
 		this.setup();
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/{prescriptionId}", 1, 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("prescription"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/{prescriptionId}", 1, 1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("prescription"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void notShowPrescriptionDetails() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/{prescriptionId}", 1, -1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/{prescriptionId}", 1, -1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionDetails"));
 	}
 
