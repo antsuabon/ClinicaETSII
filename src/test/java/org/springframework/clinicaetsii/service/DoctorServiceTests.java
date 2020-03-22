@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -56,7 +57,56 @@ class DoctorServiceTests {
 			}
 		}
 		Assertions.assertThat(sortedFirst && sortedLast).isEqualTo(true);
-
 	}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void doctorShouldFindCurrentDoctor() {
+		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
+
+		Assertions.assertThat(currentDoctor).isNotNull();
+
+		String username = currentDoctor.getUsername();
+
+		Assertions.assertThat(username.equals("doctor1"));
+	}
+
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {"patient"})
+	void patientShouldNotFindCurrentDoctor() {
+		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
+
+		Assertions.assertThat(currentDoctor).isNull();
+	}
+
+	@Test
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	void administrativeShouldNotFindCurrentDoctor() {
+		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
+
+		Assertions.assertThat(currentDoctor).isNull();
+	}
+
+	@Test
+	@WithMockUser(value = "spring")
+	void anonymousShouldNotFindCurrentDoctor() {
+		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
+
+		Assertions.assertThat(currentDoctor).isNull();
+	}
+
+	@Test
+	void shouldFindAllServices() {
+		Collection<org.springframework.clinicaetsii.model.Service> services = this.doctorService.findAllServices();
+
+		Assertions.assertThat(services)
+			.isNotEmpty()
+			.allMatch(s -> !s.getId().equals(null), "")
+			.allMatch(s -> !s.getName().equals(null), "")
+			.allMatch(s -> !s.getName().isEmpty(), "");
+	}
+
+
 
 }

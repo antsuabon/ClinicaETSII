@@ -25,6 +25,7 @@ public class User {
 	private int id;
 
 	@Column(name = "username", unique = true)
+	@NotBlank
 	private String username;
 
 	@Column(name = "password")

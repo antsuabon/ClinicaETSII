@@ -37,10 +37,7 @@ class PatientServiceTests {
 
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {
-		"doctor"
-	})
-
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void shouldFindCurrentDoctorPatients() {
 
 		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
@@ -75,9 +72,7 @@ class PatientServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 
 	void shouldFindCurrentDoctorPatientsAuthority() {
 
