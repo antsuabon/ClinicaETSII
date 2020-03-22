@@ -55,7 +55,7 @@ class DoctorServiceTests {
 				break;
 			}
 		}
-		Assertions.assertThat(sortedFirst && sortedLast).isEqualTo(true);
+		Assertions.assertThat(sortedFirst && sortedLast).isTrue();
 
 	}
 

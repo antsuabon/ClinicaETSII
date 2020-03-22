@@ -32,7 +32,6 @@ class MedicineServiceTests {
 	@Autowired
 	protected MedicineService medicineService;
 
-
 	@Test
 	void shouldListMedicines() {
 		Collection<Medicine> medicines = this.medicineService.findAllMedicines();
