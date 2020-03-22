@@ -66,3 +66,16 @@ _site/
 .metadata/.plugins/org.eclipse.ui.intro/introstate
 .metadata/.plugins/org.eclipse.ui.workbench/dialog_settings.xml
 .metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
+/.editorconfig
+/.gitignore
+/.mvn/
+/.settings/
+/.travis.yml
+/.vscode/
+/Sprints/
+/docker-compose.yml
+/mvnw
+/mvnw.cmd
+/pom.xml
+/readme.md
+/src/

@@ -36,6 +36,6 @@ public class Appointment extends BaseEntity {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "patient_id")
 
-	private Patient patient;
+	private Patient			patient;
 
 }

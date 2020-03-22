@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="doctors">
-    <h2>MÃ©dicos</h2>
+    <h2>Médicos</h2>
 	<c:choose>
 	<c:when test="${emptylist=='true'}">
 		<p>No se han encontrado resultados</p>
