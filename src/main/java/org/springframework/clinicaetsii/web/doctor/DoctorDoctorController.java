@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Service;
+import org.springframework.clinicaetsii.model.form.DoctorForm;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.web.validator.DoctorFormValidator;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import lombok.Data;
 
 @Controller
 @RequestMapping("/doctor")
@@ -43,6 +42,7 @@ public class DoctorDoctorController {
 	}
 
 	@InitBinder
+	@RequestMapping("/doctor/edit")
 	public void initBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new DoctorFormValidator(this.doctorService));
 	}
@@ -51,14 +51,6 @@ public class DoctorDoctorController {
 	@ModelAttribute("allServices")
 	public Collection<Service> populateAllServices() {
 		return this.doctorService.findAllServices();
-	}
-
-	@Data
-	public class DoctorForm {
-		@Valid
-		private Doctor doctor;
-		private String newPassword;
-		private String repeatPassword;
 	}
 
 	@GetMapping("/edit")
