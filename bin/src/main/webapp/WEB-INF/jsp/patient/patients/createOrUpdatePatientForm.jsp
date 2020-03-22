@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="patients">
+<petclinic:layout pageName="patient profile">
     <h2>
         Patient <c:out  value="${patient.fullName}"/> 
     </h2>
@@ -14,11 +14,11 @@
      
     <form:form modelAttribute="patient" class="form-horizontal" id="add-patient-form">
         <div class="form-group has-feedback">
-            <petclinic:selectField label="Doctors to choose" name="generalPractitioner" size="1" names="${doctors}"/>
+            <petclinic:selectFieldMap label="Médicos disponibles " name="generalPractitioner" size="1" names="${doctors}"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-default" type="submit">Update Patient general practitioner</button>
+                <button class="btn btn-default" type="submit">Actualizar médico de cabecera</button>
             </div>
         </div>
     </form:form>
