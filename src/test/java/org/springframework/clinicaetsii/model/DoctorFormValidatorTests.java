@@ -71,6 +71,51 @@ public class DoctorFormValidatorTests {
 		Assertions.assertThat(errors.hasErrors()).isFalse();
 	}
 
+	@Test
+	void shouldValidateWithNameNull() {
+
+		this.doctorForm1.getDoctor().setName(null);
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.name")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldValidateWithNameBlank() {
+
+		this.doctorForm1.getDoctor().setName("");
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.name")).isTrue();
+		Assertions.assertThat(errors.getFieldErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldValidateWithSurnameNull() {
+
+		this.doctorForm1.getDoctor().setSurname(null);
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.surname")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldValidateWithSurnameBlank() {
+
+		this.doctorForm1.getDoctor().setSurname("");
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.surname")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+
 	@ParameterizedTest
 	@ValueSource(strings = {"", "aa2dBe", "dsdsddsR3", "aa2dBedddddddefrgth6"})
 	void shouldValidateWithPassword(final String newPassword) {
@@ -81,8 +126,8 @@ public class DoctorFormValidatorTests {
 		BindException errors = new BindException(this.doctorForm1, "doctorForm");
 		this.doctorFormValidator.validate(this.doctorForm1, errors);
 
-		Assertions.assertThat(errors.hasErrors()).isFalse();
 		Assertions.assertThat(errors.hasFieldErrors("newPassword")).isFalse();
+		Assertions.assertThat(errors.hasErrors()).isFalse();
 	}
 
 	@ParameterizedTest
@@ -95,8 +140,8 @@ public class DoctorFormValidatorTests {
 		BindException errors = new BindException(this.doctorForm1, "doctorForm");
 		this.doctorFormValidator.validate(this.doctorForm1, errors);
 
-		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 		Assertions.assertThat(errors.hasFieldErrors("newPassword")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 	}
 
 	@Test
@@ -108,8 +153,8 @@ public class DoctorFormValidatorTests {
 		BindException errors = new BindException(this.doctorForm1, "doctorForm");
 		this.doctorFormValidator.validate(this.doctorForm1, errors);
 
-		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 		Assertions.assertThat(errors.hasFieldErrors("repeatPassword")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 	}
 
 	@Test
@@ -121,8 +166,165 @@ public class DoctorFormValidatorTests {
 		BindException errors = new BindException(this.doctorForm1, "doctorForm");
 		this.doctorFormValidator.validate(this.doctorForm1, errors);
 
-		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 		Assertions.assertThat(errors.hasFieldErrors("repeatPassword")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldNotValidateWithDniNull() {
+
+		this.doctorForm1.getDoctor().setDni(null);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.dni")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "222222222", "AAAAAAAAA", "333D3333R", "D33333333", "333333333E", "3333333F"})
+	void shouldNotValidateWithDni(final String dni) {
+
+		this.doctorForm1.getDoctor().setDni(dni);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.dni")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"11111111D", "12345678A", "12345432Z"})
+	void shouldValidateWithDni(final String dni) {
+
+		this.doctorForm1.getDoctor().setDni(dni);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.dni")).isFalse();
+		Assertions.assertThat(errors.hasErrors()).isFalse();
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"antonio@gmail.com", "antonio@gmail"})
+	void shouldValidateWithEmail(final String email) {
+
+		this.doctorForm1.getDoctor().setEmail(email);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.email")).isFalse();
+		Assertions.assertThat(errors.hasErrors()).isFalse();
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "antoniogmail.com", "antonio", "@", "@gmail.com", "@gmail .com", "@gmail. com", "antonio@"})
+	void shouldNotValidateWithEmail(final String email) {
+
+		this.doctorForm1.getDoctor().setEmail(email);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.email")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldNotValidateWithEmailNull() {
+
+		this.doctorForm1.getDoctor().setEmail(null);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.email")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+
+	}
+
+	@Test
+	void shouldNotValidateWithCollegiateCodeNull() {
+
+		this.doctorForm1.getDoctor().setCollegiateCode(null);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.collegiateCode")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"221400543", "011200000", "010100000", "521300000"})
+	void shouldValidateWithCollegiateCode(final String collegiateCode) {
+
+		this.doctorForm1.getDoctor().setCollegiateCode(collegiateCode);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.collegiateCode")).isFalse();
+		Assertions.assertThat(errors.hasErrors()).isFalse();
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "1234567899", "12345678", "003456789", "120056789", "531200000", "125399999"})
+	void shouldNotValidateWithCollegiateCode(final String collegiateCode) {
+
+		this.doctorForm1.getDoctor().setCollegiateCode(collegiateCode);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.collegiateCode")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666", "+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
+	void shouldValidateWithPhone(final String phone) {
+
+		this.doctorForm1.getDoctor().setPhone(phone);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.phone")).isFalse();
+		Assertions.assertThat(errors.hasErrors()).isFalse();
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "+ (3333) 666 666", "+ 3333 666 666"})
+	void shouldNotValidateWithPhone(final String phone) {
+
+		this.doctorForm1.getDoctor().setPhone(phone);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.phone")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldNotValidateWithPhoneNull() {
+
+		this.doctorForm1.getDoctor().setPhone(null);
+
+		BindException errors = new BindException(this.doctorForm1, "doctorForm");
+		this.doctorFormValidator.validate(this.doctorForm1, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("doctor.phone")).isTrue();
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+
 	}
 
 }

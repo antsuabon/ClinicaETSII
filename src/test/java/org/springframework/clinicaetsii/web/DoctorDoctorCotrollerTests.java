@@ -144,7 +144,7 @@ public class DoctorDoctorCotrollerTests {
 	@WithMockUser(username = "doctor1", roles = {
 		"doctor"
 	})
-	void shouldProcessUpdateDoctorForm() throws Exception {
+	void shouldProcessUpdateDoctorFormWithoutNewPassword() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -167,7 +167,28 @@ public class DoctorDoctorCotrollerTests {
 	@WithMockUser(username = "doctor1", roles = {
 		"doctor"
 	})
-	void shouldProcessUpdateDoctorFormPassword() throws Exception {
+	void shouldProcessUpdateDoctorFormWithNullNewPassword() throws Exception {
+		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("doctor.name", "Pablo")
+				.param("doctor.surname", "Rodriguez Garrido")
+				.param("doctor.dni", "45612378P")
+				.param("doctor.email", "pablo@gmail.com")
+				.param("doctor.phone", "955668756")
+				.param("doctor.username", "doctor1")
+				.param("doctor.collegiateCode", "303092345")
+//				.param("doctor.services", "1", "2"))
+			).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor"));
+
+	}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
+	void shouldProcessUpdateDoctorFormWithPassword() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
