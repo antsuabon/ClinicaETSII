@@ -14,23 +14,23 @@
     <table class="table table-striped">
         
         <tr>
-            <th>Username</th>
+            <th>Nombre de usuario</th>
             <td><b><c:out value="${patient.username}"/></b></td>
         </tr>
         <tr>
-            <th>Name</th>
+            <th>Nombre completo</th>
             <td><b><c:out value="${patient.name} ${patient.surname}"/></b></td>
         </tr>
         <tr>
-            <th>Birth Date</th>
+            <th>Fecha de nacimiento</th>
             <td><petclinic:localDate date="${patient.birthDate}" pattern="yyyy-MM-dd"/></td>
         </tr>
         <tr>
-            <th>Address</th>
+            <th>Dirección</th>
             <td><c:out value="${patient.address}"/></td>
         </tr>
         <tr>
-            <th>State</th>
+            <th>Provincia</th>
             <td><c:out value="${patient.state}"/></td>
         </tr>
         <tr>
@@ -42,16 +42,20 @@
             <td><c:out value="${patient.dni}"/></td>
         </tr>
         <tr>
-            <th>Email</th>
+            <th>Correo electrónico</th>
             <td><c:out value="${patient.email}"/></td>
         </tr>
         <tr>
-            <th>Telephone</th>
+            <th>Teléfono principal</th>
             <td><c:out value="${patient.phone}"/></td>
         </tr>
         <tr>
-            <th>Telephone 2</th>
+            <th>Teléfono secudario</th>
             <td><c:out value="${patient.phone2}"/></td>
+        </tr>
+        <tr>
+            <th>Médico de cabecera</th>
+            <td><c:out value="${patient.generalPractitioner.fullName}"/></td>
         </tr>
     </table>
 

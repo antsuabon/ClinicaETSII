@@ -14,17 +14,21 @@
     <form:form modelAttribute="patient" class="form-horizontal" id="add-patient-form">
         <div class="form-group has-feedback">
         
-            <petclinic:inputField label="Username" name="username"/>
-            <petclinic:inputField label="First Name" name="name"/>
-            <petclinic:inputField label="Last Name" name="surname"/>
-            <petclinic:inputField label="Birth Date" name="birthDate"/>
-            <petclinic:inputField label="Address" name="address"/>
-            <petclinic:inputField label="State" name="state"/>
+            <petclinic:inputField label="Nombre de usuario" name="username"/>
+            <petclinic:inputField label="Nombre" name="name"/>
+            <petclinic:inputField label="Apellidos" name="surname"/>
+            <petclinic:inputField label="Fecha de nacimiento" name="birthDate"/>
+            <petclinic:inputField label="Dirección" name="address"/>
+            <petclinic:inputField label="Provincia" name="state"/>
             <petclinic:inputField label="NSS" name="nss"/>
             <petclinic:inputField label="DNI" name="dni"/>
-            <petclinic:inputField label="Email" name="email"/>
-            <petclinic:inputField label="Telephone" name="phone"/>
-            <petclinic:inputField label="Telephone 2" name="phone2"/>
+            <petclinic:inputField label="Correo electrónico" name="email"/>
+            <petclinic:inputField label="Teléfono pricipal" name="phone"/>
+            <petclinic:inputField label="Teléfono secundario" name="phone2"/>
+            
+            <div class="control-group">
+				<petclinic:selectFieldMap name="generalPractitioner" label="Médicos disponibles " names="${doctors}" size="1" />
+			</div>
         </div>
         
         <div class="form-group">
