@@ -24,8 +24,8 @@ public class PatientValidator implements Validator {
 	public void validate(final Object target, final Errors errors) {
 		Patient patient = (Patient) target;
 
-		if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId()).size() >= 1000) {
-			errors.rejectValue("generalPractitioner", "too_many_patients", "Este doctor tiene 1000 pacientes asignados");
+		if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId()).size() >= 5) {
+			errors.rejectValue("generalPractitioner", "too_many_patients", "Este doctor tiene 5 pacientes asignados");
 		}
 
 	}
