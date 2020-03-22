@@ -6,11 +6,12 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.patient.PatientPatientController.PatientForm;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class PatientValidator implements Validator {
+public class PatientFormValidator implements Validator {
 
 		private Pattern			dniPattern				= Pattern.compile("^[0-9]{8}[A-Z]{1}$");
 		private Pattern			phonePattern			= Pattern.compile("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$");
@@ -22,7 +23,7 @@ public class PatientValidator implements Validator {
 		private PatientService patientService;
 
 		@Autowired
-		public PatientValidator(final PatientService patientService) {
+		public PatientFormValidator(final PatientService patientService) {
 			this.patientService = patientService;
 		}
 
@@ -33,7 +34,8 @@ public class PatientValidator implements Validator {
 
 		@Override
 		public void validate(final Object target, final Errors errors) {
-			Patient patient = (Patient) target;
+			PatientForm patientForm = (PatientForm) target;
+			Patient patient = patientForm.getPatient();
 
 			if (patient.getName() == null || StringUtils.isEmpty(patient.getName())) {
 				errors.rejectValue("patient.name", "Este campo es obligatorio", "Este campo es obligatorio");
@@ -92,6 +94,18 @@ public class PatientValidator implements Validator {
 				errors.rejectValue("patient.nss", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (!this.nssPattern.matcher(patient.getNss()).matches()) {
 				errors.rejectValue("patient.nss", "Este campo debe de estar formado por 11 dígitos", "Este campo debe de estar formado por 11 dígitos");
+			}
+
+			if (patientForm.getNewPassword() != null && !StringUtils.isEmpty(patientForm.getNewPassword())) {
+
+				if (!this.passwordPattern.matcher(patientForm.getNewPassword()).matches()) {
+					errors.rejectValue("newPassword", "La contraseña debe tener entre 6 y 20 caracteres y debe contener al menos un caracter en minúscula, un caracter en mayúscula y un dígito",
+						"La contraseña debe tener entre 6 y 20 caracteres y debe contener al menos un caracter en minúscula, un caracter en mayúscula y un dígito");
+				}
+
+				if (!patientForm.getNewPassword().equals(patientForm.getRepeatPassword())) {
+					errors.rejectValue("repeatPassword", "La contraseña no coincide", "La contraseña no coincide");
+				}
 			}
 
 			Patient oldPatient = this.patientService.findPatient();

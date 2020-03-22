@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class DoctorValidator implements Validator {
+public class DoctorFormValidator implements Validator {
 
 	private Pattern			dniPattern				= Pattern.compile("^[0-9]{8}[A-Z]{1}$");
 	private Pattern			phonePattern			= Pattern.compile("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$");
@@ -23,7 +23,7 @@ public class DoctorValidator implements Validator {
 	private DoctorService	doctorService;
 
 	@Autowired
-	public DoctorValidator(final DoctorService doctorService) {
+	public DoctorFormValidator(final DoctorService doctorService) {
 		this.doctorService = doctorService;
 	}
 

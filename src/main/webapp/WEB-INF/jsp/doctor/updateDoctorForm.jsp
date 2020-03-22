@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
-<petclinic:layout pageName="doctor">
+<petclinic:layout pageName="doctor profile">
 	<h2>Médico</h2>
 	<form:form modelAttribute="doctorForm" class="form-horizontal" id="update-doctor-form">
 		<div class="form-group has-feedback">

@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
@@ -55,7 +56,9 @@ public class PatientService {
 	public Patient findPatientByUsername() throws DataAccessException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails user = (UserDetails) principal;
-		return this.patientRepository.findByUsername(user.getUsername());
+		String username = user.getUsername();
+
+		return this.patientRepository.findPatientByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
@@ -86,7 +89,7 @@ public class PatientService {
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.patientRepository.findById(username);
+		return this.patientRepository.findPatientByUsername(username);
 	}
 
 		@PreAuthorize("hasAuthority('patient')")
@@ -116,7 +119,7 @@ public class PatientService {
 			UserDetails user = (UserDetails) principal;
 			String username = user.getUsername();
 
-			return this.patientRepository.findPatient(username);
+			return this.patientRepository.findPatientByUsername(username);
 		}
 
 		@Transactional

@@ -3,20 +3,27 @@ package org.springframework.clinicaetsii.web.patient;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
-import org.springframework.clinicaetsii.web.validator.PatientValidator;
+import org.springframework.clinicaetsii.web.validator.PatientFormValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import lombok.Data;
 
 /**
  * @author Juergen Hoeller
@@ -27,7 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class PatientPatientController {
 
-	private final String			VIEWS_PATIENT_CREATE_OR_UPDATE_FORM	= "patient/patients/createOrUpdatePatientForm";
+	private final String			VIEWS_PATIENT_CREATE_OR_UPDATE_FORM	= "patient/updatePatientForm";
 
 	private final DoctorService		doctorService;
 	private final PatientService	patientService;
@@ -42,7 +49,7 @@ public class PatientPatientController {
 	@InitBinder
 	public void initBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-		dataBinder.setValidator(new PatientValidator(this.patientService));
+		dataBinder.setValidator(new PatientFormValidator(this.patientService));
 	}
 
 	@ModelAttribute("doctors")
@@ -50,23 +57,62 @@ public class PatientPatientController {
 		return this.doctorService.findAllDoctors();
 	}
 
+	@GetMapping("/patient")
+	public ModelAndView showPatient() {
+		ModelAndView mav = new ModelAndView("patient/patientDetails");
+		mav.addObject(this.patientService.findCurrentPatient());
+		return mav;
+	}
+
+
+	@Data
+	public class PatientForm {
+		@Valid
+		private Patient patient;
+		private String newPassword;
+		private String repeatPassword;
+	}
+
 	@GetMapping(value = "/patient/edit")
 	public String initUpdatePatientForm(final Model model) {
-		Patient patient = this.patientService.findCurrentPatient();
-		model.addAttribute("patient", patient);
-		return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+		Patient patientToUpdate = this.patientService.findPatient();
+
+		PatientForm patientForm = new PatientForm();
+		patientForm.setPatient(patientToUpdate);
+
+		model.addAttribute(patientForm);
+		return  "/patient/updatePatientForm";
 	}
 
 	@PostMapping(value = "/patient/edit")
-	public String processUpdatePatientForm(final Patient patient, final BindingResult result, final Model model, @ModelAttribute(name = "generalPractitioner") final Doctor practitioner) {
+	public String processUpdatePatientForm(@Valid final PatientForm patientForm, final BindingResult result) {
+
+		Patient patientToUpdate = this.patientService.findPatient();
+		String oldUsername = String.valueOf(patientToUpdate.getUsername());
+
+		System.out.println(result.getAllErrors());
+
 		if (result.hasErrors()) {
-			return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+
+			return "/patient/updatePatientForm";
+
 		} else {
-			Patient patient2 = this.patientService.findCurrentPatient();
-			patient2.setGeneralPractitioner(practitioner);
-			this.patientService.savePatient(patient2);
-			return "redirect:/patient";
+
+			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password", "username", "enabled");
+			if (patientForm.getNewPassword() != null && !StringUtils.isEmpty(patientForm.getNewPassword())) {
+				patientToUpdate.setPassword(patientForm.getNewPassword());
+			}
+
+			this.patientService.save(patientToUpdate);
+
+			if (!oldUsername.equals(patientToUpdate.getUsername())) {
+				return "redirect:/logout";
+			} else {
+				return "redirect:/patient";
+			}
+
 		}
+
 	}
 
 }

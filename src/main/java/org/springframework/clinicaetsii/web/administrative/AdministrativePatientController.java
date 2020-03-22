@@ -19,25 +19,36 @@ package org.springframework.clinicaetsii.web.administrative;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.AuthoritiesService;
+import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdministrativePatientController {
 
 	private PatientService patientService;
+	private DoctorService doctorService;
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public AdministrativePatientController(final PatientService patientService) {
+	public AdministrativePatientController(final PatientService patientService, final DoctorService doctorService, final AuthoritiesService authoritiesService) {
 		this.patientService = patientService;
+		this.doctorService = doctorService;
+		this.authoritiesService = authoritiesService;
 	}
 
 	@InitBinder("patient")
@@ -74,7 +85,12 @@ public class AdministrativePatientController {
 		return "/administrative/doctorsList";
 	}
 
-	@GetMapping("/patients/new")
+	@ModelAttribute("doctors")
+	public Collection<Doctor> populateDoctors() {
+		return this.doctorService.findAllDoctors();
+	}
+
+	@GetMapping("/administrative/patients/new")
 	public String initCreation(final Map<String, Object> model) {
 
 		Patient patient = new Patient();
@@ -85,7 +101,7 @@ public class AdministrativePatientController {
 	}
 
 
-	@PostMapping("/patients/new")
+	@PostMapping("/administrative/patients/new")
 	public String processCreation(@Valid final Patient patient, final BindingResult result) {
 
 		if(result.hasErrors()) {
@@ -102,7 +118,7 @@ public class AdministrativePatientController {
 		}
 	}
 
-	@GetMapping("/patients/{patientId}")
+	@GetMapping("/administrative/patients/{patientId}")
 	public ModelAndView showOwner(@PathVariable("patientId") final int patientId) {
 		ModelAndView mav = new ModelAndView("administrative/patients/patientDetails");
 		mav.addObject(this.patientService.findPatientById(patientId));
