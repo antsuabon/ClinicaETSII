@@ -37,9 +37,6 @@ class DoctorConsultationControllerTests {
 	private static final int				TEST_CONSULTATION_ID_1	= 1;
 	private static final int				TEST_CONSULTATION_ID_2	= 2;
 
-	@Autowired
-	private DoctorConsultationController	doctorConsultationController;
-
 	@MockBean
 	private ConsultationService				consultationService;
 
@@ -139,8 +136,10 @@ class DoctorConsultationControllerTests {
 
 		Collection<Consultation> consultations2 = consultations;
 
-		BDDMockito.given(this.consultationService.findConsultationsByPatientId(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).willReturn(consultations2);
-		BDDMockito.given(this.consultationService.findConsultationById(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).willReturn(this.consultation1);
+		BDDMockito.given(this.consultationService.findConsultationsByPatientId(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+			.willReturn(consultations2);
+		BDDMockito.given(this.consultationService.findConsultationById(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+			.willReturn(this.consultation1);
 
 	}
 
@@ -148,14 +147,20 @@ class DoctorConsultationControllerTests {
 	@Test
 	void testListConsultationsPatient() throws Exception {
 		this.setup();
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("consultations")).andExpect(MockMvcResultMatchers.model().attributeExists("patientId")).andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationsList"));
+		this.mockMvc.perform(MockMvcRequestBuilders
+			.get("/doctor/patients/{patientId}/consultations", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("consultations"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("patientId"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationsList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testNotListConsultationsPatient() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations", -1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations", -1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationsList"));
 	}
 
@@ -164,15 +169,19 @@ class DoctorConsultationControllerTests {
 	void testDetailsConsultation() throws Exception {
 		this.setup();
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("consultation")).andExpect(MockMvcResultMatchers.model().attributeExists("patientId"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("consultation"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("patientId"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testNotDetailsConsultation() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, -1)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("empty")).andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, -1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
 	}
 
 }

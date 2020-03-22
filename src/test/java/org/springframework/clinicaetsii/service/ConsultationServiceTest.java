@@ -22,6 +22,7 @@ class ConsultationServiceTest {
 	void shouldFindConsultationByPatientId() {
 		int patientId1 = 4;
 		Collection<Consultation> consultations1 = this.consultationService.findConsultationsByPatientId(patientId1);
+
 		Boolean condition = true;
 		for (Consultation c : consultations1) {
 
@@ -31,10 +32,12 @@ class ConsultationServiceTest {
 			}
 
 		}
+
 		Assertions.assertThat(condition).isTrue();
 
 		int patientId2 = -1;
 		Collection<Consultation> consultations2 = this.consultationService.findConsultationsByPatientId(patientId2);
+
 		Assertions.assertThat(consultations2).isEmpty();
 
 	}
@@ -47,7 +50,7 @@ class ConsultationServiceTest {
 
 		int consultationId2 = -1;
 		Consultation consultation2 = this.consultationService.findConsultationById(consultationId2);
-		Assertions.assertThat(consultation2).isEqualTo(null);
+		Assertions.assertThat(consultation2).isNull();
 
 	}
 

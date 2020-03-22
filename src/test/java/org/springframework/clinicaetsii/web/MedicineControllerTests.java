@@ -29,9 +29,6 @@ class MedicineControllerTests {
 	private static final int	TEST_MEDICINE_ID_2	= 2;
 	private static final int	TEST_MEDICINE_ID_3	= 3;
 
-	@Autowired
-	private MedicineController	MedicineController;
-
 	@MockBean
 	private MedicineService		MedicineService;
 
@@ -90,14 +87,18 @@ class MedicineControllerTests {
 	@Test
 	void testListMedicines() throws Exception {
 		this.setup();
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/medicines")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("medicines"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/medicines"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("medicines"))
 			.andExpect(MockMvcResultMatchers.view().name("/anonymous/medicines/medicinesList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
-	void testNotListMedicines() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/medicines")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
+	void testEmptyListMedicines() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/anonymous/medicines"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
 			.andExpect(MockMvcResultMatchers.view().name("/anonymous/medicines/medicinesList"));
 	}
 
