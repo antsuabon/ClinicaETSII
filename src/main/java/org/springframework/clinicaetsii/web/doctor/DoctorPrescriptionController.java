@@ -100,7 +100,7 @@ public class DoctorPrescriptionController {
 	}
 
 	@GetMapping("/{prescriptionId}")
-	public String showConsultationDetails(@PathVariable("prescriptionId") final int prescriptionId, final Map<String, Object> model) {
+	public String showPrescriptionDetails(@PathVariable("prescriptionId") final int prescriptionId, final Map<String, Object> model) {
 		Prescription result = this.prescriptionService.findPrescriptionById(prescriptionId);
 
 		if (result == null) {
