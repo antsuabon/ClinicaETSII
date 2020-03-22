@@ -5,10 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -147,8 +150,6 @@ class DoctorPrescriptionControllerTests {
 
 		BDDMockito.given(this.prescriptionService.findPrescriptionsByPatientId(1)).willReturn(prescriptions2);
 		BDDMockito.given(this.prescriptionService.findPrescriptionById(1)).willReturn(this.prescription1);
-		//BDDMockito.when(this.prescriptionService.deletePrescription(this.prescription1)).;
-
 	}
 
 	@WithMockUser(value = "spring")
@@ -181,11 +182,21 @@ class DoctorPrescriptionControllerTests {
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/prescriptionDetails"));
 	}
 
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void deletePrescription() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/{prescriptionId}/delete", 1, 1)).andExpect(MockMvcResultMatchers.status().isOk())
-	//			.andExpect(MockMvcResultMatchers.view().name("/doctor/patients/{patientId}/prescriptions"));
-	//	}
+	@WithMockUser(value = "spring")
+	@Test
+	void deletePrescription() throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		this.doctorPrescriptionController.initDelete(1, model);
+		Mockito.verify(this.prescriptionService).deletePrescription(this.prescription1);
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void notDeletePrescription() throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		this.doctorPrescriptionController.initDelete(-1, model);
+		Mockito.verify(this.prescriptionService).deletePrescription(null);
+
+	}
 
 }
