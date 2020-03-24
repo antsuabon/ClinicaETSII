@@ -20,7 +20,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+
 import org.assertj.core.api.Assertions;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,6 +33,7 @@ import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class DoctorServiceTests {
@@ -35,6 +41,8 @@ class DoctorServiceTests {
 	@Autowired
 	protected DoctorService doctorService;
 
+	@PersistenceContext
+    private EntityManager entityManager;
 
 	@Test
 	void shouldListDoctorsSortedByServices() {
@@ -69,6 +77,7 @@ class DoctorServiceTests {
 		String username = currentDoctor.getUsername();
 
 		Assertions.assertThat(username.equals("doctor1"));
+
 	}
 
 
@@ -102,11 +111,63 @@ class DoctorServiceTests {
 
 		Assertions.assertThat(services)
 			.isNotEmpty()
-			.allMatch(s -> !s.getId().equals(null), "")
-			.allMatch(s -> !s.getName().equals(null), "")
-			.allMatch(s -> !s.getName().isEmpty(), "");
+			.allMatch(s -> s.getId() != null)
+			.allMatch(s -> s.getName() != null)
+			.allMatch(s -> !s.getName().isEmpty());
 	}
 
 
+	@Test
+	@Transactional
+	void shouldUpdateDoctor() {
+		Doctor doctor = new Doctor();
+		doctor.setId(1);
+		doctor.setUsername("doctorPrueba");
+		doctor.setPassword("doctorPrueba");
+		doctor.setEnabled(true);
+		doctor.setName("María");
+		doctor.setSurname("Laso Escot");
+		doctor.setDni("12345678S");
+		doctor.setEmail("maria@gmail.com");
+		doctor.setPhone("956787025");
+		doctor.setCollegiateCode("303092345");
 
+		this.doctorService.save(doctor);
+
+		doctor = this.doctorService.findDoctorById(1);
+		Assertions.assertThat(doctor).isNotNull();
+		Assertions.assertThat(doctor.getUsername()).isEqualTo("doctorPrueba");
+		Assertions.assertThat(doctor.getPassword()).isEqualTo("doctorPrueba");
+		Assertions.assertThat(doctor.isEnabled()).isTrue();
+		Assertions.assertThat(doctor.getName()).isEqualTo("María");
+		Assertions.assertThat(doctor.getSurname()).isEqualTo("Laso Escot");
+		Assertions.assertThat(doctor.getDni()).isEqualTo("12345678S");
+		Assertions.assertThat(doctor.getEmail()).isEqualTo("maria@gmail.com");
+		Assertions.assertThat(doctor.getPhone()).isEqualTo("956787025");
+		Assertions.assertThat(doctor.getCollegiateCode()).isEqualTo("303092345");
+	}
+
+	@Test
+	@Transactional
+	void shouldNotUpdateDoctorWithExistingUsername() {
+
+		Doctor doctor = new Doctor();
+		doctor.setId(1);
+		doctor.setUsername("doctor2");
+		doctor.setPassword("doctorPrueba");
+		doctor.setEnabled(true);
+		doctor.setName("Pablo");
+		doctor.setSurname("Rodriguez Garrido");
+		doctor.setDni("23455558N");
+		doctor.setEmail("pablo@gmail.com");
+		doctor.setPhone("956784325");
+		doctor.setCollegiateCode("303012345");
+
+
+		Assertions.assertThatThrownBy(() -> {
+			this.doctorService.save(doctor);
+			this.entityManager.flush();
+		}).isInstanceOf(PersistenceException.class).hasCauseInstanceOf(ConstraintViolationException.class);
+
+	}
 }

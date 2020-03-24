@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,7 +63,7 @@ public class DoctorService {
 	}
 
 	@Transactional
-	public void save(final Doctor doctor) throws DataAccessException {
+	public void save(final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
 		this.doctorRepository.save(doctor);
 	}
 

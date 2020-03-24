@@ -24,7 +24,7 @@ public class DoctorValidatorTests {
 	private Doctor doctor;
 
 	@BeforeEach
-	void intDoctor() {
+	void initDoctor() {
 		Doctor doctor = new Doctor();
 		doctor.setId(1);
 		doctor.setUsername("doctor1");

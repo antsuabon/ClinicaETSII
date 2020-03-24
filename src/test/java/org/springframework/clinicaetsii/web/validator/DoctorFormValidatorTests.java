@@ -1,4 +1,4 @@
-package org.springframework.clinicaetsii.model;
+package org.springframework.clinicaetsii.web.validator;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.form.DoctorForm;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.web.validator.DoctorFormValidator;
