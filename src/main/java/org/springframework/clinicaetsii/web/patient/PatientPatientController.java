@@ -3,6 +3,8 @@ package org.springframework.clinicaetsii.web.patient;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
@@ -52,13 +54,15 @@ public class PatientPatientController {
 
 	@GetMapping(value = "/patient/edit")
 	public String initUpdatePatientForm(final Model model) {
+		
 		Patient patient = this.patientService.findCurrentPatient();
-		model.addAttribute("patient", patient);
+		model.addAttribute("patient",patient);
+		
 		return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/patient/edit")
-	public String processUpdatePatientForm(final Patient patient, final BindingResult result, final Model model, @ModelAttribute(name = "generalPractitioner") final Doctor practitioner) {
+	public String processUpdatePatientForm(@Valid final Patient patient, final BindingResult result, final Model model, @ModelAttribute(name = "generalPractitioner") final Doctor practitioner) {
 		if (result.hasErrors()) {
 			return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
 		} else {
