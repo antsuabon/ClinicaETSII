@@ -1,15 +1,13 @@
 package org.springframework.clinicaetsii.model;
 
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.util.ArrayList;
 
-import org.aspectj.lang.annotation.DeclareError;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,10 +16,6 @@ import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.web.validator.PatientValidator;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-import org.springframework.web.servlet.tags.form.ErrorsTag;
-
 
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(org.springframework.stereotype.Service.class))

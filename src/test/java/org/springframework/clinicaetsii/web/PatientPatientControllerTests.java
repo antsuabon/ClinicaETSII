@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.formatter.DoctorFormatter;
 import org.springframework.clinicaetsii.web.patient.PatientPatientController;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -26,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = PatientPatientController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = PatientPatientController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,  classes = DoctorFormatter.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,  classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class PatientPatientControllerTests {
 
 	private static final int		TEST_PATIENT_ID_1	= 1;
@@ -54,6 +57,8 @@ class PatientPatientControllerTests {
 	private Doctor					doctor3;
 	
 	private Doctor					doctor4;
+	
+	private List<Doctor> doctors;
 
 
 	void setup() {
@@ -105,7 +110,7 @@ class PatientPatientControllerTests {
 		this.patient2.setDni("41235578L");
 		this.patient2.setEmail("laura@gmail.com");
 		this.patient2.setEnabled(true);
-		this.patient2.setGeneralPractitioner(this.doctor4);
+		this.patient2.setGeneralPractitioner(this.doctor3);
 		this.patient2.setName("Laura");
 		this.patient2.setNss("12345779S");
 		this.patient2.setPassword("patient2");
@@ -113,15 +118,10 @@ class PatientPatientControllerTests {
 		this.patient2.setState("España");
 		this.patient2.setSurname("Sánchez");
 		this.patient2.setUsername("patient2");
-
-		List<Patient> patients = new ArrayList<>();
-
-		patients.add(this.patient1);
-		patients.add(this.patient2);
-
-		Collection<Patient> patients2 = patients;
-
-		BDDMockito.given(this.patientService.findCurrentDoctorPatients()).willReturn(patients2);
+		
+		this.doctors = new ArrayList<>();
+		this.doctors.add(this.doctor3);
+		this.doctors.add(this.doctor4);
 
 	}
 	
@@ -130,9 +130,11 @@ class PatientPatientControllerTests {
 		"patient"
 	})
 	void shouldInitUpdatePatientForm() throws Exception {
+		this.setup();
 		BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/edit"))
 			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("patient"))
 			.andExpect(MockMvcResultMatchers.view().name("patient/patients/createOrUpdatePatientForm"));
 	}
 	
@@ -153,12 +155,16 @@ class PatientPatientControllerTests {
 		"patient"
 	})
 	void shouldProcessUpdatePatientForm() throws Exception {
+		this.setup();
 		BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
+		BDDMockito.given(this.doctorService.findAllDoctors()).willReturn(this.doctors);
+		BDDMockito.given(this.doctorService.findDoctorById(4)).willReturn(this.doctor4);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/patient/edit")
 		.with(SecurityMockMvcRequestPostProcessors.csrf())
 		.param("generalPractitioner", "4"))
 		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 	.andExpect(MockMvcResultMatchers.view().name("redirect:/patient"));
 	}
+	
 	
 }
