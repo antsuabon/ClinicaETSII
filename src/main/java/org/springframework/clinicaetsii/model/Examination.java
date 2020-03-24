@@ -1,12 +1,11 @@
 package org.springframework.clinicaetsii.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,7 +20,6 @@ public class Examination extends BaseEntity {
 
 	@Column(name = "start_time")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-	@NotNull
 	private LocalDateTime startTime;
 
 	@Column(name = "description")

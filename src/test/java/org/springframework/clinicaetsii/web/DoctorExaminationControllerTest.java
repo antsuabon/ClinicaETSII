@@ -1,9 +1,8 @@
 package org.springframework.clinicaetsii.web;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +32,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -160,7 +160,9 @@ public class DoctorExaminationControllerTest {
 		
 	}
 	
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
 	@Test
 	void testShowExaminationPatient() throws Exception {
 		
@@ -173,7 +175,35 @@ public class DoctorExaminationControllerTest {
 			.andExpect(MockMvcResultMatchers.model().attributeExists("examination"))
 			.andExpect(MockMvcResultMatchers.view().name("doctor/examinations/examinationDetails"));
 	}
+	
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
+	@Test
+	void doctorShouldInitExaminationCreationForm() throws Exception {
+		this.setup();
+		BDDMockito.given(this.doctorService.findCurrentDoctor()).willThrow(new RuntimeException());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}/examinations/new", TEST_PATIENT_ID_1 ,TEST_CONSULTATION_ID_1))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("examination"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/examinations/createExaminationForm"));
+	}
 
+	
+	@Test
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
+	void shouldProcessCreateExamination() throws Exception {
+		this.setup();
+		BDDMockito.given(this.consultationService.findConsultationById(TEST_CONSULTATION_ID_1)).willReturn(this.consultation1);
+		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/patients/{patientId}/consultations/{consultationId}/examinations/new", TEST_PATIENT_ID_1 ,TEST_CONSULTATION_ID_1)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("description", "asdf"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
+
+	}
 
 	
 }
