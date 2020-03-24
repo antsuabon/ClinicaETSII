@@ -3,8 +3,6 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -123,7 +121,7 @@ public class PatientService {
 		}
 
 		@Transactional
-		public void save(@Valid final Patient patient) throws DataAccessException {
+		public void save(final Patient patient) throws DataAccessException {
 			this.patientRepository.save(patient);
 		}
 
