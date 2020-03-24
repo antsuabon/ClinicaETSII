@@ -13,6 +13,7 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
+import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,6 +113,29 @@ class ConsultationServiceTest {
 	}
 
 	void shouldUpdateConsultation() {
+		Consultation consultation = this.consultationService.findConsultationById(1);
+		Assertions.assertThat(consultation).isNotNull();
+		Assertions.assertThat(consultation.getExaminations()).isNotNull();
+
+		Assertions.assertThat(consultation.getAnamnesis()).isNotNull();
+		consultation.setAnamnesis(consultation.getAnamnesis() + "Updated");
+		Assertions.assertThat(consultation.getRemarks()).isNotNull();
+		consultation.setAnamnesis(consultation.getRemarks() + "Updated");
+		Assertions.assertThat(consultation.getExaminations()).isNotNull();
+			Examination examination = new Examination();
+			examination.setId(2);
+			examination.setDescription("Tiene la cara pálida");
+			consultation.getExaminations().remove(examination);
+
+		this.consultationService.save(consultation);
+
+		consultation = this.consultationService.findConsultationById(consultation.getId());
+		Assertions.assertThat(consultation).isNotNull();
+		Assertions.assertThat(consultation.getAppointment()).isNotNull();
+		Assertions.assertThat(consultation.getAppointment().getId()).isEqualTo(4);
+		Assertions.assertThat(consultation.getAnamnesis()).isNotNull().contains("Updated");
+		Assertions.assertThat(consultation.getRemarks()).isNotNull().contains("Updated");
+		Assertions.assertThat(consultation.getExaminations()).isNotNull().doesNotContain(examination);
 
 	}
 
