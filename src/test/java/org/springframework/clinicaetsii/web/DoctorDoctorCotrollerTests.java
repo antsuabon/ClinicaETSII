@@ -19,7 +19,6 @@ import org.springframework.clinicaetsii.web.doctor.DoctorDoctorController;
 import org.springframework.clinicaetsii.web.formatter.ServiceFormatter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.format.support.FormattingConversionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -27,14 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = DoctorDoctorController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = DoctorDoctorController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = ServiceFormatter.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class DoctorDoctorCotrollerTests {
 
 	@Autowired
 	private DoctorDoctorController	doctorDoctorController;
-
-	@MockBean
-	private ServiceFormatter		serviceFormatter;
 
 	@MockBean
 	private DoctorService			doctorService;
@@ -42,16 +38,18 @@ public class DoctorDoctorCotrollerTests {
 	@Autowired
 	private MockMvc					mockMvc;
 
-	FormattingConversionService cs;
-
 	private int						TEST_DOCTOR_ID_1	= 1;
 	private Doctor					doctor1;
 	private int						TEST_DOCTOR_ID_2	= 2;
 	private Doctor					doctor2;
 	private DoctorForm				doctorForm1;
+	private Collection<Service> services;
+
+	private Service service1;
+	private Service service2;
 
 	@BeforeEach
-	void setup() {
+	void initDoctors() {
 		this.doctor1 = new Doctor();
 		this.doctor1.setId(this.TEST_DOCTOR_ID_1);
 		this.doctor1.setUsername("doctor1");
@@ -64,20 +62,21 @@ public class DoctorDoctorCotrollerTests {
 		this.doctor1.setPhone("955668756");
 		this.doctor1.setCollegiateCode("303092345");
 
-		Service service1 = new Service();
-		service1.setId(1);
-		service1.setName("Consulta Niños");
+		this.service1 = new Service();
+		this.service1.setId(1);
+		this.service1.setName("Consulta Niños");
 
-		Service service2 = new Service();
-		service2.setId(4);
-		service2.setName("Vacunación de la Gripe");
+		this.service2 = new Service();
+		this.service2.setId(4);
+		this.service2.setName("Vacunación de la Gripe");
 
-		Collection<Service> services = new ArrayList<Service>();
-		services.add(service1);
+		this.services = new ArrayList<Service>();
+		this.services.add(this.service1);
+		this.services.add(this.service2);
 
 		this.doctorForm1 = new DoctorForm();
 
-		this.doctor1.setServices(services);
+		this.doctor1.setServices(this.services);
 
 
 		this.doctor2 = new Doctor();
@@ -146,6 +145,7 @@ public class DoctorDoctorCotrollerTests {
 	})
 	void shouldProcessUpdateDoctorFormWithoutNewPassword() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.param("doctor.name", "Pablo")
@@ -157,8 +157,8 @@ public class DoctorDoctorCotrollerTests {
 				.param("newPassword", "")
 				.param("repeatPassword", "")
 				.param("doctor.collegiateCode", "303092345")
-//				.param("doctor.services", "1", "2"))
-			).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.param("doctor.services", "1", "4"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor"));
 
 	}
@@ -169,6 +169,7 @@ public class DoctorDoctorCotrollerTests {
 	})
 	void shouldProcessUpdateDoctorFormWithNullNewPassword() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.param("doctor.name", "Pablo")
@@ -178,8 +179,8 @@ public class DoctorDoctorCotrollerTests {
 				.param("doctor.phone", "955668756")
 				.param("doctor.username", "doctor1")
 				.param("doctor.collegiateCode", "303092345")
-//				.param("doctor.services", "1", "2"))
-			).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.param("doctor.services", "1", "4"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor"));
 
 	}
@@ -190,6 +191,7 @@ public class DoctorDoctorCotrollerTests {
 	})
 	void shouldProcessUpdateDoctorFormWithPassword() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.param("doctor.name", "Pablo")
@@ -201,8 +203,8 @@ public class DoctorDoctorCotrollerTests {
 				.param("newPassword", "aaaaaaA1@")
 				.param("repeatPassword", "aaaaaaA1@")
 				.param("doctor.collegiateCode", "303092345")
-//				.param("doctor.services", "1", "2"))
-			).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.param("doctor.services", "1", "4"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor"));
 
 	}
@@ -213,6 +215,7 @@ public class DoctorDoctorCotrollerTests {
 	})
 	void shouldProcessUpdateDoctorFormUsername() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.param("doctor.name", "Pablo")
@@ -224,8 +227,8 @@ public class DoctorDoctorCotrollerTests {
 				.param("newPassword", "")
 				.param("repeatPassword", "")
 				.param("doctor.collegiateCode", "303092345")
-//				.param("doctor.services", "1", "2"))
-			).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.param("doctor.services", "1", "4"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/logout"));
 
 	}
@@ -237,6 +240,7 @@ public class DoctorDoctorCotrollerTests {
 	void shouldNotProcessUpdateDoctorFormUsername() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
 		BDDMockito.given(this.doctorService.findDoctorByUsername("doctor2")).willReturn(this.doctor2);
+		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/edit")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.param("doctor.name", "Pablo")
@@ -248,8 +252,8 @@ public class DoctorDoctorCotrollerTests {
 				.param("newPassword", "")
 				.param("repeatPassword", "")
 				.param("doctor.collegiateCode", "303092345")
-//				.param("doctor.services", "1", "2"))
-			).andExpect(MockMvcResultMatchers.status().isOk())
+				.param("doctor.services", "1"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/updateDoctorForm"));
 
 	}
