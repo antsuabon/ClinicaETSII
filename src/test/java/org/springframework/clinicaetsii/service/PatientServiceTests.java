@@ -54,6 +54,4 @@ public class PatientServiceTests {
 		Assertions.assertThat(initSize).isEqualTo(finalSize);
 	}
 	
-	
-	
 }

@@ -139,9 +139,7 @@ class PatientPatientControllerTests {
 	}
 	
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "spring")
 	void shouldNotInitUpdatePatientForm() throws Exception {
 		BDDMockito.given(this.patientService.findCurrentPatient()).willThrow(new RuntimeException());
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/edit"))

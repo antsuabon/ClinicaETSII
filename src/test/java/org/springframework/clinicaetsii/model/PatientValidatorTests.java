@@ -135,7 +135,7 @@ public class PatientValidatorTests {
 	}
 	
 	@Test
-	void shouldUpdateDoctorsLess5Patients() {
+	void shouldNotUpdateDoctorsLess5Patients() {
 		Doctor d = this.doctorService.findDoctorById(1000);
 		
 		
