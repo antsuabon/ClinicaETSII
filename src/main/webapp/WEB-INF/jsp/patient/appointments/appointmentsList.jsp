@@ -11,7 +11,7 @@
 
     <c:choose>
 
-	<c:when test="${emptyListDelete=='true'}">
+	<c:when test="${appointmentsDelete=='true'}">
 
 		<p>No se han encontrado consultas registradas para ese paciente</p>
 
@@ -69,7 +69,7 @@
 
     <c:choose>
 
-	<c:when test="${emptyListDone=='true'}">
+	<c:when test="${appointmentsDone=='true'}">
 
 		<p>No se han encontrado consultas registradas para ese paciente</p>
 
@@ -90,7 +90,7 @@
 
         <tbody>
 
-        <c:forEach items="${appointments}" var="appointment">
+        <c:forEach items="${appointmentsDone}" var="appointment">
 
             <tr>
 				<td>

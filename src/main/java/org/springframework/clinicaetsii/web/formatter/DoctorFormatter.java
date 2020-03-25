@@ -32,6 +32,7 @@ public class DoctorFormatter implements Formatter<Doctor> {
 
 	}
 
-
-
 }
+
+
+

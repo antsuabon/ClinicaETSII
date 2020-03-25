@@ -18,10 +18,9 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 
-import javax.validation.Valid;
-
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.model.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
@@ -35,6 +34,8 @@ public interface PatientRepository {
 
 	Patient findPatientByUsername(@Param("username") String username) throws DataAccessException;
 
+	User findAdministrativeByUsername(@Param("username") String username) throws DataAccessException;
+
 	Collection<Patient> findDoctorPatients(int id) throws DataAccessException;
 
 	Collection<Patient> findPatientsByDoctorUsername(@Param("doctorUsername") String doctorUsername) throws DataAccessException;
@@ -44,4 +45,6 @@ public interface PatientRepository {
 	Collection<Appointment> findAppointmentsByPatientUsernameDone(@Param("patientUsername") String username) throws DataAccessException;
 
 	Collection<Appointment> findAppointmentsByPatientUsernameDelete(@Param("patientUsername") String patientUsername) throws DataAccessException;
+
+
 }

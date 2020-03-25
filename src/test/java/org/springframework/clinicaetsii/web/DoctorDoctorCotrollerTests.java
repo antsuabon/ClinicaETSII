@@ -267,12 +267,26 @@ public class DoctorDoctorCotrollerTests {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
 
 		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/doctor/edit").with(SecurityMockMvcRequestPostProcessors.csrf()).param("doctor.name", "").param("doctor.surname", "").param("doctor.dni", "").param("doctor.email", "").param("doctor.phone", "")
-				.param("doctor.username", "doctor1").param("newPassword", "").param("repeatPassword", "").param("doctor.collegiateCode", ""))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("doctorForm")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.name"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.surname")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.dni"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.email")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.phone"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.dni")).andExpect(MockMvcResultMatchers.view().name("/doctor/updateDoctorForm"));
+			.perform(MockMvcRequestBuilders.post("/doctor/edit")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("doctor.name", "")
+				.param("doctor.surname", "")
+				.param("doctor.dni", "")
+				.param("doctor.email", "")
+				.param("doctor.phone", "")
+				.param("doctor.username", "doctor1")
+				.param("newPassword", "")
+				.param("repeatPassword", "")
+				.param("doctor.collegiateCode", ""))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("doctorForm"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.name"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.surname"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.dni"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.email"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.phone"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("doctorForm", "doctor.dni"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/updateDoctorForm"));
 	}
 
 }

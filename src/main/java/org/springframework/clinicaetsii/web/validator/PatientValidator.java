@@ -35,71 +35,69 @@ public class PatientValidator implements Validator {
 		public void validate(final Object target, final Errors errors) {
 			Patient patient = (Patient) target;
 
+			if (patient.getUsername() == null || StringUtils.isEmpty(patient.getUsername())) {
+				errors.rejectValue("username", "Este campo es obligatorio", "Este campo es obligatorio");
+			}
+
 			if (patient.getName() == null || StringUtils.isEmpty(patient.getName())) {
-				errors.rejectValue("patient.name", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("name", "Este campo es obligatorio", "Este campo es obligatorio");
 			}
 
 			if (patient.getSurname() == null || StringUtils.isEmpty(patient.getSurname())) {
-				errors.rejectValue("patient.surname", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("surname", "Este campo es obligatorio", "Este campo es obligatorio");
 			}
 
 			if (patient.getState() == null || StringUtils.isEmpty(patient.getState())) {
-				errors.rejectValue("patient.state", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("state", "Este campo es obligatorio", "Este campo es obligatorio");
 			}
 
 			if (patient.getAddress() == null || StringUtils.isEmpty(patient.getAddress())) {
-				errors.rejectValue("patient.address", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("address", "Este campo es obligatorio", "Este campo es obligatorio");
 			}
 
 			if (patient.getBirthDate() == null || StringUtils.isEmpty(patient.getBirthDate())) {
-				errors.rejectValue("patient.birthDate", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("birthDate", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (patient.getBirthDate().isAfter(LocalDate.now())) {
-				errors.rejectValue("patient.birthDate", "El día de nacimiento debe ser anterior al día de hoy", "El día de nacimiento debe ser anterior al día de hoy");
+				errors.rejectValue("birthDate", "El día de nacimiento debe ser anterior al día de hoy", "El día de nacimiento debe ser anterior al día de hoy");
 			}
 
 			if (patient.getDni() == null || StringUtils.isEmpty(patient.getDni())) {
-				errors.rejectValue("patient.dni", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("dni", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (!this.dniPattern.matcher(patient.getDni()).matches()) {
-				errors.rejectValue("patient.dni", "El campo debe seguir el formato: 12345678A", "El campo debe seguir el formato: 12345678A");
+				errors.rejectValue("dni", "El campo debe seguir el formato: 12345678A", "El campo debe seguir el formato: 12345678A");
 			}
 
 			if (patient.getEmail() == null || StringUtils.isEmpty(patient.getEmail())) {
-				errors.rejectValue("patient.email", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("email", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (!this.emailPattern.matcher(patient.getEmail()).matches()) {
-				errors.rejectValue("patient.email", "No se ha introducido un Email adecuado", "No se ha introducido un Email adecuado");
+				errors.rejectValue("email", "No se ha introducido un Email adecuado", "No se ha introducido un Email adecuado");
 			}
 
 			if (patient.getPhone() == null || StringUtils.isEmpty(patient.getPhone())) {
-				errors.rejectValue("patient.phone", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("phone", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (!this.phonePattern.matcher(patient.getPhone()).matches()) {
-				errors.rejectValue("patient.phone", "No se ha introducido un número de teléfono adecuado", "No se ha introducido un número de teléfono adecuado");
+				errors.rejectValue("phone", "No se ha introducido un número de teléfono adecuado", "No se ha introducido un número de teléfono adecuado");
 			}
 
 			if (!(patient.getPhone2() != null || StringUtils.isEmpty(patient.getPhone2()))) {
 				if (!this.phonePattern.matcher(patient.getPhone2()).matches()) {
-					errors.rejectValue("patient.phone2", "No se ha introducido un número de teléfono adecuado", "No se ha introducido un número de teléfono adecuado");
+					errors.rejectValue("phone2", "No se ha introducido un número de teléfono adecuado", "No se ha introducido un número de teléfono adecuado");
 				}
 			}
 
 			if (patient.getNss() == null || StringUtils.isEmpty(patient.getNss())) {
-				errors.rejectValue("patient.nss", "Este campo es obligatorio", "Este campo es obligatorio");
+				errors.rejectValue("nss", "Este campo es obligatorio", "Este campo es obligatorio");
 			} else if (!this.nssPattern.matcher(patient.getNss()).matches()) {
-				errors.rejectValue("patient.nss", "Este campo debe de estar formado por 11 dígitos", "Este campo debe de estar formado por 11 dígitos");
+				errors.rejectValue("nss", "Este campo debe de estar formado por 11 dígitos", "Este campo debe de estar formado por 11 dígitos");
 			}
 
 
-			if (patient.getNss() == null || StringUtils.isEmpty(patient.getNss())) {
-				errors.rejectValue("patient.nss", "Este campo es obligatorio", "Este campo es obligatorio");
-			} else if (!this.nssPattern.matcher(patient.getNss()).matches()) {
-				errors.rejectValue("patient.nss", "Este campo debe de estar formado por 11 dígitos", "Este campo debe de estar formado por 11 dígitos");
-			}
-
-			Patient oldPatient = this.patientService.findPatient();
-			if (!oldPatient.getUsername().equals(patient.getUsername())) {
-				if (this.patientService.findPatientByUsername(patient.getUsername()) != null) {
-					errors.rejectValue("patient.username", "Ya existe un usuario con este nombre de usuario", "Ya existe un usuario con este nombre de usuario");
-				}
-			}
+//			Patient oldPatient = this.patientService.findPatient();
+//			if (!oldPatient.getUsername().equals(patient.getUsername())) {
+//				if (this.patientService.findPatientByUsername(patient.getUsername()) != null) {
+//					errors.rejectValue("username", "Ya existe un usuario con este nombre de usuario", "Ya existe un usuario con este nombre de usuario");
+//				}
+//			}
 
 			if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId()).size() >= 1000) {
 				errors.rejectValue("generalPractitioner", "too_many_patients", "Este doctor tiene 1000 pacientes asignados");

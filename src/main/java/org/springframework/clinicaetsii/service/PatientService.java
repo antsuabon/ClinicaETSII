@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.model.User;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.dao.DataAccessException;
@@ -90,6 +91,17 @@ public class PatientService {
 		return this.patientRepository.findPatientByUsername(username);
 	}
 
+	@PreAuthorize("hasAuthority('administrative')")
+	@Transactional(readOnly = true)
+	public User findCurrentAdministrative() throws DataAccessException {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
+
+		return this.patientRepository.findAdministrativeByUsername(username);
+	}
+
 		@PreAuthorize("hasAuthority('patient')")
 		public Collection<Appointment> findAppointmentsDone() throws DataAccessException {
 
@@ -100,7 +112,7 @@ public class PatientService {
 			return this.patientRepository.findAppointmentsByPatientUsernameDone(username);
 		}
 
-	@PreAuthorize("hasAuthority('patient')")
+		@PreAuthorize("hasAuthority('patient')")
 		public Collection<Appointment> findAppointmentsDelete() {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails user = (UserDetails) principal;
@@ -129,5 +141,7 @@ public class PatientService {
 		public Patient findPatientByUsername(final String username) throws DataAccessException {
 				return this.patientRepository.findPatientByUsername(username);
 		}
+
+
 
 }

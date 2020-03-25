@@ -1,27 +1,13 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +23,10 @@ class PatientServiceTests {
 
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
+
 	void shouldFindCurrentDoctorPatients() {
 
 		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
@@ -72,12 +61,139 @@ class PatientServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {"patient"})
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
 
 	void shouldFindCurrentDoctorPatientsAuthority() {
 
 		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
 		Assertions.assertThat(patients).isEmpty();
 	}
+
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {"patient"})
+	void patientShouldFindCurrentPatient() {
+
+		Patient patient = this.patientService.findCurrentPatient();
+
+		Assertions.assertThat(patient).isNotNull();
+
+		String username = patient.getUsername();
+
+		Assertions.assertThat(username.equals("patient1"));
+
+	}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void doctorShouldNotFindCurrentPatient() {
+
+		Patient patient = this.patientService.findCurrentPatient();
+
+		Assertions.assertThat(patient).isNull();
+
+	}
+
+	@Test
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	void administrativeShouldNotFindCurrentPatient() {
+
+		Patient patient = this.patientService.findCurrentPatient();
+
+		Assertions.assertThat(patient).isNull();
+
+	}
+
+	@Test
+	@WithMockUser(value = "spring")
+	void anonymousShouldNotFindCurrentPatient() {
+
+		Patient patient = this.patientService.findCurrentPatient();
+
+		Assertions.assertThat(patient).isNull();
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {"patient"})
+	void shouldFindAppointmentDeleteByPatientUsername() {
+
+		Collection<Appointment> appointment1 = this.patientService.findAppointmentsDelete();
+		Boolean condition = true;
+
+		for (Appointment a : appointment1) {
+
+			if (!a.getPatient().getUsername().equals("patient1")) {
+				condition = false;
+				break;
+			}
+
+		}
+
+		Assertions.assertThat(condition).isTrue();
+
+		}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void shouldNotFindAppointmentDeleteByPatientUsername() {
+
+		Collection<Appointment> appointment1 = this.patientService.findAppointmentsDelete();
+
+		Collection<Appointment> ca = new HashSet<>();
+
+		for (Appointment a : appointment1) {
+
+			if (a.getPatient().getUsername().equals("doctor1")) {
+				ca.add(a);
+			}
+
+		}
+
+		Assertions.assertThat(ca).isEmpty();
+
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {"patient"})
+	void shouldFindAppointmentDoneByPatientUsername() {
+
+		Collection<Appointment> appointment1 = this.patientService.findAppointmentsDone();
+		Boolean condition = true;
+
+		for (Appointment a : appointment1) {
+
+			if (!a.getPatient().getUsername().equals("patient1")) {
+				condition = false;
+				break;
+			}
+
+		}
+
+		Assertions.assertThat(condition).isTrue();
+
+		}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void shouldNotFindAppointmentDoneByPatientUsername() {
+
+		Collection<Appointment> appointment1 = this.patientService.findAppointmentsDone();
+
+		Collection<Appointment> ca = new HashSet<>();
+
+		for (Appointment a : appointment1) {
+
+			if (a.getPatient().getUsername().equals("doctor1")) {
+				ca.add(a);
+			}
+
+		}
+
+		Assertions.assertThat(ca).isEmpty();
+
+	}
+
 
 }
