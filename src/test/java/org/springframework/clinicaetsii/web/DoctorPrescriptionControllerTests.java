@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.web;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.springframework.clinicaetsii.configuration.SecurityConfiguration;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.model.Prescription;
 import org.springframework.clinicaetsii.model.Service;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
@@ -22,7 +20,6 @@ import org.springframework.clinicaetsii.service.MedicineService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.service.PrescriptionService;
 import org.springframework.clinicaetsii.web.doctor.DoctorPrescriptionController;
-import org.springframework.clinicaetsii.web.formatter.LocalDateTimeFormatter;
 import org.springframework.clinicaetsii.web.formatter.MedicineFormatter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
