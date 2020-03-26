@@ -1,10 +1,12 @@
 
 package org.springframework.clinicaetsii.web.patient;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.formatter.LocalDateTimeFormatter;
 import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,8 +30,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class PatientAppointmentController {
 
-	private final AppointmentService	appointmentService;
-	private final PatientService		patientService;
+	private final AppointmentService			appointmentService;
+	private final PatientService				patientService;
+	private static final LocalDateTimeFormatter	FORMATTER	= new LocalDateTimeFormatter();
 
 
 	@Autowired
@@ -59,12 +63,12 @@ public class PatientAppointmentController {
 	}
 
 	@GetMapping(value = "/patient/appointments/new")
-	public String initCreationForm(@RequestParam("fecha") final LocalDateTime fecha, final Map<String, Object> model) {
+	public String initCreationForm(@RequestParam("fecha") final String fecha, final Map<String, Object> model) throws ParseException {
 		Appointment appointment = new Appointment();
 		appointment.setPatient(this.patientService.findCurrentPatient());
 
-		appointment.setStartTime(fecha);
-		appointment.setEndTime(fecha.plusMinutes(7));
+		appointment.setStartTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")));
+		appointment.setEndTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")).plusMinutes(7));
 
 		model.put("appointment", appointment);
 

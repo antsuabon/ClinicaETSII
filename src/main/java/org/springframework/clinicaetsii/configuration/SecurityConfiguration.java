@@ -27,9 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-//    securedEnabled = true,
-//    jsr250Enabled = true,
-    prePostEnabled = true)
+	//    securedEnabled = true,
+	//    jsr250Enabled = true,
+	prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -38,19 +38,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-      .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-      .antMatchers("/anonymous/**").permitAll()
-      .antMatchers("/patient/**").hasAnyAuthority("patient")
-      .antMatchers("/doctor/**").hasAnyAuthority("doctor")
-      .antMatchers("/administrative/**").hasAnyAuthority("administrative")
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers(HttpMethod.POST, "/**").permitAll().antMatchers("/anonymous/**").permitAll()
+			.antMatchers("/patient/**").hasAnyAuthority("patient").antMatchers("/doctor/**").hasAnyAuthority("doctor").antMatchers("/administrative/**").hasAnyAuthority("administrative")
 			//				.antMatchers("/users/new").permitAll()
 			//				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
 			//				.antMatchers("/vets/**").authenticated()
-			.anyRequest().denyAll()
-			.and()
-			.formLogin()
+			.anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración

@@ -99,9 +99,8 @@ public class AdministrativeAppointmentController {
 	public String processCreationForm(@PathVariable("patientId") final int patientId, @Valid final Appointment appointment, final BindingResult result) {
 		Patient patient = this.patientService.findPatient(patientId);
 		if (result.hasErrors()) {
-			System.out.println(result.getFieldError());
 
-			return "redirect:/administrative/patients/{patientId}/appointments/table";
+			return "redirect:/administrative/patients/{patientId}/appointments/new";
 		} else {
 
 			appointment.setPatient(patient);

@@ -16,10 +16,13 @@
 
 package org.springframework.clinicaetsii.service;
 
+import java.util.Collection;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -67,14 +70,58 @@ class PatientServiceTests {
 		Patient patient1 = this.patientService.findPatientByUsername();
 		Assertions.assertThat(patient1).isEqualTo(null);
 	}
-
 	@Test
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
+
 	void shouldFindPatientByPatientId() {
 		Patient patient1 = this.patientService.findPatient(4);
 		Assertions.assertThat(patient1.getId()).isEqualTo(4);
 
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
+
+	void shouldNotFindPatientByPatientId() {
 		Patient patient2 = this.patientService.findPatient(-1);
 		Assertions.assertThat(patient2).isEqualTo(null);
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
+	void shouldFindAllPatients() {
+		Collection<Patient> patients = this.patientService.findPatients();
+		Assertions.assertThat(patients.size()).isEqualTo(2);
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
+	void shouldFindDoctorByPatient() {
+		int doctorId = 1;
+		int patientId = 4;
+
+		Doctor doctor = this.patientService.findDoctorByPatient(patientId);
+
+		Assertions.assertThat(doctor.getId()).isEqualTo(doctorId);
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
+	void shouldNotFindDoctorByPatient() {
+
+		Doctor doctor2 = this.patientService.findDoctorByPatient(-1);
+
+		Assertions.assertThat(doctor2).isEqualTo(null);
 	}
 
 }
