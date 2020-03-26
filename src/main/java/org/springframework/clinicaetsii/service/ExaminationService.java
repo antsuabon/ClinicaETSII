@@ -25,7 +25,7 @@ public class ExaminationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Examination> findAllDoctors() throws DataAccessException {
+	public Collection<Examination> findAllExaminations() throws DataAccessException {
 		return this.examinationRepository.findAll();
 	}
 
