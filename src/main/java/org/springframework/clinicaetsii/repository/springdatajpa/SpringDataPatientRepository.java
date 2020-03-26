@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.model.User;
 import org.springframework.clinicaetsii.repository.PatientRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -49,6 +50,9 @@ public interface SpringDataPatientRepository extends PatientRepository, CrudRepo
 
 	@Override
 	@Query("SELECT patient FROM Patient patient WHERE patient.username = :username")
-	public Patient findPatientByUsername(@Param("username") String username);
+	Patient findPatientByUsername(@Param("username") String username);
 
+	@Override
+	@Query("SELECT user FROM User user WHERE user.username = :username")
+	User findAdministrativeByUsername(@Param("username") String username);
 }

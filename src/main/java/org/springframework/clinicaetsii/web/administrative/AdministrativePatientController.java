@@ -76,6 +76,7 @@ public class AdministrativePatientController {
 
 		Patient patient = new Patient();
 		model.put("patient", patient);
+		model.put("administrative", this.patientService.findCurrentAdministrative());
 
 		return "/administrative/patients/createPatientForm";
 

@@ -20,6 +20,7 @@ import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.web.formatter.LocalDateTimeFormatter;
 import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,31 +113,36 @@ public class PatientAppointmentController {
 	public String deleteAppointent(@PathVariable("appointmentId") final int appointmentId) {
 
 		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
+		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
 
-		if(appointment !=null) {
-		this.appointmentService.deleteAppointment(appointment);
+		if(appointment != null && !appointmentsDone.contains(appointment)) {
+
+			this.appointmentService.deleteAppointment(appointment);
+
+			return "redirect:/patient/appointments";
 		}
 
-		return "redirect:/patient/appointments";
+		return "exception";
 
 	}
 
 	@GetMapping
-	public String listAppointmentsPatient(final Map<String, Object> model) {
+	public String listAppointmentsPatient(final ModelMap model) {
 
 		Collection<Appointment> appointmentsDelete = this.patientService.findAppointmentsDelete();
 		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
 
+
 		if (appointmentsDelete.isEmpty()) {
-			model.put("emptyListDelete", true);
+			model.put("appointmentsDelete", true);
 		} else {
 			model.put("appointmentsDelete", appointmentsDelete);
 		}
 
 		if (appointmentsDone.isEmpty()) {
-			model.put("emptyListDone", true);
+			model.put("appointmentsDone", true);
 		} else {
-			model.put("appointments", appointmentsDone);
+			model.put("appointmentsDone", appointmentsDone);
 		}
 
 		return "/patient/appointments/appointmentsList";

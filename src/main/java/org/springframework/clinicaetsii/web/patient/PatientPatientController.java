@@ -75,7 +75,7 @@ public class PatientPatientController {
 
 	@GetMapping(value = "/patient/edit")
 	public String initUpdatePatientForm(final Model model) {
-		Patient patientToUpdate = this.patientService.findPatient();
+		Patient patientToUpdate = this.patientService.findCurrentPatient();
 
 		PatientForm patientForm = new PatientForm();
 		patientForm.setPatient(patientToUpdate);
