@@ -88,7 +88,7 @@ public class DoctorConsultationController {
 
 	@PostMapping("/doctor/patients/{patientId}/consultations/new")
 	public String processCreationForm(@ModelAttribute("appointmentId") final int appointmentId, @Valid final Consultation consultation, final BindingResult result, final ModelMap model) {
-		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);;
+		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
       	consultation.setAppointment(appointment);
 
 		if (result.hasErrors()) {
@@ -133,7 +133,7 @@ public class DoctorConsultationController {
 			}
 
 			this.consultationService.save(consultation);
-			return "redirect:/doctor/patients/{patientId}/consultations/" + consultation.getId();
+			return "redirect:/doctor/patients/{patientId}/consultations/{consultationId}";
 		}
 	}
 

@@ -3,35 +3,44 @@ package org.springframework.clinicaetsii.web;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.clinicaetsii.configuration.SecurityConfiguration;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Consultation;
+import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.model.Doctor;
+import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.ConsultationService;
 import org.springframework.clinicaetsii.web.doctor.DoctorConsultationController;
+import org.springframework.clinicaetsii.web.formatter.DiagnosisFormatter;
+import org.springframework.clinicaetsii.web.formatter.DischargeTypeFormatter;
+import org.springframework.clinicaetsii.web.formatter.LocalDateTimeFormatter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = DoctorConsultationController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-
+@WebMvcTest(controllers = DoctorConsultationController.class, includeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = LocalDateTimeFormatter.class), @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = DiagnosisFormatter.class), @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = DischargeTypeFormatter.class)}, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class DoctorConsultationControllerTests {
 
 	private static final int				TEST_CONSULTATION_ID_1	= 1;
@@ -49,6 +58,9 @@ class DoctorConsultationControllerTests {
 	@Autowired
 	private MockMvc							mockMvc;
 
+	@Autowired
+	private DoctorConsultationController doctorConsultationController;
+
 	private Consultation					consultation1;
 	private Consultation					consultation2;
 
@@ -59,9 +71,14 @@ class DoctorConsultationControllerTests {
 	private Appointment						appointment1;
 	private Appointment						appointment2;
 
+	private Examination						examination1;
+
 	private DischargeType					dischargeType1;
 	private DischargeType					dischargeType2;
 
+
+	private Collection<DischargeType> dischargeTypes;
+	private Collection<Diagnosis> diagnoses;
 
 	void setup() {
 
@@ -110,6 +127,12 @@ class DoctorConsultationControllerTests {
 		this.dischargeType1.setName("Revisión");
 		this.consultation1.setDischargeType(this.dischargeType1);
 		this.consultation1.setAppointment(this.appointment1);
+		this.examination1 = new Examination();
+		this.examination1.setId(1);
+		this.examination1.setDescription("Tiene el vientre muy hinchado");
+		Collection<Examination> examinations = new ArrayList<>();
+		examinations.add(this.examination1);
+		this.consultation1.setExaminations(examinations);
 
 		this.appointment2 = new Appointment();
 		this.appointment2.setStartTime(LocalDateTime.now().plusMinutes(7));
@@ -135,6 +158,18 @@ class DoctorConsultationControllerTests {
 		consultations.add(this.consultation2);
 
 		Collection<Consultation> consultations2 = consultations;
+
+		this.dischargeTypes = new ArrayList<>();
+		this.dischargeTypes.add(this.dischargeType1);
+		this.dischargeTypes.add(this.dischargeType2);
+
+
+		Diagnosis diagnosis1 = new Diagnosis();
+		diagnosis1.setId(1);
+		diagnosis1.setName("Gripe invernal");
+
+		this.diagnoses = new ArrayList<>();
+		this.diagnoses.add(diagnosis1);
 
 		BDDMockito.given(this.consultationService.findConsultationsByPatientId(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
 			.willReturn(consultations2);
@@ -182,6 +217,91 @@ class DoctorConsultationControllerTests {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
 			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/consultationDetails"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitCreationForm() throws Exception {
+		this.setup();
+		BDDMockito.given(this.appointmentService.findAppointmentById(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).willReturn(this.appointment1);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/new", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+				.queryParam("appointmentId", String.valueOf(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("consultation"))
+			.andExpect(MockMvcResultMatchers.model().attribute("consultation", Matchers.hasProperty("startTime")))
+			.andExpect(MockMvcResultMatchers.model().attribute("consultation", Matchers.hasProperty("appointment", Matchers.is(this.appointment1))))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/createOrUpdateConsultationForm"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessCreationForm() throws Exception {
+		this.setup();
+		BDDMockito.given(this.appointmentService.findAppointmentById(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).willReturn(this.appointment1);
+
+		Mockito.doAnswer(invocation -> {
+			Consultation consultation = invocation.getArgument(0);
+
+			if (consultation.getId() == null) {
+				consultation.setId(5);
+			}
+
+			return null;
+		}).when(this.consultationService).save(ArgumentMatchers.any(Consultation.class));
+
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/patients/{patientId}/consultations/new", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("startTime", this.appointment1.getStartTime().plusMinutes(5).format(DateTimeFormatter.ISO_DATE_TIME))
+				.param("appointmentId", String.valueOf(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+				.param("anamnesis", this.consultation1.getAnamnesis())
+				.param("remarks", this.consultation1.getRemarks()))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor/patients/{patientId}/consultations/5"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitEditionForm() throws Exception {
+		this.setup();
+		BDDMockito.given(this.consultationService.findAllDiagnoses()).willReturn(this.diagnoses);
+		BDDMockito.given(this.consultationService.findDischargeTypes()).willReturn(this.dischargeTypes);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/consultations/{consultationId}/edit", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("consultation", this.consultation1))
+			.andExpect(MockMvcResultMatchers.model().attribute("dischargeTypes", this.dischargeTypes))
+			.andExpect(MockMvcResultMatchers.model().attribute("allDiagnoses", this.diagnoses))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/consultations/createOrUpdateConsultationForm"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessEditionForm() throws Exception {
+		this.setup();
+
+		BDDMockito.given(this.consultationService.findAllDiagnoses()).willReturn(this.diagnoses);
+		BDDMockito.given(this.consultationService.findDischargeTypes()).willReturn(this.dischargeTypes);
+		BDDMockito.given(this.appointmentService.findAppointmentById(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)).willReturn(this.appointment1);
+
+		Mockito.doAnswer(invocation -> {
+			Consultation consultation = invocation.getArgument(0);
+
+			if (consultation.getId() == null) {
+				consultation.setId(5);
+			}
+
+			return null;
+		}).when(this.consultationService).save(ArgumentMatchers.any(Consultation.class));
+
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/patients/{patientId}/consultations/{consultationId}/edit", DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1, DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("startTime", this.appointment1.getStartTime().plusMinutes(5).format(DateTimeFormatter.ISO_DATE_TIME))
+			.param("appointmentId", String.valueOf(DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+			.param("anamnesis", this.consultation1.getAnamnesis())
+			.param("remarks", this.consultation1.getRemarks())
+			.param("diagnoses", "1")
+			.param("dischargeType", "1"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
 	}
 
 }
