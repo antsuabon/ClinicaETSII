@@ -22,20 +22,14 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdministrativePatientController {
@@ -70,20 +64,7 @@ public class AdministrativePatientController {
 		return "/administrative/patientsList";
 	}
 
-	@GetMapping(value = "/administrative/patients/{patientId}/doctors")
-	public String processFind(@PathVariable("patientId") final int patientId, final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
 
-		Doctor d = this.patientService.findDoctorByPatient(patientId);
-
-		if (d.equals(null)) {
-			model.put("emptylist", true);
-		} else {
-			model.put("patientId", patientId);
-			model.put("doctor", d);
-
-		}
-		return "/administrative/doctorsList";
-	}
 
 	@ModelAttribute("doctors")
 	public Collection<Doctor> populateDoctors() {

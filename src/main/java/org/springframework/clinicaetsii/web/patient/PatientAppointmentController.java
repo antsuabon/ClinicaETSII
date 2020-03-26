@@ -1,11 +1,13 @@
 
 package org.springframework.clinicaetsii.web.patient;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -15,6 +17,8 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.web.formatter.LocalDateTimeFormatter;
+import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,15 +26,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/patient/appointments")
+
 public class PatientAppointmentController {
 
-	private final AppointmentService		appointmentService;
-	private final PatientService			patientService;
+	private final AppointmentService			appointmentService;
+	private final PatientService				patientService;
+	private static final LocalDateTimeFormatter	FORMATTER	= new LocalDateTimeFormatter();
+
 
 	@Autowired
 	public PatientAppointmentController(final AppointmentService appointmentService, final PatientService patientService) {
@@ -38,13 +43,14 @@ public class PatientAppointmentController {
 		this.patientService = patientService;
 	}
 
-	@InitBinder
+	@InitBinder("appointment")
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setValidator(new AppointmentValidator());
 
 	}
 
-	@GetMapping(value = "/table")
+	@GetMapping(value = "/patient/appointments/table")
 	public String generateTable(final Map<String, Object> model) {
 		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(this.patientService.findCurrentPatient().getGeneralPractitioner().getId()));
 		List<LocalDateTime> table = this.timeTable(LocalDate.now());
@@ -58,13 +64,13 @@ public class PatientAppointmentController {
 		return "/patient/appointments/timeTable";
 	}
 
-	@GetMapping(value = "/new")
-	public String initCreationForm(final Map<String, Object> model, @RequestParam("fecha") final LocalDateTime fecha) {
+	@GetMapping(value = "/patient/appointments/new")
+	public String initCreationForm(@RequestParam("fecha") final String fecha, final Map<String, Object> model) throws ParseException {
 		Appointment appointment = new Appointment();
 		appointment.setPatient(this.patientService.findCurrentPatient());
 
-		appointment.setStartTime(fecha);
-		appointment.setEndTime(fecha.plusMinutes(7));
+		appointment.setStartTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")));
+		appointment.setEndTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")).plusMinutes(7));
 
 		model.put("appointment", appointment);
 
@@ -72,8 +78,8 @@ public class PatientAppointmentController {
 
 	}
 
-	@PostMapping(value = "/save")
-	public String processCreationForm(@Valid final Appointment appointment,final BindingResult result) {
+	@PostMapping(value = "/patient/appointments/save")
+	public String processCreationForm(@Valid final Appointment appointment, final BindingResult result) {
 		Patient p = this.patientService.findPatientByUsername();
 		if (result.hasErrors()) {
 			return "redirect:/patient/appointments/new";
@@ -98,7 +104,6 @@ public class PatientAppointmentController {
 			start = start.plusMinutes(7);
 			hours.add(start);
 		}
-		hours.add(end);
 
 		return hours;
 	}

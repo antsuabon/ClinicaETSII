@@ -24,6 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
+
+@EnableGlobalMethodSecurity(
+	//    securedEnabled = true,
+	//    jsr250Enabled = true,
+	prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
@@ -41,9 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			//				.antMatchers("/users/new").permitAll()
 			//				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
 			//				.antMatchers("/vets/**").authenticated()
-			.anyRequest().denyAll()
-			.and()
-			.formLogin()
+			.anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración
