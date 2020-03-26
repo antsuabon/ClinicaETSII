@@ -75,23 +75,15 @@ public class PatientPatientController {
 
 	@GetMapping(value = "/patient/edit")
 	public String initUpdatePatientForm(final Model model) {
-		Patient patientToUpdate = this.patientService.findCurrentPatient();
 
-		PatientForm patientForm = new PatientForm();
-		patientForm.setPatient(patientToUpdate);
+		Patient patient = this.patientService.findCurrentPatient();
+		model.addAttribute("patient",patient);
 
-		model.addAttribute(patientForm);
-		return  "/patient/updatePatientForm";
+		return this.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/patient/edit")
-	public String processUpdatePatientForm(@Valid final PatientForm patientForm, final BindingResult result) {
-
-		Patient patientToUpdate = this.patientService.findPatient();
-		String oldUsername = String.valueOf(patientToUpdate.getUsername());
-
-		System.out.println(result.getAllErrors());
-
+	public String processUpdatePatientForm(@Valid final Patient patient, final BindingResult result, final Model model, @ModelAttribute(name = "generalPractitioner") final Doctor practitioner) {
 		if (result.hasErrors()) {
 
 			return "/patient/updatePatientForm";
