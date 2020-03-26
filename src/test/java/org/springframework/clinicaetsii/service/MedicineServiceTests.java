@@ -32,4 +32,11 @@ public class MedicineServiceTests {
 		Assertions.assertThat(medicine.getCommercialName()).isNotNull().isNotBlank();
 	}
 
+	@Test
+	void shouldListAllMedicines() {
+
+		Collection<Medicine> medicines = this.medicineService.findAllMedicines();
+		Assertions.assertThat(medicines.size()).isEqualTo(3);
+	}
+	
 }

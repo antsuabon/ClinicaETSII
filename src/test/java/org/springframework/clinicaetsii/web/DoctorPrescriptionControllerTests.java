@@ -208,4 +208,36 @@ class DoctorPrescriptionControllerTests {
 
 	}
 
+	@Test
+	@WithMockUser(username = "doctor1", roles = {
+			"doctor"
+	})
+	void shouldInitCreatePrescriptionForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions/new", TEST_PATIENT_ID_1))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("prescription"))
+			.andExpect(MockMvcResultMatchers.view().name("/doctor/prescriptions/createPrescriptionForm"));
+	}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
+	void shouldProcessCreatePrescriptionForm() throws Exception {
+		setup();
+		BDDMockito.given(this.patientService.findPatientById(TEST_PATIENT_ID_1)).willReturn(this.patient1);
+		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
+		BDDMockito.given(this.medicineService.findMedicineById(TEST_MEDICINE_ID_1)).willReturn(this.medicine1);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/doctor/patients/{patientId}/prescriptions/new", TEST_PATIENT_ID_1)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("dosage", "3")
+				.param("days", "3")
+				.param("pharmaceuticalWarning", "None")
+				.param("patientWarning", "None")
+				.param("medicine", "1"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/doctor/patients/{patientId}/prescriptions"));
+
+	}
+
 }

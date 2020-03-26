@@ -276,5 +276,26 @@ void shouldFindCurrentDoctorPatientsAuthority() {
 
 	}
 
+	@Test
+	void shouldShowValidPatient() {
+		int id = 4;
+		Patient patient = this.patientService.findPatient(id);
+		Assertions.assertThat(patient).isNotNull();
+
+		Assertions.assertThat(patient.getUsername()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getPassword()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getName()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getSurname()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getDni()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getEmail()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getPhone()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getNss()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getBirthDate()).isNotNull();
+		Assertions.assertThat(patient.getAddress()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getState()).isNotNull().isNotBlank();
+		Assertions.assertThat(patient.getGeneralPractitioner()).isNotNull();
+
+	}
+
 
 }

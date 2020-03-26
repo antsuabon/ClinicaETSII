@@ -84,4 +84,36 @@ public class PrescriptionServiceTests {
 
 	}
 
+	@Test
+	void shouldInsertPrescription() {
+		Collection<Prescription> prescriptions1 = this.prescriptionService.findAllPrescriptions();
+
+		int initSize = prescriptions1.size();
+
+		Medicine medicine1 = this.medicineService.findMedicineById(1);
+		Patient patient1 = this.patientService.findPatientById(4);
+		Doctor doctor1 = this.doctorService.findDoctorById(1);
+
+		LocalDateTime inicio = LocalDateTime.now();
+
+		Prescription prescription = new Prescription();
+		prescription.setDays(3f);
+		prescription.setDosage(3f);
+		prescription.setPatientWarning("");
+		prescription.setPharmaceuticalWarning("");
+
+		prescription.setStartDate(inicio);
+		prescription.setDoctor(doctor1);
+		prescription.setPatient(patient1);
+		prescription.setMedicine(medicine1);
+
+		this.prescriptionService.savePrescription(prescription);
+		Assertions.assertThat(prescription.getId().longValue()).isNotEqualTo(0);
+
+		Collection<Prescription> prescriptions2 = this.prescriptionService.findAllPrescriptions();
+		int finalSize = prescriptions2.size();
+		Assertions.assertThat(finalSize).isEqualTo(initSize + 1);
+
+	}
+
 }
