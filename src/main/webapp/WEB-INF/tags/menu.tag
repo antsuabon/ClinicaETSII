@@ -65,6 +65,12 @@
 								<span>Solicitar cita médica</span>
 							</petclinic:menuItem>
 
+
+							<petclinic:menuItem active="${name eq 'appointments'}" url="/patient/prescriptions" title="list my prescriptions">
+								<span aria-hidden="true"></span>
+								<span>Mis prescripciones</span>
+							</petclinic:menuItem>
+
 						</ul></li>
 				</sec:authorize>
 
@@ -90,7 +96,7 @@
 
 
 				<sec:authorize access="hasAuthority('administrative')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrative <span
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrativo <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 
@@ -103,7 +109,7 @@
 
 							<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients" title="list my patients">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Crear Cita</span>
+								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
 
 							<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"

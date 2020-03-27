@@ -246,4 +246,19 @@ class DoctorPrescriptionControllerTests {
 				.andExpect(view().name("redirect:/doctor/patients/{patientId}/prescriptions"));
 	}
 
+	@Test
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void shouldNotProcessCreatePrescriptionForm() throws Exception {
+		this.mockMvc
+				.perform(post("/doctor/patients/{patientId}/prescriptions/new",
+						DoctorPrescriptionControllerTests.TEST_PATIENT_ID_1).with(csrf())
+								.param("dosage", "").param("days", "")
+								.param("pharmaceuticalWarning", "").param("patientWarning", "")
+								.param("medicine", ""))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("prescription"))
+				.andExpect(model().attributeHasFieldErrors("prescription", "dosage", "days",
+						"medicine"))
+				.andExpect(view().name("/doctor/prescriptions/createPrescriptionForm"));
+	}
+
 }

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,7 @@ public class PatientAppointmentController {
 		List<LocalDateTime> citas =
 				new ArrayList<>(this.appointmentService.findAppointmentByDoctors(
 						this.patientService.findCurrentPatient().getGeneralPractitioner().getId()));
-		List<LocalDateTime> table = this.timeTable(LocalDate.now());
+		List<LocalDateTime> table = timeTable(LocalDate.now());
 		table.removeAll(citas);
 		if (table.isEmpty()) {
 			model.put("emptylist", true);
@@ -67,15 +66,13 @@ public class PatientAppointmentController {
 	}
 
 	@GetMapping(value = "/patient/appointments/new")
-	public String initCreationForm(@RequestParam("fecha") final String fecha,
+	public String initCreationForm(@RequestParam("fecha") final LocalDateTime fecha,
 			final Map<String, Object> model) throws ParseException {
 		Appointment appointment = new Appointment();
 		appointment.setPatient(this.patientService.findCurrentPatient());
 
-		appointment.setStartTime(
-				PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")));
-		appointment.setEndTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es"))
-				.plusMinutes(7));
+		appointment.setStartTime(fecha);
+		appointment.setEndTime(fecha.plusMinutes(7));
 
 		model.put("appointment", appointment);
 
@@ -118,17 +115,17 @@ public class PatientAppointmentController {
 	@GetMapping("/patient/appointments/{appointmentId}/delete")
 	public String deleteAppointent(@PathVariable("appointmentId") final int appointmentId) {
 
+		Patient patient = this.patientService.findCurrentPatient();
 		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
 		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
 
-		if (appointment != null && !appointmentsDone.contains(appointment)) {
-
-			this.appointmentService.deleteAppointment(appointment);
-
+		if (patient != null && appointment != null
+				&& appointment.getPatient().getId() == patient.getId()
+				&& !appointmentsDone.contains(appointment)) {
 			return "redirect:/patient/appointments";
+		} else {
+			return "exception";
 		}
-
-		return "exception";
 
 	}
 

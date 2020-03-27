@@ -65,7 +65,7 @@ public class AdministrativePatientController {
 			model.put("patients", results);
 		}
 
-		return "/administrative/patientsList";
+		return "/administrative/patients/patientsList";
 	}
 
 
@@ -106,7 +106,7 @@ public class AdministrativePatientController {
 
 	@GetMapping("/administrative/patients/{patientId}")
 	public ModelAndView showPatient(@PathVariable("patientId") final int patientId) {
-		ModelAndView mav = new ModelAndView("administrative/patients/patientDetails");
+		ModelAndView mav = new ModelAndView("/administrative/patients/patientDetails");
 		mav.addObject(this.patientService.findPatientById(patientId));
 		return mav;
 	}

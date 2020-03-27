@@ -179,6 +179,18 @@ public class DoctorExaminationControllerTest {
 
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	@Test
+	void testNotShowExaminationPatient() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get(
+				"/doctor/patients/{patientId}/consultations/{consultationId}/examinations/{examinationId}",
+				this.TEST_PATIENT_ID_1, this.TEST_CONSULTATION_ID_1, -1))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
+				.andExpect(MockMvcResultMatchers.view()
+						.name("doctor/examinations/examinationDetails"));
+	}
+
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	@Test
 	void doctorShouldInitExaminationCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get(
 				"/doctor/patients/{patientId}/consultations/{consultationId}/examinations/new",

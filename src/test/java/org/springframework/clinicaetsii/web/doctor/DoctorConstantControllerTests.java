@@ -194,4 +194,14 @@ public class DoctorConstantControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name(
 						"redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
 	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessNotExistingConstantDeletion() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get(
+				"/doctor/patients/{patientId}/consultations/{consultationId}/constants/{constantId}/delete",
+				1, 1, -1)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name(
+						"redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
+	}
 }

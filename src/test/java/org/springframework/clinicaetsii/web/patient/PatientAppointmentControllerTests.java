@@ -218,7 +218,6 @@ public class PatientAppointmentControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testGenerateTable() throws Exception {
-		setup();
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments/table"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("hours"))
@@ -227,8 +226,17 @@ public class PatientAppointmentControllerTests {
 
 	@WithMockUser(value = "spring")
 	@Test
+	void testGenerateEmptyTable() throws Exception {
+		BDDMockito.given(this.appointmentService.findAppointmentByDoctors(this.patient1.getGeneralPractitioner().getId())).willReturn(this.patientAppointmentController.timeTable(LocalDate.now()));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments/table"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
+				.andExpect(MockMvcResultMatchers.view().name("/patient/appointments/timeTable"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
 	void testInitForm() throws Exception {
-		setup();
 		String fecha = LocalDateTime.now().plusHours(8).format(DateTimeFormatter.ISO_DATE_TIME);
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/new").param("fecha",
@@ -242,7 +250,6 @@ public class PatientAppointmentControllerTests {
 	@Test
 	@WithMockUser(username = "patient1", roles = {"patient"})
 	void testProcessCreationForm() throws Exception {
-		setup();
 
 		String startTime =
 				LocalDateTime.of(2020, 3, 26, 9, 0).format(DateTimeFormatter.ISO_DATE_TIME);
@@ -260,7 +267,6 @@ public class PatientAppointmentControllerTests {
 	@Test
 	@WithMockUser(username = "patient1", roles = {"patient"})
 	void testNotProcessCreationForm() throws Exception {
-		setup();
 
 		String startTime =
 				LocalDateTime.of(2020, 3, 26, 9, 0).format(DateTimeFormatter.ISO_DATE_TIME);
@@ -289,6 +295,23 @@ public class PatientAppointmentControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("appointmentsDone"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("appointmentsDelete"))
+				.andExpect(MockMvcResultMatchers.view()
+						.name("/patient/appointments/appointmentsList"));
+
+	}
+
+	@Test
+	@WithMockUser(username = "patient", roles = {"patient"})
+	void shouldListEmptyAppointments() throws Exception {
+
+		BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
+		BDDMockito.given(this.patientService.findAppointmentsDelete())
+				.willReturn(new ArrayList<>());
+		BDDMockito.given(this.patientService.findAppointmentsDone()).willReturn(new ArrayList<>());
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments"))
+				.andExpect(MockMvcResultMatchers.model().attribute("appointmentsDone", true))
+				.andExpect(MockMvcResultMatchers.model().attribute("appointmentsDelete", true))
 				.andExpect(MockMvcResultMatchers.view()
 						.name("/patient/appointments/appointmentsList"));
 
@@ -378,9 +401,6 @@ public class PatientAppointmentControllerTests {
 	void shouldNotDeleteAppointments() throws Exception {
 
 		BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
-		BDDMockito.given(this.appointmentService.findAppointmentById(-1))
-				.willThrow(new RuntimeException());
-
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",
@@ -389,6 +409,7 @@ public class PatientAppointmentControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("exception"));
 
 	}
+
 
 
 	@Test
@@ -433,10 +454,8 @@ public class PatientAppointmentControllerTests {
 	@WithMockUser(username = "administrative", roles = {"administrative"})
 	void administrativeShouldNotDeleteAppointments() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentPatient())
-				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(2))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment2);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",
@@ -455,7 +474,7 @@ public class PatientAppointmentControllerTests {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(2))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment2);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",
@@ -473,7 +492,7 @@ public class PatientAppointmentControllerTests {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(1))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment1);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",
@@ -491,7 +510,7 @@ public class PatientAppointmentControllerTests {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(1))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment1);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",
@@ -510,7 +529,7 @@ public class PatientAppointmentControllerTests {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(1))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment1);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",

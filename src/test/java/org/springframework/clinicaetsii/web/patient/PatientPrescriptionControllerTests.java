@@ -19,7 +19,6 @@ import org.springframework.clinicaetsii.model.Service;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.service.PrescriptionService;
-import org.springframework.clinicaetsii.web.PatientPrescriptionController;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -182,10 +181,20 @@ public class PatientPrescriptionControllerTests {
 	void testNotListPrescritionsByOtherUserRole() throws Exception {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(RuntimeException.class);
-
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/prescriptions"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	@WithMockUser(value = "patient1", roles = "patient")
+	@Test
+	void testNotListPrescritionsByUser() throws Exception {
+		BDDMockito.given(this.prescriptionService.findPrescriptionsByPatientUsername("patient1"))
+			.willReturn(new ArrayList<>());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/prescriptions"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
+				.andExpect(MockMvcResultMatchers.view().name("/prescriptions/prescriptionList"));
 	}
 
 	@WithMockUser(value = "patient1", roles = "patient")
@@ -194,6 +203,15 @@ public class PatientPrescriptionControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/prescriptions/1"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("consultation"))
+				.andExpect(MockMvcResultMatchers.view().name("/prescriptions/prescriptionDetails"));
+	}
+	
+	@WithMockUser(value = "patient1", roles = "patient")
+	@Test
+	void testNotShowPrescriptionById() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/prescriptions/-1"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("empty"))
 				.andExpect(MockMvcResultMatchers.view().name("/prescriptions/prescriptionDetails"));
 	}
 }

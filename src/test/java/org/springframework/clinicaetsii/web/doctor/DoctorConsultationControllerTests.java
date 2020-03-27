@@ -1,6 +1,11 @@
 
 package org.springframework.clinicaetsii.web.doctor;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -304,9 +309,6 @@ class DoctorConsultationControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationForm() throws Exception {
-		this.setup();
-
-
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
 						.post("/doctor/patients/{patientId}/consultations/new",
@@ -323,6 +325,25 @@ class DoctorConsultationControllerTests {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view()
 						.name("redirect:/doctor/patients/{patientId}/consultations/5"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testNotProcessCreationForm() throws Exception {
+		this.consultation1.getExaminations().clear();
+		this.mockMvc
+				.perform(post("/doctor/patients/{patientId}/consultations/new",
+						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+								.with(csrf())
+								.param("startTime",
+										this.appointment1.getStartTime().minusMinutes(5)
+												.format(DateTimeFormatter.ISO_DATE_TIME))
+								.param("appointmentId", String.valueOf(
+										DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+								.param("anamnesis", "").param("remarks", ""))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("consultation"))
+				.andExpect(model().attributeHasFieldErrors("consultation", "startTime"))
+				.andExpect(view().name("/doctor/consultations/createOrUpdateConsultationForm"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -364,6 +385,50 @@ class DoctorConsultationControllerTests {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name(
 						"redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessEditionFormWithoutDischargeType() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.post("/doctor/patients/{patientId}/consultations/{consultationId}/edit",
+								DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1,
+								DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+						.with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("startTime",
+								this.appointment1.getStartTime().plusMinutes(5)
+										.format(DateTimeFormatter.ISO_DATE_TIME))
+						.param("appointmentId",
+								String.valueOf(
+										DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+						.param("anamnesis", this.consultation1.getAnamnesis())
+						.param("remarks", this.consultation1.getRemarks()).param("diagnoses", "1")
+						.param("dischargeType", ""))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name(
+						"redirect:/doctor/patients/{patientId}/consultations/{consultationId}"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testNotProcessEditionForm() throws Exception {
+		this.consultation1.getExaminations().clear();
+		this.mockMvc
+				.perform(post("/doctor/patients/{patientId}/consultations/{consultationId}/edit",
+						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1,
+						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+								.with(csrf())
+								.param("startTime",
+										this.appointment1.getStartTime().plusMinutes(5)
+												.format(DateTimeFormatter.ISO_DATE_TIME))
+								.param("appointmentId", String.valueOf(
+										DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
+								.param("anamnesis", "").param("remarks", "").param("diagnoses", "")
+								.param("dischargeType", "1"))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("consultation"))
+				.andExpect(model().attributeHasFieldErrors("consultation", "dischargeType"))
+				.andExpect(view().name("/doctor/consultations/createOrUpdateConsultationForm"));
 	}
 
 }

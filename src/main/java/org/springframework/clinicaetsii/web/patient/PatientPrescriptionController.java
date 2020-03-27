@@ -1,4 +1,4 @@
-package org.springframework.clinicaetsii.web;
+package org.springframework.clinicaetsii.web.patient;
 
 import java.util.ArrayList;
 import java.util.Collection;

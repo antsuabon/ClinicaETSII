@@ -78,6 +78,8 @@ public class AdministrativePatientControllerTests {
 	private static int TEST_APPOINTMENT_ID_1 = 1;
 	private static int TEST_APPOINTMENT_ID_2 = 2;
 
+	private static int TEST_PATIENT_ID = 1;
+
 	@BeforeEach
 	void setup() {
 
@@ -95,7 +97,7 @@ public class AdministrativePatientControllerTests {
 		this.doctor1.setCollegiateCode("303024345");
 
 		this.patient1 = new Patient();
-		this.patient1.setId(1);
+		this.patient1.setId(TEST_PATIENT_ID);
 		this.patient1.setAddress("Calle Oscar Arias");
 		this.patient1.setBirthDate(LocalDate.now());
 		this.patient1.setDni("41235678L");
@@ -177,8 +179,6 @@ public class AdministrativePatientControllerTests {
 
 		this.doctor1.setServices(this.services);
 
-		this.patient1 = new Patient();
-
 	}
 
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
@@ -186,8 +186,8 @@ public class AdministrativePatientControllerTests {
 	void shouldListPatients() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("patients"))
-				.andExpect(MockMvcResultMatchers.view().name("/administrative/patientsList"));
+				.andExpect(MockMvcResultMatchers.model().attributeExists("patients")).andExpect(
+						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
 	}
 
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
@@ -196,8 +196,29 @@ public class AdministrativePatientControllerTests {
 		BDDMockito.given(this.patientService.findPatients()).willReturn(new ArrayList<>());
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
-				.andExpect(MockMvcResultMatchers.view().name("/administrative/patientsList"));
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList")).andExpect(
+						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
+	}
+
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	@Test
+	void shouldShowPatient() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/administrative/patients/{patientId}",
+						TEST_PATIENT_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("patient"))
+				.andExpect(MockMvcResultMatchers.view()
+						.name("/administrative/patients/patientDetails"));
+	}
+
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	@Test
+	void shouldNotShowPatient() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/{patientId}", -1))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("patient"))
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@Test

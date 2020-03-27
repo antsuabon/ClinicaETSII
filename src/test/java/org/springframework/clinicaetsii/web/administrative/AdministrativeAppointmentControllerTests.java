@@ -1,6 +1,11 @@
 
 package org.springframework.clinicaetsii.web.administrative;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +41,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
 				classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration = SecurityConfiguration.class)
-
 public class AdministrativeAppointmentControllerTests {
 
 	private static final int TEST_APPOINTMENT_ID_1 = 1;
@@ -136,6 +140,21 @@ public class AdministrativeAppointmentControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("/administrative/timeTable"));
 	}
 
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	@Test
+	void testGenerateEmptyTable() throws Exception {
+		BDDMockito
+				.given(this.appointmentService
+						.findAppointmentByDoctors(this.patient1.getGeneralPractitioner().getId()))
+				.willReturn(this.administrativeAppointmentController.timeTable(LocalDate.now()));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.get("/administrative/patients/{patientId}/appointments/table", 1))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
+				.andExpect(MockMvcResultMatchers.view().name("/administrative/timeTable"));
+	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitForm() throws Exception {
@@ -177,13 +196,9 @@ public class AdministrativeAppointmentControllerTests {
 				LocalDateTime.of(2020, 3, 26, 9, 0).format(DateTimeFormatter.ISO_DATE_TIME);
 
 		this.mockMvc
-				.perform(MockMvcRequestBuilders
-						.post("/administrative/patients/{patientId}/appointments/save", 1)
-						.with(SecurityMockMvcRequestPostProcessors.csrf())
-						.param("startTime", startTime))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view()
+				.perform(post("/administrative/patients/{patientId}/appointments/save", 1)
+						.with(csrf()).param("startTime", startTime))
+				.andDo(print()).andExpect(status().is3xxRedirection()).andExpect(view()
 						.name("redirect:/administrative/patients/{patientId}/appointments/new"));
 
 	}
