@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +40,10 @@ public class ConstantServiceTests {
 	void shouldInsertConstant() {
 		Constant constant = new Constant();
 		constant.setValue(75f);
-			ConstantType constantType = new ConstantType();
-			constantType.setId(6);
-			constantType.setName("FrecCard");
-			constant.setConstantType(constantType);
+		ConstantType constantType = new ConstantType();
+		constantType.setId(6);
+		constantType.setName("FrecCard");
+		constant.setConstantType(constantType);
 
 		this.constantService.saveConstant(constant);
 		Assertions.assertThat(constant.getId()).isNotNull();
@@ -73,10 +72,10 @@ public class ConstantServiceTests {
 	void shouldUpdateConstant() {
 		Constant constant = this.constantService.findConstantById(1);
 		constant.setValue(80f);
-			ConstantType constantType = new ConstantType();
-			constantType.setId(6);
-			constantType.setName("FrecCard");
-			constant.setConstantType(constantType);
+		ConstantType constantType = new ConstantType();
+		constantType.setId(6);
+		constantType.setName("FrecCard");
+		constant.setConstantType(constantType);
 
 		this.constantService.saveConstant(constant);
 

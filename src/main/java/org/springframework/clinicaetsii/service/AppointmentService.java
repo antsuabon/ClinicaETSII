@@ -3,7 +3,6 @@ package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.repository.AppointmentRepository;
@@ -26,7 +25,8 @@ public class AppointmentService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<LocalDateTime> findAppointmentByDoctors(final int id) throws DataAccessException {
+	public Collection<LocalDateTime> findAppointmentByDoctors(
+			final int id) throws DataAccessException {
 		return this.appointmentRepository.findAppointmentsDatesByDoctorId(id);
 	}
 
@@ -55,7 +55,8 @@ public class AppointmentService {
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.appointmentRepository.findAppointmentsWithoutConsultationByDoctorUsername(username);
+		return this.appointmentRepository
+				.findAppointmentsWithoutConsultationByDoctorUsername(username);
 	}
 
 	@Transactional

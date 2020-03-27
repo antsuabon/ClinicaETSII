@@ -4,7 +4,6 @@ package org.springframework.clinicaetsii.web.validator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -129,7 +128,8 @@ public class PatientValidatorTests {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"", "222222222", "AAAAAAAAA", "333D3333R", "D33333333", "333333333E", "3333333F"})
+	@ValueSource(strings = {"", "222222222", "AAAAAAAAA", "333D3333R", "D33333333", "333333333E",
+			"3333333F"})
 	void validateWhenDni(final String dni) {
 
 		this.patient.setDni(dni);
@@ -144,7 +144,8 @@ public class PatientValidatorTests {
 
 
 	@ParameterizedTest
-	@ValueSource(strings = {"mariagmail.com", "maria", "@", "@gmail.com", "@gmail .com", "@gmail. com", "maria@"})
+	@ValueSource(strings = {"mariagmail.com", "maria", "@", "@gmail.com", "@gmail .com",
+			"@gmail. com", "maria@"})
 	void validateWhenEmail(final String email) {
 
 		this.patient.setEmail(email);
@@ -262,7 +263,8 @@ public class PatientValidatorTests {
 
 
 	@ParameterizedTest
-	@ValueSource(strings = {"", "1234567899", "12345678333333333", "00789", "12789", "53120", "125399995555555559"})
+	@ValueSource(strings = {"", "1234567899", "12345678333333333", "00789", "12789", "53120",
+			"125399995555555559"})
 	void validateWhenNSS(final String nss) {
 
 		this.patient.setNss(nss);
@@ -327,7 +329,8 @@ public class PatientValidatorTests {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666", "+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
+	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666",
+			"+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
 	void validateWhenPhone(final String phone) {
 
 		this.patient.setPhone(phone);
@@ -342,9 +345,9 @@ public class PatientValidatorTests {
 
 
 
-
 	@ParameterizedTest
-	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666", "+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
+	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666",
+			"+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
 	void validateWhenPhone2(final String phone) {
 
 		this.patient.setPhone2(phone);

@@ -1,11 +1,10 @@
 
-package org.springframework.clinicaetsii.web;
+package org.springframework.clinicaetsii.web.doctor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +15,38 @@ import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.PatientService;
-import org.springframework.clinicaetsii.web.doctor.DoctorPatientController;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = DoctorPatientController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = DoctorPatientController.class,
+		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+				classes = WebSecurityConfigurer.class),
+		excludeAutoConfiguration = SecurityConfiguration.class)
 class DoctorPatientControllerTests {
 
-	private static final int		TEST_PATIENT_ID_1	= 1;
-	private static final int		TEST_PATIENT_ID_2	= 2;
+	private static final int TEST_PATIENT_ID_1 = 1;
+	private static final int TEST_PATIENT_ID_2 = 2;
 
 	@MockBean
-	private PatientService			patientService;
+	private PatientService patientService;
 
 	@MockBean
-	private AuthoritiesService		authoritiesService;
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	private MockMvc					mockMvc;
+	private MockMvc mockMvc;
 
-	private Patient					patient1;
+	private Patient patient1;
 
-	private Patient					patient2;
+	private Patient patient2;
 
-	private Doctor					doctor3;
+	private Doctor doctor3;
 
 
 	void setup() {
@@ -109,18 +111,28 @@ class DoctorPatientControllerTests {
 	void testListPatients() throws Exception {
 		this.setup();
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("patients"))
-			.andExpect(MockMvcResultMatchers.view().name("/doctor/patientsList"));
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("patients"))
+				.andExpect(MockMvcResultMatchers.view().name("/doctor/patientsList"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testListPatientsWithOtherUserRole() throws Exception {
+		BDDMockito.given(this.patientService.findCurrentDoctorPatients())
+				.willThrow(AccessDeniedException.class);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testNotListPatients() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/doctor/patients"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
-			.andExpect(MockMvcResultMatchers.view().name("/doctor/patientsList"));
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList"))
+				.andExpect(MockMvcResultMatchers.view().name("/doctor/patientsList"));
 	}
 
 }

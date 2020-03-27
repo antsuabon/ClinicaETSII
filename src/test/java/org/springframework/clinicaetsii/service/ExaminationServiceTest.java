@@ -2,10 +2,9 @@
 package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,10 @@ class ExplorationServiceTests {
 
 
 	@Test
-	void shouldListDoctorsSortedByServices() {
-		Collection<Examination> examinations = this.examinationService.findExaminationsSortedByStartDate(1);
-		
+	void shouldListDoctorsSortedByServices() throws Exception {
+		Collection<Examination> examinations =
+				this.examinationService.findExaminationsSortedByStartDate(1);
+
 		Assertions.assertThat(examinations.size()).isEqualTo(2);
 
 		List<Examination> listExaminations = new ArrayList<>(examinations);
@@ -47,23 +47,24 @@ class ExplorationServiceTests {
 		Assertions.assertThat(sortedFirst && sortedLast).isEqualTo(true);
 
 	}
-	
+
 
 	@Test
-	void shouldInsertExamination() {
-		Collection<Examination> examinations = this.examinationService.findAllDoctors();
+	void shouldInsertExamination() throws Exception {
+		Collection<Examination> examinations = this.examinationService.findAllExaminations();
 		int tamañoInicial = examinations.size();
-		
+
 		Examination examination1 = new Examination();
 		examination1.setDescription("asdfg0");
 		examination1.setStartTime(LocalDateTime.of(2021, 12, 12, 12, 12));
-		Collection<Examination> examinationadded = this.consultationService.findConsultationById(1).getExaminations();
+		Collection<Examination> examinationadded =
+				this.consultationService.findConsultationById(1).getExaminations();
 		examinationadded.add(examination1);
 		this.consultationService.findConsultationById(1).setExaminations(examinationadded);
 		this.examinationService.saveExamination(examination1);
 		Assertions.assertThat(examination1.getId().longValue()).isNotEqualTo(0);
-		int tamañoFinal = this.examinationService.findAllDoctors().size();
-		Assertions.assertThat(tamañoFinal).isEqualTo(tamañoInicial+1);
+		int tamañoFinal = this.examinationService.findAllExaminations().size();
+		Assertions.assertThat(tamañoFinal).isEqualTo(tamañoInicial + 1);
 
 	}
 

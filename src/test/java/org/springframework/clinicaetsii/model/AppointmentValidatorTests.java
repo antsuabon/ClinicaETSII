@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.model;
 
 import java.time.LocalDateTime;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 /**
- * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
- *         when upgrading to a new version of Hibernate Validator/ Bean Validation)
+ * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful when
+ *         upgrading to a new version of Hibernate Validator/ Bean Validation)
  */
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class AppointmentValidatorTests {
@@ -36,7 +35,7 @@ class AppointmentValidatorTests {
 
 		Appointment appointment = new Appointment();
 		LocalDateTime date = LocalDateTime.now();
-		Patient patient = this.patientService.findPatient(4);
+		Patient patient = this.patientService.findPatientById(4);
 		appointment.setEndTime(date.plusMinutes(7));
 		appointment.setPatient(patient);
 		Object object = appointment;
@@ -49,7 +48,8 @@ class AppointmentValidatorTests {
 
 		Assertions.assertThat(errors.getFieldError().getField()).isEqualTo("startTime");
 
-		Assertions.assertThat(errors.getFieldError().getDefaultMessage()).isEqualTo("La fecha de inicio de la cita no puede ser nula");
+		Assertions.assertThat(errors.getFieldError().getDefaultMessage())
+				.isEqualTo("La fecha de inicio de la cita no puede ser nula");
 
 	}
 
@@ -58,7 +58,7 @@ class AppointmentValidatorTests {
 
 		Appointment appointment = new Appointment();
 		LocalDateTime date = LocalDateTime.now();
-		Patient patient = this.patientService.findPatient(4);
+		Patient patient = this.patientService.findPatientById(4);
 		appointment.setStartTime(date);
 		appointment.setPatient(patient);
 		Object object = appointment;
@@ -71,7 +71,8 @@ class AppointmentValidatorTests {
 
 		Assertions.assertThat(errors.getFieldError().getField()).isEqualTo("endTime");
 
-		Assertions.assertThat(errors.getFieldError().getDefaultMessage()).isEqualTo("La fecha de fin de la cita no puede ser nula");
+		Assertions.assertThat(errors.getFieldError().getDefaultMessage())
+				.isEqualTo("La fecha de fin de la cita no puede ser nula");
 
 	}
 
@@ -80,7 +81,7 @@ class AppointmentValidatorTests {
 
 		Appointment appointment = new Appointment();
 		LocalDateTime date = LocalDateTime.now();
-		Patient patient = this.patientService.findPatient(4);
+		Patient patient = this.patientService.findPatientById(4);
 		appointment.setStartTime(date);
 		appointment.setPatient(patient);
 		appointment.setEndTime(date.minusMinutes(7));
@@ -94,7 +95,8 @@ class AppointmentValidatorTests {
 
 		Assertions.assertThat(errors.getFieldError().getField()).isEqualTo("endTime");
 
-		Assertions.assertThat(errors.getFieldError().getDefaultMessage()).isEqualTo("La diferecia entre en comienzo y fin de la cita debe de ser de 7 minutos");
+		Assertions.assertThat(errors.getFieldError().getDefaultMessage()).isEqualTo(
+				"La diferecia entre en comienzo y fin de la cita debe de ser de 7 minutos");
 
 	}
 

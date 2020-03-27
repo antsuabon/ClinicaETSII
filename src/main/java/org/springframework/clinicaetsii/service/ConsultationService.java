@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Diagnosis;
@@ -15,17 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ConsultationService {
 
-	private ConsultationRepository	consultationRepository;
+	private ConsultationRepository consultationRepository;
 	private DiagnosisRepository diagnosisRepository;
 
 	@Autowired
-	public ConsultationService(final ConsultationRepository	consultationRepository, final DiagnosisRepository diagnosisRepository) {
+	public ConsultationService(final ConsultationRepository consultationRepository,
+			final DiagnosisRepository diagnosisRepository) {
 		this.consultationRepository = consultationRepository;
 		this.diagnosisRepository = diagnosisRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Consultation> findConsultationsByPatientId(final int patientId) throws DataAccessException {
+	public Collection<Consultation> findConsultationsByPatientId(
+			final int patientId) throws DataAccessException {
 		return this.consultationRepository.findConsultationsByPatientId(patientId);
 	}
 

@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
@@ -63,7 +62,8 @@ public class DoctorService {
 	}
 
 	@Transactional
-	public void save(final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
+	public void save(
+			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
 		this.doctorRepository.save(doctor);
 	}
 

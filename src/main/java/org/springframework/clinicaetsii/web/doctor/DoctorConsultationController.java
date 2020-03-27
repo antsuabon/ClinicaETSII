@@ -14,6 +14,7 @@ import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.ConsultationService;
 import org.springframework.clinicaetsii.service.ExaminationService;
+import org.springframework.clinicaetsii.web.validator.ConsultationValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

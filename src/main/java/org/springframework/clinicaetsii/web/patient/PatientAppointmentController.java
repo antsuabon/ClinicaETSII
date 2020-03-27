@@ -9,9 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
@@ -33,13 +31,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class PatientAppointmentController {
 
-	private final AppointmentService			appointmentService;
-	private final PatientService				patientService;
-	private static final LocalDateTimeFormatter	FORMATTER	= new LocalDateTimeFormatter();
+	private final AppointmentService appointmentService;
+	private final PatientService patientService;
+	private static final LocalDateTimeFormatter FORMATTER = new LocalDateTimeFormatter();
 
 
 	@Autowired
-	public PatientAppointmentController(final AppointmentService appointmentService, final PatientService patientService) {
+	public PatientAppointmentController(final AppointmentService appointmentService,
+			final PatientService patientService) {
 		this.appointmentService = appointmentService;
 		this.patientService = patientService;
 	}
@@ -53,7 +52,9 @@ public class PatientAppointmentController {
 
 	@GetMapping(value = "/patient/appointments/table")
 	public String generateTable(final Map<String, Object> model) {
-		List<LocalDateTime> citas = new ArrayList<>(this.appointmentService.findAppointmentByDoctors(this.patientService.findCurrentPatient().getGeneralPractitioner().getId()));
+		List<LocalDateTime> citas =
+				new ArrayList<>(this.appointmentService.findAppointmentByDoctors(
+						this.patientService.findCurrentPatient().getGeneralPractitioner().getId()));
 		List<LocalDateTime> table = this.timeTable(LocalDate.now());
 		table.removeAll(citas);
 		if (table.isEmpty()) {
@@ -66,12 +67,15 @@ public class PatientAppointmentController {
 	}
 
 	@GetMapping(value = "/patient/appointments/new")
-	public String initCreationForm(@RequestParam("fecha") final String fecha, final Map<String, Object> model) throws ParseException {
+	public String initCreationForm(@RequestParam("fecha") final String fecha,
+			final Map<String, Object> model) throws ParseException {
 		Appointment appointment = new Appointment();
 		appointment.setPatient(this.patientService.findCurrentPatient());
 
-		appointment.setStartTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")));
-		appointment.setEndTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")).plusMinutes(7));
+		appointment.setStartTime(
+				PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es")));
+		appointment.setEndTime(PatientAppointmentController.FORMATTER.parse(fecha, new Locale("es"))
+				.plusMinutes(7));
 
 		model.put("appointment", appointment);
 
@@ -80,8 +84,9 @@ public class PatientAppointmentController {
 	}
 
 	@PostMapping(value = "/patient/appointments/save")
-	public String processCreationForm(@Valid final Appointment appointment, final BindingResult result) {
-		Patient p = this.patientService.findPatientByUsername();
+	public String processCreationForm(@Valid final Appointment appointment,
+			final BindingResult result) {
+		Patient p = this.patientService.findCurrentPatient();
 		if (result.hasErrors()) {
 			return "redirect:/patient/appointments/new";
 		} else {
@@ -98,7 +103,8 @@ public class PatientAppointmentController {
 	public List<LocalDateTime> timeTable(final LocalDate l) {
 
 		List<LocalDateTime> hours = new ArrayList<>();
-		LocalDateTime start = LocalDateTime.of(l.getYear(), l.getMonthValue(), l.getDayOfMonth(), 9, 0);
+		LocalDateTime start =
+				LocalDateTime.of(l.getYear(), l.getMonthValue(), l.getDayOfMonth(), 9, 0);
 		hours.add(start);
 		LocalDateTime end = start.plusHours(1);
 		while (start.isBefore(end)) {
@@ -109,13 +115,13 @@ public class PatientAppointmentController {
 		return hours;
 	}
 
-	@GetMapping("/{appointmentId}/delete")
+	@GetMapping("/patient/appointments/{appointmentId}/delete")
 	public String deleteAppointent(@PathVariable("appointmentId") final int appointmentId) {
 
 		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
 		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
 
-		if(appointment != null && !appointmentsDone.contains(appointment)) {
+		if (appointment != null && !appointmentsDone.contains(appointment)) {
 
 			this.appointmentService.deleteAppointment(appointment);
 
@@ -126,7 +132,7 @@ public class PatientAppointmentController {
 
 	}
 
-	@GetMapping
+	@GetMapping("/patient/appointments")
 	public String listAppointmentsPatient(final ModelMap model) {
 
 		Collection<Appointment> appointmentsDelete = this.patientService.findAppointmentsDelete();
