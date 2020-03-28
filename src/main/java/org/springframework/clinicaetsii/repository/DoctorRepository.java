@@ -18,8 +18,6 @@ public interface DoctorRepository {
 
 	Doctor findById(int id) throws DataAccessException;
 
-	Collection<Integer> findAllDoctorsId() throws DataAccessException;
-
 	Doctor findDoctorById(int id) throws DataAccessException;
 
 	Doctor findDoctorByPatientId(@Param("id") int id)throws DataAccessException;

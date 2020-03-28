@@ -2,6 +2,7 @@
 package org.springframework.clinicaetsii.web.doctor;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -310,21 +311,18 @@ class DoctorConsultationControllerTests {
 	@Test
 	void testProcessCreationForm() throws Exception {
 		this.mockMvc
-				.perform(MockMvcRequestBuilders
-						.post("/doctor/patients/{patientId}/consultations/new",
-								DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
-						.with(SecurityMockMvcRequestPostProcessors.csrf())
-						.param("startTime",
-								this.appointment1.getStartTime().plusMinutes(5)
-										.format(DateTimeFormatter.ISO_DATE_TIME))
-						.param("appointmentId",
-								String.valueOf(
+				.perform(post("/doctor/patients/{patientId}/consultations/new",
+						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1)
+								.with(csrf())
+								.param("startTime",
+										this.appointment1.getStartTime().plusMinutes(5)
+												.format(DateTimeFormatter.ISO_DATE_TIME))
+								.param("appointmentId", String.valueOf(
 										DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
-						.param("anamnesis", this.consultation1.getAnamnesis())
-						.param("remarks", this.consultation1.getRemarks()))
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view()
-						.name("redirect:/doctor/patients/{patientId}/consultations/5"));
+								.param("anamnesis", this.consultation1.getAnamnesis())
+								.param("remarks", this.consultation1.getRemarks()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/doctor/patients/{patientId}/consultations/5"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -350,18 +348,14 @@ class DoctorConsultationControllerTests {
 	@Test
 	void testInitEditionForm() throws Exception {
 		this.mockMvc
-				.perform(MockMvcRequestBuilders.get(
-						"/doctor/patients/{patientId}/consultations/{consultationId}/edit",
+				.perform(get("/doctor/patients/{patientId}/consultations/{consultationId}/edit",
 						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1,
 						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(
-						MockMvcResultMatchers.model().attribute("consultation", this.consultation1))
-				.andExpect(MockMvcResultMatchers.model().attribute("dischargeTypes",
-						this.dischargeTypes))
-				.andExpect(MockMvcResultMatchers.model().attribute("allDiagnoses", this.diagnoses))
-				.andExpect(MockMvcResultMatchers.view()
-						.name("/doctor/consultations/createOrUpdateConsultationForm"));
+				.andExpect(model().attribute("consultation", this.consultation1))
+				.andExpect(model().attribute("dischargeTypes", this.dischargeTypes))
+				.andExpect(model().attribute("allDiagnoses", this.diagnoses))
+				.andExpect(view().name("/doctor/consultations/createOrUpdateConsultationForm"));
 	}
 
 	@WithMockUser(value = "spring")

@@ -2,6 +2,7 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
@@ -38,10 +39,6 @@ public class DoctorService {
 		return this.doctorRepository.findDoctorByUsername(username);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<Integer> findAllDoctorsId() {
-		return this.doctorRepository.findAllDoctorsId();
-	}
 
 	@Transactional(readOnly = true)
 	public Doctor findDoctorById(final int id) {

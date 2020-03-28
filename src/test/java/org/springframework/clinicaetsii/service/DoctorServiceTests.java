@@ -17,9 +17,11 @@ package org.springframework.clinicaetsii.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+
 import org.assertj.core.api.Assertions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -84,6 +86,25 @@ class DoctorServiceTests {
 
 		Assertions.assertThat(currentDoctor).isNull();
 	}
+
+	@Test
+	void shouldFindByUsername() {
+		Doctor doctor = this.doctorService.findDoctorByUsername("doctor1");
+
+		Assertions.assertThat(doctor).isNotNull();
+
+		Assertions.assertThat(doctor.getUsername()).isNotNull().isEqualTo("doctor1");
+	}
+
+
+	@Test
+	void shouldNotFindByUsername() {
+		Doctor doctor = this.doctorService.findDoctorByUsername("doctor4");
+
+		Assertions.assertThat(doctor).isNull();
+
+	}
+
 
 	@Test
 	@WithMockUser(username = "administrative1", roles = {"administrative"})

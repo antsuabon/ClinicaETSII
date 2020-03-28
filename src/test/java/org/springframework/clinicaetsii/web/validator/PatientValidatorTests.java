@@ -4,6 +4,7 @@ package org.springframework.clinicaetsii.web.validator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -344,10 +345,24 @@ public class PatientValidatorTests {
 	}
 
 
+	@ParameterizedTest
+	@ValueSource(strings = {"", "+ (3333) 666 666", "+ 3333 666 666"})
+	void notValidateWhenPhone(final String phone) {
+
+		this.patient.setPhone(phone);
+
+		BindException errors = new BindException(this.patient, "patient");
+		this.patientValidator.validate(this.patient, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("phone")).isTrue();
+		Assertions.assertThat(errors.getFieldErrorCount()).isEqualTo(1);
+
+	}
+
 
 	@ParameterizedTest
-	@ValueSource(strings = {"+(3333) 666 666", "(3333) 666 666", "+3333 666 666", "+(3333) 666666",
-			"+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
+	@ValueSource(strings = {"", "+(3333) 666 666", "(3333) 666 666", "+3333 666 666",
+			"+(3333) 666666", "+(3333) 66666666", "+(3) 666666", "666 666666", "666 66 66 66"})
 	void validateWhenPhone2(final String phone) {
 
 		this.patient.setPhone2(phone);
@@ -360,5 +375,45 @@ public class PatientValidatorTests {
 
 	}
 
+	@Test
+	void validateWhenPhone2IsNull() {
+
+		this.patient.setPhone2(null);
+
+		BindException errors = new BindException(this.patient, "patient");
+		this.patientValidator.validate(this.patient, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("phone2")).isFalse();
+		Assertions.assertThat(errors.getFieldErrorCount()).isEqualTo(0);
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"+ (3333) 666 666", "+ 3333 666 666"})
+	void notValidateWhenPhone2(final String phone) {
+
+		this.patient.setPhone2(phone);
+
+		BindException errors = new BindException(this.patient, "patient");
+		this.patientValidator.validate(this.patient, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("phone2")).isTrue();
+		Assertions.assertThat(errors.getFieldErrorCount()).isEqualTo(1);
+
+	}
+
+
+	@Test
+	void notValidateBirthDate() {
+
+		this.patient.setBirthDate(LocalDate.now().plusDays(1));
+
+		BindException errors = new BindException(this.patient, "patient");
+		this.patientValidator.validate(this.patient, errors);
+
+		Assertions.assertThat(errors.hasFieldErrors("birthDate")).isTrue();
+		Assertions.assertThat(errors.getFieldErrorCount()).isEqualTo(1);
+
+	}
 
 }

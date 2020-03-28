@@ -23,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +71,87 @@ class AppointmentServiceTests {
 		Collection<Appointment> appointments2 = this.appointmentService.findAll();
 		int tamañoFinal = appointments2.size();
 		Assertions.assertThat(tamañoFinal).isEqualTo(tamañoInicial + 1);
+	}
+
+	@Test
+	void shouldFindOneById() throws Exception {
+
+		Appointment appointment = this.appointmentService.findOneById(1);
+
+		Assertions.assertThat(appointment).isNotNull();
+
+		Assertions.assertThat(appointment.getId()).isNotNull().isEqualTo(1);
+		Assertions.assertThat(appointment.getPatient()).isNotNull();
+		Assertions.assertThat(appointment.getPatient().getId()).isNotNull().isEqualTo(4);
+
+	}
+
+
+	@Test
+	void shouldNotFindOneById() throws Exception {
+
+		Appointment appointment = this.appointmentService.findOneById(-1);
+
+		Assertions.assertThat(appointment).isNull();
+
+	}
+
+	@Test
+	void shouldFindAllAppointmentByDoctorId() throws Exception {
+
+		Collection<LocalDateTime> fechas = this.appointmentService.findAppointmentByDoctors(1);
+
+		Assertions.assertThat(fechas).isNotEmpty();
+
+		Assertions.assertThat(fechas).isNotNull().hasSize(3);
+
+	}
+
+	@Test
+	void shouldNotFindAllAppointmentByDoctorId() throws Exception {
+
+		Collection<LocalDateTime> fechas = this.appointmentService.findAppointmentByDoctors(-1);
+
+		Assertions.assertThat(fechas).isEmpty();
+	}
+
+	@Test
+	@WithMockUser(username = "doctor1", roles = "doctor")
+	void shouldFindCurrentDoctorAppointments() throws Exception {
+
+		Collection<Appointment> appointments =
+				this.appointmentService.findCurrentDoctorAppointments();
+
+		Assertions.assertThat(appointments).isNotEmpty();
+
+		Assertions.assertThat(appointments).isNotNull().hasSize(1);
+
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = "patient")
+	void shouldNotFindCurrentDoctorAppointments() throws Exception {
+
+		Collection<Appointment> appointments =
+				this.appointmentService.findCurrentDoctorAppointments();
+
+		Assertions.assertThat(appointments).isNotNull().isEmpty();
+
+	}
+
+	@Test
+	@WithMockUser(username = "patient1", roles = "patient")
+	void shouldDeleteAppointment() throws Exception {
+		Appointment appointment = this.appointmentService.findOneById(1);
+
+		Assertions.assertThat(appointment).isNotNull();
+
+		this.appointmentService.deleteAppointment(appointment);
+
+		appointment = this.appointmentService.findOneById(1);
+
+		Assertions.assertThat(appointment).isNull();
+
 	}
 
 }

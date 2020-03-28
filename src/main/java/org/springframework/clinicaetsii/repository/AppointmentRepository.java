@@ -18,8 +18,6 @@ public interface AppointmentRepository {
 
 	Collection<LocalDateTime> findAppointmentsDatesByDoctorId(@Param("id") int id) throws DataAccessException;
 
-	Collection<Appointment> findAppointmentsByDoctorId(@Param("id") int id) throws DataAccessException;
-
 	Appointment save(Appointment appointment) throws DataAccessException;
 
 	void delete(Appointment appointment) throws DataAccessException;

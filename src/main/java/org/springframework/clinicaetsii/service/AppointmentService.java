@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.repository.AppointmentRepository;
@@ -63,11 +64,6 @@ public class AppointmentService {
 	@PreAuthorize("hasAuthority('patient')")
 	public void deleteAppointment(final Appointment appointment) {
 		this.appointmentRepository.delete(appointment);
-	}
-
-	@Transactional
-	public Collection<Appointment> findAllAppointmentsByDoctorId(final int id) {
-		return this.appointmentRepository.findAppointmentsByDoctorId(id);
 	}
 
 	@Transactional

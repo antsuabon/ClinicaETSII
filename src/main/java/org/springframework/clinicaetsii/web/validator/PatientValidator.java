@@ -79,7 +79,7 @@ public class PatientValidator implements Validator {
 					"No se ha introducido un número de teléfono adecuado");
 		}
 
-		if (!(patient.getPhone2() != null || StringUtils.isEmpty(patient.getPhone2()))) {
+		if (patient.getPhone2() != null && !StringUtils.isEmpty(patient.getPhone2())) {
 			if (!this.phonePattern.matcher(patient.getPhone2()).matches()) {
 				errors.rejectValue("phone2", "No se ha introducido un número de teléfono adecuado",
 						"No se ha introducido un número de teléfono adecuado");
