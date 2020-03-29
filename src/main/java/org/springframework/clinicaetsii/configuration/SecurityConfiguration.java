@@ -1,8 +1,9 @@
 package org.springframework.clinicaetsii.configuration;
 
+import java.time.Duration;
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,11 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this license header, choose License Headers in Project Properties. To change this
+ * template file, choose Tools | Templates and open the template in the editor.
  */
 
 /**
@@ -30,22 +31,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-      .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-      .antMatchers("/anonymous/**").permitAll()
-      .antMatchers("/patient/**").hasAnyAuthority("patient")
-      .antMatchers("/doctor/**").hasAnyAuthority("doctor")
-      .antMatchers("/administrative/**").hasAnyAuthority("administrative")
-      .antMatchers("/admin/**").hasAnyAuthority("admin")
-			//				.antMatchers("/users/new").permitAll()
-			//				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
-			//				.antMatchers("/vets/**").authenticated()
-			.anyRequest().denyAll()
-			.and()
-			.formLogin()
-			/* .loginPage("/login") */
-			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**")
+				.permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+				.antMatchers("/anonymous/**").permitAll().antMatchers("/patient/**")
+				.hasAnyAuthority("patient").antMatchers("/doctor/**").hasAnyAuthority("doctor")
+				.antMatchers("/administrative/**").hasAnyAuthority("administrative")
+				.antMatchers("/admin/**").hasAnyAuthority("admin")
+				// .antMatchers("/users/new").permitAll()
+				// .antMatchers("/owners/**").hasAnyAuthority("owner","admin")
+				// .antMatchers("/vets/**").authenticated()
+				.anyRequest().denyAll().and().formLogin()
+				/* .loginPage("/login") */
+				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido
@@ -56,15 +53,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled from users where username = ?")
-			.authoritiesByUsernameQuery("select * from authorities a where exists (select * from users u where a.user_id = u.id and u.username= ? )").passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource)
+				.usersByUsernameQuery(
+						"select username,password,enabled from users where username = ?")
+				.authoritiesByUsernameQuery(
+						"select * from authorities a where exists (select * from users u where a.user_id = u.id and u.username= ? )")
+				.passwordEncoder(passwordEncoder());
 	}
 
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
-	    return encoder;
+		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
+		return encoder;
 	}
 
+	@Bean
+	public RestTemplate restTemplate(final RestTemplateBuilder builder) {
+
+		return builder.setConnectTimeout(Duration.ofMillis(10 * 1000))
+				.setReadTimeout(Duration.ofMillis(10 * 1000)).build();
+	}
 }
