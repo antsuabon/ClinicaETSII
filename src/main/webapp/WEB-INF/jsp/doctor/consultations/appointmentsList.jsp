@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="doctor consultations">
+<petclinic:layout pageName="doctor appointments">
     <h2>Lista de Citas por Atender</h2>
 
     <c:choose>
@@ -39,8 +39,8 @@
 
             <tr>
             
-            	<td><c:out value="${appointment.startTime}"/></td>
-            	<td><c:out value="${appointment.endTime}"/></td>
+            	<td><spring:eval expression="appointment.startTime"/></td>
+            	<td><spring:eval expression="appointment.endTime"/></td>
 				<td><c:out value="${appointment.patient.fullName}"/></td>
                 <td>
 					<spring:url value="/doctor/patients/{patientId}/consultations/new?appointmentId={appointmentId}" var="appointmentUrl">

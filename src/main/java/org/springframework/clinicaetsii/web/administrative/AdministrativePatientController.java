@@ -23,6 +23,7 @@ import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.clinicaetsii.web.validator.PatientValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -40,18 +41,21 @@ public class AdministrativePatientController {
 	private PatientService patientService;
 	private DoctorService doctorService;
 	private AuthoritiesService authoritiesService;
+	private UserService userService;
 
 	@Autowired
 	public AdministrativePatientController(final PatientService patientService,
-			final DoctorService doctorService, final AuthoritiesService authoritiesService) {
+			final DoctorService doctorService, final AuthoritiesService authoritiesService,
+			final UserService userService) {
 		this.patientService = patientService;
 		this.doctorService = doctorService;
 		this.authoritiesService = authoritiesService;
+		this.userService = userService;
 	}
 
 	@InitBinder("patient")
 	public void initBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new PatientValidator(this.patientService));
+		dataBinder.setValidator(new PatientValidator(this.patientService, this.userService));
 		dataBinder.setDisallowedFields("id");
 	}
 
@@ -91,7 +95,6 @@ public class AdministrativePatientController {
 	public String processCreation(@Valid final Patient patient, final BindingResult result) {
 
 		if (result.hasErrors()) {
-
 			return "/administrative/patients/createPatientForm";
 
 		} else {

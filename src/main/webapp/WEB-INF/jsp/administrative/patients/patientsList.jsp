@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
-<petclinic:layout pageName="patients">
+<petclinic:layout pageName="administrative patients">
 	<h2>Pacientes</h2>
 	<c:choose>
 		<c:when test="${emptylist=='true'}">

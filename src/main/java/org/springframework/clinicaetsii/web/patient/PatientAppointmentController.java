@@ -119,9 +119,10 @@ public class PatientAppointmentController {
 		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
 		Collection<Appointment> appointmentsDone = this.patientService.findAppointmentsDone();
 
-		if (patient != null && appointment != null
+		if (appointment != null
 				&& appointment.getPatient().getId() == patient.getId()
 				&& !appointmentsDone.contains(appointment)) {
+			this.appointmentService.deleteAppointment(appointment);
 			return "redirect:/patient/appointments";
 		} else {
 			return "exception";

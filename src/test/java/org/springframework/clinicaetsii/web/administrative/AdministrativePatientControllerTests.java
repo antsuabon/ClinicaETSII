@@ -1,6 +1,14 @@
 
 package org.springframework.clinicaetsii.web.administrative;
 
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +30,7 @@ import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.clinicaetsii.web.formatter.DoctorFormatter;
 import org.springframework.clinicaetsii.web.formatter.LocalDateFormatter;
 import org.springframework.clinicaetsii.web.formatter.ServiceFormatter;
@@ -29,11 +38,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 @WebMvcTest(controllers = AdministrativePatientController.class, includeFilters = {
@@ -60,6 +65,9 @@ public class AdministrativePatientControllerTests {
 
 	@MockBean
 	private AuthoritiesService authoritiesService;
+
+	@MockBean
+	private UserService userService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -184,54 +192,45 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	@Test
 	void shouldListPatients() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("patients")).andExpect(
-						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
+		this.mockMvc.perform(get("/administrative/patients")).andExpect(status().isOk())
+				.andExpect(model().attributeExists("patients"))
+				.andExpect(view().name("/administrative/patients/patientsList"));
 	}
 
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	@Test
 	void shouldNotListPatients() throws Exception {
-		BDDMockito.given(this.patientService.findPatients()).willReturn(new ArrayList<>());
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList")).andExpect(
-						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
+		given(this.patientService.findPatients()).willReturn(new ArrayList<>());
+		this.mockMvc.perform(get("/administrative/patients")).andExpect(status().isOk())
+				.andExpect(model().attributeExists("emptyList"))
+				.andExpect(view().name("/administrative/patients/patientsList"));
 	}
 
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	@Test
 	void shouldShowPatient() throws Exception {
-		this.mockMvc
-				.perform(MockMvcRequestBuilders.get("/administrative/patients/{patientId}",
-						TEST_PATIENT_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("patient"))
-				.andExpect(MockMvcResultMatchers.view()
-						.name("/administrative/patients/patientDetails"));
+		this.mockMvc.perform(get("/administrative/patients/{patientId}", TEST_PATIENT_ID))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("patient"))
+				.andExpect(view().name("/administrative/patients/patientDetails"));
 	}
 
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	@Test
 	void shouldNotShowPatient() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/{patientId}", -1))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("patient"))
-				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(get("/administrative/patients/{patientId}", -1))
+				.andExpect(status().isOk()).andExpect(model().attributeDoesNotExist("patient"))
+				.andExpect(view().name("exception"));
 	}
 
 	@Test
 	@WithMockUser(username = "administrative", roles = {"administrative"})
 	void shouldInitCreatePatientForm() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willReturn(this.administrative);
+		given(this.patientService.findCurrentAdministrative()).willReturn(this.administrative);
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("patient"))
-				.andExpect(MockMvcResultMatchers.view()
-						.name("/administrative/patients/createPatientForm"));
+		this.mockMvc.perform(get("/administrative/patients/new"))
+				.andExpect(model().attributeExists("patient"))
+				.andExpect(view().name("/administrative/patients/createPatientForm"));
 
 	}
 
@@ -239,13 +238,11 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void doctorShouldNotInitCreatePatientForm() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willThrow(new RuntimeException());
+		given(this.patientService.findCurrentAdministrative()).willThrow(new RuntimeException());
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("patient"))
-				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(get("/administrative/patients/new")).andExpect(status().isOk())
+				.andExpect(model().attributeDoesNotExist("patient"))
+				.andExpect(view().name("exception"));
 
 	}
 
@@ -253,13 +250,11 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(username = "patient", roles = {"patient"})
 	void patientShouldNotInitCreatePatientForm() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willThrow(new RuntimeException());
+		given(this.patientService.findCurrentAdministrative()).willThrow(new RuntimeException());
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("patient"))
-				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(get("/administrative/patients/new")).andExpect(status().isOk())
+				.andExpect(model().attributeDoesNotExist("patient"))
+				.andExpect(view().name("exception"));
 
 	}
 
@@ -267,13 +262,11 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(value = "spring")
 	void anonymousShouldNotInitCreatePatientForm() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willThrow(new RuntimeException());
+		given(this.patientService.findCurrentAdministrative()).willThrow(new RuntimeException());
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("patient"))
-				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(get("/administrative/patients/new")).andExpect(status().isOk())
+				.andExpect(model().attributeDoesNotExist("patient"))
+				.andExpect(view().name("exception"));
 
 	}
 
@@ -282,10 +275,9 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(username = "administrative", roles = {"administrative"})
 	void shouldProcessCreatePatientForm() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willReturn(this.administrative);
+		given(this.patientService.findCurrentAdministrative()).willReturn(this.administrative);
 
-		BDDMockito.given(this.doctorService.findDoctorById(2)).willReturn(this.doctor1);
+		given(this.doctorService.findDoctorById(2)).willReturn(this.doctor1);
 
 		// Mockito.doAnswer(invocation->{
 		// Patient patient = (Patient) invocation.getArgument(0);
@@ -294,54 +286,42 @@ public class AdministrativePatientControllerTests {
 		// }).when(this.patientService).savePatient(this.patient1);
 
 		this.mockMvc
-				.perform(MockMvcRequestBuilders.post("/administrative/patients/new")
-						.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.perform(post("/administrative/patients/new").with(csrf())
 						.param("username", "pablo").param("name", "Pablo")
 						.param("surname", "Rodriguez Garrido").param("address", "C/ Ejemplo")
 						.param("birthDate", "02/02/2020").param("dni", "45612378P")
 						.param("email", "pablo@gmail.com").param("nss", "12345678900")
 						.param("state", "Sevilla").param("phone", "955668756").param("phone2", "")
 						.param("generalPractitioner", "2"))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+				.andDo(print()).andExpect(status().is3xxRedirection());
 	}
 
 
 	@Test
 	@WithMockUser(username = "administrative", roles = {"administrative"})
 	void shouldNotProcessCreatePatientForm() throws Exception {
-
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willReturn(this.administrative);
+		given(this.patientService.findCurrentAdministrative()).willReturn(this.administrative);
 
 		this.mockMvc
-				.perform(MockMvcRequestBuilders.post("/administrative/patients/new")
-						.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.perform(post("/administrative/patients/new").with(csrf())
 						.param("username", "pablo").param("name", "").param("surname", "")
 						.param("address", "").param("birthDate", "").param("dni", "")
 						.param("email", "").param("nss", "").param("state", "").param("phone", "")
 						.param("phone2", "").param("generalPractitioner", ""))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("patient"))
-				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "name"))
-				.andExpect(
-						MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "surname"))
-				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "dni"))
-				.andExpect(
-						MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "email"))
-				.andExpect(
-						MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "phone"))
-				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "dni"))
-				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("patient",
-						"birthDate"))
-				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "nss"))
-				.andExpect(
-						MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "address"))
-				.andExpect(
-						MockMvcResultMatchers.model().attributeHasFieldErrors("patient", "state"))
-				.andExpect(MockMvcResultMatchers.view()
-						.name("/administrative/patients/createPatientForm"));
+				.andDo(print()).andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("patient"))
+				.andExpect(model().attributeHasFieldErrors("patient", "name"))
+				.andExpect(model().attributeHasFieldErrors("patient", "surname"))
+				.andExpect(model().attributeHasFieldErrors("patient", "dni"))
+				.andExpect(model().attributeHasFieldErrors("patient", "email"))
+				.andExpect(model().attributeHasFieldErrors("patient", "phone"))
+				.andExpect(model().attributeHasFieldErrors("patient", "dni"))
+				.andExpect(model().attributeHasFieldErrors("patient", "birthDate"))
+				.andExpect(model().attributeHasFieldErrors("patient", "nss"))
+				.andExpect(model().attributeHasFieldErrors("patient", "address"))
+				.andExpect(model().attributeHasFieldErrors("patient", "state"))
+				.andExpect(model().attributeHasFieldErrors("patient", "generalPractitioner"))
+				.andExpect(view().name("/administrative/patients/createPatientForm"));
 	}
 
 
@@ -349,20 +329,19 @@ public class AdministrativePatientControllerTests {
 	@WithMockUser(username = "administrative", roles = {"administrative"})
 	void shouldProcessCreatePatientFormPhone2() throws Exception {
 
-		BDDMockito.given(this.patientService.findCurrentAdministrative())
-				.willReturn(this.administrative);
+		given(this.patientService.findCurrentAdministrative()).willReturn(this.administrative);
 
-		BDDMockito.given(this.doctorService.findDoctorById(2)).willReturn(this.doctor1);
+		given(this.doctorService.findDoctorById(2)).willReturn(this.doctor1);
 
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/administrative/patients/new")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("username", "pablo")
-				.param("name", "Pablo").param("surname", "Rodriguez Garrido")
-				.param("address", "C/ Ejemplo").param("birthDate", "02/02/2020")
-				.param("dni", "45612378P").param("email", "pablo@gmail.com")
-				.param("nss", "12345678900").param("state", "Sevilla").param("phone", "955668756")
-				.param("phone2", "955865502").param("generalPractitioner", "2"))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc
+				.perform(post("/administrative/patients/new").with(csrf())
+						.param("username", "pablo").param("name", "Pablo")
+						.param("surname", "Rodriguez Garrido").param("address", "C/ Ejemplo")
+						.param("birthDate", "02/02/2020").param("dni", "45612378P")
+						.param("email", "pablo@gmail.com").param("nss", "12345678900")
+						.param("state", "Sevilla").param("phone", "955668756")
+						.param("phone2", "955865502").param("generalPractitioner", "2"))
+				.andDo(print()).andExpect(status().is3xxRedirection());
 	}
 
 }

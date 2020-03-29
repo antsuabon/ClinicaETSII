@@ -1,15 +1,14 @@
 package org.springframework.clinicaetsii.web.doctor;
 
 import java.util.Collection;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Service;
 import org.springframework.clinicaetsii.model.form.DoctorForm;
 import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.clinicaetsii.web.validator.DoctorFormValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +28,13 @@ public class DoctorDoctorController {
 
 	private DoctorService doctorService;
 
+	private UserService userService;
+
 	@Autowired
-	public DoctorDoctorController(final DoctorService doctorService) {
+	public DoctorDoctorController(final DoctorService doctorService,
+			final UserService userService) {
 		this.doctorService = doctorService;
+		this.userService = userService;
 	}
 
 	@GetMapping
@@ -44,7 +47,7 @@ public class DoctorDoctorController {
 	@InitBinder
 	@RequestMapping("/doctor/edit")
 	public void initBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new DoctorFormValidator(this.doctorService));
+		dataBinder.setValidator(new DoctorFormValidator(this.doctorService, this.userService));
 	}
 
 
@@ -65,7 +68,8 @@ public class DoctorDoctorController {
 	}
 
 	@PostMapping("/edit")
-	public String processUpdateDoctorForm(@Valid final DoctorForm doctorForm, final BindingResult result) {
+	public String processUpdateDoctorForm(@Valid final DoctorForm doctorForm,
+			final BindingResult result) {
 		Doctor doctorToUpdate = this.doctorService.findCurrentDoctor();
 		String oldUsername = String.valueOf(doctorToUpdate.getUsername());
 
@@ -74,8 +78,10 @@ public class DoctorDoctorController {
 		if (result.hasErrors()) {
 			return "/doctor/updateDoctorForm";
 		} else {
-			BeanUtils.copyProperties(doctorForm.getDoctor(), doctorToUpdate, "id", "password", "enabled");
-			if (doctorForm.getNewPassword() != null && !StringUtils.isEmpty(doctorForm.getNewPassword())) {
+			BeanUtils.copyProperties(doctorForm.getDoctor(), doctorToUpdate, "id", "password",
+					"enabled");
+			if (doctorForm.getNewPassword() != null
+					&& !StringUtils.isEmpty(doctorForm.getNewPassword())) {
 				doctorToUpdate.setPassword(doctorForm.getNewPassword());
 			}
 

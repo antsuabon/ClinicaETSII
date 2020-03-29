@@ -14,6 +14,7 @@ import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Service;
 import org.springframework.clinicaetsii.model.form.DoctorForm;
 import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.clinicaetsii.web.formatter.ServiceFormatter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -37,6 +38,9 @@ public class DoctorDoctorCotrollerTests {
 
 	@MockBean
 	private DoctorService doctorService;
+
+	@MockBean
+	private UserService userService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -210,8 +214,7 @@ public class DoctorDoctorCotrollerTests {
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void shouldNotProcessUpdateDoctorFormUsername() throws Exception {
 		BDDMockito.given(this.doctorService.findCurrentDoctor()).willReturn(this.doctor1);
-		BDDMockito.given(this.doctorService.findDoctorByUsername("doctor2"))
-				.willReturn(this.doctor2);
+		BDDMockito.given(this.userService.findUserByUsername("doctor2")).willReturn(this.doctor2);
 		BDDMockito.given(this.doctorService.findAllServices()).willReturn(this.services);
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/doctor/edit")

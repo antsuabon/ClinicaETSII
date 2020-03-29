@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.PatientService;
+import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -18,10 +19,12 @@ public class PatientValidator implements Validator {
 	private Pattern nssPattern = Pattern.compile("^\\d{11}$");
 
 	private PatientService patientService;
+	private UserService userService;
 
 	@Autowired
-	public PatientValidator(final PatientService patientService) {
+	public PatientValidator(final PatientService patientService, final UserService userService) {
 		this.patientService = patientService;
+		this.userService = userService;
 	}
 
 	@Override
@@ -33,6 +36,14 @@ public class PatientValidator implements Validator {
 	public void validate(final Object target, final Errors errors) {
 
 		Patient patient = (Patient) target;
+
+		if (patient.getUsername() == null || StringUtils.isEmpty(patient.getUsername())) {
+			errors.rejectValue("username", "Este campo es obligatorio",
+					"Este campo es obligatorio");
+		} else if (this.userService.findUserByUsername(patient.getUsername()) != null) {
+			errors.rejectValue("username", "Este nombre de usuario ya existe",
+					"Este nombre de usuario ya existe");
+		}
 
 		if (patient.getName() == null || StringUtils.isEmpty(patient.getName())) {
 			errors.rejectValue("name", "Este campo es obligatorio", "Este campo es obligatorio");
@@ -92,7 +103,14 @@ public class PatientValidator implements Validator {
 			errors.rejectValue("nss", "Este campo debe de estar formado por 11 dígitos",
 					"Este campo debe de estar formado por 11 dígitos");
 		}
-
+		
+		if(patient.getGeneralPractitioner() == null) {
+			errors.rejectValue("generalPractitioner", "Un médico de cabecera debe ser asignado", "Un médico de cabecera debe ser asignado");
+		} else if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId())
+				.size() >= 5) {
+			errors.rejectValue("generalPractitioner", "too_many_patients",
+					"Este doctor tiene 5 pacientes asignados");
+		}
 	}
 
 }

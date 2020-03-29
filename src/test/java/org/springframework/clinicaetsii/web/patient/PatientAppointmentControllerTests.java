@@ -47,7 +47,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
 				classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration = SecurityConfiguration.class)
-
 public class PatientAppointmentControllerTests {
 
 	@Autowired
@@ -227,7 +226,10 @@ public class PatientAppointmentControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testGenerateEmptyTable() throws Exception {
-		BDDMockito.given(this.appointmentService.findAppointmentByDoctors(this.patient1.getGeneralPractitioner().getId())).willReturn(this.patientAppointmentController.timeTable(LocalDate.now()));
+		BDDMockito
+				.given(this.appointmentService
+						.findAppointmentByDoctors(this.patient1.getGeneralPractitioner().getId()))
+				.willReturn(this.patientAppointmentController.timeTable(LocalDate.now()));
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments/table"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("emptylist"))
@@ -439,7 +441,7 @@ public class PatientAppointmentControllerTests {
 		BDDMockito.given(this.patientService.findCurrentPatient())
 				.willThrow(new RuntimeException());
 		BDDMockito.given(this.appointmentService.findAppointmentById(2))
-				.willThrow(new RuntimeException());
+				.willReturn(this.appointment2);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/patient/appointments/{appointmentId}/delete",

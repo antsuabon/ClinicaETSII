@@ -141,9 +141,9 @@ public class PatientFormValidator implements Validator {
 		}
 
 		if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId())
-				.size() >= 1000) {
+				.size() >= 5) {
 			errors.rejectValue("generalPractitioner", "too_many_patients",
-					"Este doctor tiene 1000 pacientes asignados");
+					"Este doctor tiene 5 pacientes asignados");
 		}
 	}
 

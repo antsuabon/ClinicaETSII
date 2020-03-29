@@ -54,7 +54,6 @@ public class Patient extends User {
 	private LocalDate	birthDate;
 
 	@Column(name = "phone2")
-	@NotBlank
 	private String		phone2;
 
 	@Column(name = "address")
