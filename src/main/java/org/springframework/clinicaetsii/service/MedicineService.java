@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.repository.MedicineRepository;

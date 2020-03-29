@@ -1,10 +1,8 @@
 package org.springframework.clinicaetsii.model;
 
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,32 +49,37 @@ public class ConstantValidatorTests {
 
 		this.constant1.setConstantType(null);
 
-		Validator validator = this.createValidator();
-		Set<ConstraintViolation<Constant>> constraintViolations = validator.validate(this.constant1);
+		Validator validator = createValidator();
+		Set<ConstraintViolation<Constant>> constraintViolations =
+				validator.validate(this.constant1);
 
 		Assertions.assertThat(constraintViolations).hasSize(0);
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"Pes", "Pulsioximetría", "PesoPesoPesoPesoPeso", "PesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPeso"})
+	@ValueSource(strings = {"Pes", "Pulsioximetría", "PesoPesoPesoPesoPeso",
+			"PesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPeso"})
 	void shouldValidateWhenConstantTypeName(final String constantTypeName) {
 
 		this.constantType1.setName(constantTypeName);
 
-		Validator validator = this.createValidator();
-		Set<ConstraintViolation<Constant>> constraintViolations = validator.validate(this.constant1);
+		Validator validator = createValidator();
+		Set<ConstraintViolation<Constant>> constraintViolations =
+				validator.validate(this.constant1);
 
 		Assertions.assertThat(constraintViolations).hasSize(0);
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"", "Pe", "PesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoP"})
+	@ValueSource(strings = {"", "Pe",
+			"PesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoPesoP"})
 	void shouldNotValidateWhenConstantTypeInvalidName(final String constantTypeName) {
 
 		this.constantType1.setName(constantTypeName);
 
-		Validator validator = this.createValidator();
-		Set<ConstraintViolation<Constant>> constraintViolations = validator.validate(this.constant1);
+		Validator validator = createValidator();
+		Set<ConstraintViolation<Constant>> constraintViolations =
+				validator.validate(this.constant1);
 
 		Assertions.assertThat(constraintViolations).hasSize(1);
 	}

@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -25,7 +24,8 @@ public class PatientService {
 
 
 	@Autowired
-	public PatientService(final PatientRepository patientRepository, final DoctorRepository doctorRepository) {
+	public PatientService(final PatientRepository patientRepository,
+			final DoctorRepository doctorRepository) {
 		this.patientRepository = patientRepository;
 		this.doctorRepository = doctorRepository;
 	}
@@ -47,27 +47,12 @@ public class PatientService {
 
 	@Transactional(readOnly = true)
 	public Patient findPatientById(final int id) throws DataAccessException {
-		return this.patientRepository.findAll().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
-	}
-
-	@Transactional(readOnly = true)
-	@PreAuthorize("hasAuthority('patient')")
-	public Patient findPatientByUsername() throws DataAccessException {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails user = (UserDetails) principal;
-		String username = user.getUsername();
-
-		return this.patientRepository.findPatientByUsername(username);
+		return this.patientRepository.findById(id);
 	}
 
 	@Transactional(readOnly = true)
 	public Doctor findDoctorByPatient(final int id) throws DataAccessException {
 		return this.doctorRepository.findDoctorByPatientId(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Patient findPatient(final int id) {
-		return this.patientRepository.findById(id);
 	}
 
 	@Transactional(readOnly = true)
@@ -102,45 +87,34 @@ public class PatientService {
 		return this.patientRepository.findAdministrativeByUsername(username);
 	}
 
-		@PreAuthorize("hasAuthority('patient')")
-		public Collection<Appointment> findAppointmentsDone() throws DataAccessException {
+	@PreAuthorize("hasAuthority('patient')")
+	public Collection<Appointment> findAppointmentsDone() throws DataAccessException {
 
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails user = (UserDetails) principal;
-			String username = user.getUsername();
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
 
-			return this.patientRepository.findAppointmentsByPatientUsernameDone(username);
-		}
+		return this.patientRepository.findAppointmentsByPatientUsernameDone(username);
+	}
 
-		@PreAuthorize("hasAuthority('patient')")
-		public Collection<Appointment> findAppointmentsDelete() {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails user = (UserDetails) principal;
-			String username = user.getUsername();
+	@PreAuthorize("hasAuthority('patient')")
+	public Collection<Appointment> findAppointmentsDelete() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
 
-			return this.patientRepository.findAppointmentsByPatientUsernameDelete(username);
-		}
+		return this.patientRepository.findAppointmentsByPatientUsernameDelete(username);
+	}
 
-		@PreAuthorize("hasAuthority('patient')")
-		@Transactional(readOnly = true)
-		public Patient findPatient() throws DataAccessException {
+	@Transactional
+	public void save(final Patient patient) throws DataAccessException {
+		this.patientRepository.save(patient);
+	}
 
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails user = (UserDetails) principal;
-			String username = user.getUsername();
-
-			return this.patientRepository.findPatientByUsername(username);
-		}
-
-		@Transactional
-		public void save(final Patient patient) throws DataAccessException {
-			this.patientRepository.save(patient);
-		}
-
-		@Transactional(readOnly = true)
-		public Patient findPatientByUsername(final String username) throws DataAccessException {
-				return this.patientRepository.findPatientByUsername(username);
-		}
+	@Transactional(readOnly = true)
+	public Patient findPatientByUsername(final String username) throws DataAccessException {
+		return this.patientRepository.findPatientByUsername(username);
+	}
 
 
 

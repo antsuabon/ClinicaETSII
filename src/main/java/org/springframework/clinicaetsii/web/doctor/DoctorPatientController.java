@@ -37,11 +37,6 @@ public class DoctorPatientController {
 		this.patientService = patientService;
 	}
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
-	}
-
 	@GetMapping("/doctor/patients")
 	public String listPatients(final Map<String, Object> model) {
 		Collection<Patient> results = this.patientService.findCurrentDoctorPatients();

@@ -1,5 +1,7 @@
 package org.springframework.clinicaetsii.service;
 
+import java.util.Collection;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,5 @@ public class MedicineServiceTests {
 		Collection<Medicine> medicines = this.medicineService.findAllMedicines();
 		Assertions.assertThat(medicines.size()).isEqualTo(3);
 	}
-	
+
 }

@@ -1,10 +1,9 @@
 package org.springframework.clinicaetsii.service;
 
-import java.util.Collection; 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.clinicaetsii.repository.ExaminationRepository;
@@ -33,11 +32,13 @@ public class ExaminationService {
 	public Examination findExaminationsById(final int id) throws DataAccessException {
 		return this.examinationRepository.findById(id);
 	}
-	
+
 
 	@Transactional(readOnly = true)
-	public List<Examination> findExaminationsSortedByStartDate(int id) throws DataAccessException {
-		return this.examinationRepository.findAllSorted(id).stream().sorted(Comparator.comparing(c ->c.getStartTime())).collect(Collectors.toList());
+	public List<Examination> findExaminationsSortedByStartDate(
+			final int id) throws DataAccessException {
+		return this.examinationRepository.findAllSorted(id).stream()
+				.sorted(Comparator.comparing(c -> c.getStartTime())).collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -45,6 +46,6 @@ public class ExaminationService {
 		this.examinationRepository.save(examination);
 
 	}
-	
+
 
 }

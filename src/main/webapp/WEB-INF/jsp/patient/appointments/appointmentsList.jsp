@@ -48,7 +48,7 @@
             	<spring:url value="/patient/appointments/{appointmentId}/delete" var="appointmentUrl">
                         <spring:param name="appointmentId" value="${appointment.id}"/>
                 </spring:url>
-                <a href="${fn:escapeXml(appointmentUrl)}"><c:out value="Delete Appointment"/></a>
+                <a href="${fn:escapeXml(appointmentUrl)}"><c:out value="Eliminar Cita"/></a>
                 </td>
                 
              </tr>

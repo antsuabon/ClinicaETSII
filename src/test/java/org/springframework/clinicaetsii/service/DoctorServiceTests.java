@@ -1,17 +1,15 @@
 /*
  * Copyright 2002-2013 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package org.springframework.clinicaetsii.service;
@@ -42,7 +40,7 @@ class DoctorServiceTests {
 	protected DoctorService doctorService;
 
 	@PersistenceContext
-    private EntityManager entityManager;
+	private EntityManager entityManager;
 
 	@Test
 	void shouldListDoctorsSortedByServices() {
@@ -90,6 +88,25 @@ class DoctorServiceTests {
 	}
 
 	@Test
+	void shouldFindByUsername() {
+		Doctor doctor = this.doctorService.findDoctorByUsername("doctor1");
+
+		Assertions.assertThat(doctor).isNotNull();
+
+		Assertions.assertThat(doctor.getUsername()).isNotNull().isEqualTo("doctor1");
+	}
+
+
+	@Test
+	void shouldNotFindByUsername() {
+		Doctor doctor = this.doctorService.findDoctorByUsername("doctor4");
+
+		Assertions.assertThat(doctor).isNull();
+
+	}
+
+
+	@Test
 	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	void administrativeShouldNotFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
@@ -107,13 +124,11 @@ class DoctorServiceTests {
 
 	@Test
 	void shouldFindAllServices() {
-		Collection<org.springframework.clinicaetsii.model.Service> services = this.doctorService.findAllServices();
+		Collection<org.springframework.clinicaetsii.model.Service> services =
+				this.doctorService.findAllServices();
 
-		Assertions.assertThat(services)
-			.isNotEmpty()
-			.allMatch(s -> s.getId() != null)
-			.allMatch(s -> s.getName() != null)
-			.allMatch(s -> !s.getName().isEmpty());
+		Assertions.assertThat(services).isNotEmpty().allMatch(s -> s.getId() != null)
+				.allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
 	}
 
 
@@ -167,7 +182,8 @@ class DoctorServiceTests {
 		Assertions.assertThatThrownBy(() -> {
 			this.doctorService.save(doctor);
 			this.entityManager.flush();
-		}).isInstanceOf(PersistenceException.class).hasCauseInstanceOf(ConstraintViolationException.class);
+		}).isInstanceOf(PersistenceException.class)
+				.hasCauseInstanceOf(ConstraintViolationException.class);
 
 	}
 }

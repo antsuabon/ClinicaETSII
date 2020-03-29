@@ -1,15 +1,19 @@
 package org.springframework.clinicaetsii.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Appointment;
+import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
@@ -19,119 +23,107 @@ class PatientServiceTests {
 	@Autowired
 	protected PatientService patientService;
 
+	@Autowired
+	protected DoctorService doctorService;
+
 
 	@Test
-@WithMockUser(username = "doctor1", roles = {"doctor"})
-void shouldFindCurrentDoctorPatients() {
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	void shouldFindCurrentDoctorPatients() {
 
-	Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
-	boolean condition1 = true;
+		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
+		boolean condition1 = true;
 
-	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	UserDetails user = (UserDetails) principal;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
 
-	for (Patient patient : patients) {
+		for (Patient patient : patients) {
 
-		if (!patient.getGeneralPractitioner().getUsername().equals(user.getUsername())) {
-			condition1 = false;
-			break;
+			if (!patient.getGeneralPractitioner().getUsername().equals(user.getUsername())) {
+				condition1 = false;
+				break;
+			}
+
 		}
+
+		Assertions.assertThat(condition1).isTrue();
+
+		boolean condition2 = true;
+		for (Patient patient : patients) {
+
+			if (!patient.getGeneralPractitioner().getUsername().equals("doctor2")) {
+				condition2 = false;
+				break;
+			}
+
+		}
+
+		Assertions.assertThat(condition2).isFalse();
 
 	}
 
-	Assertions.assertThat(condition1).isTrue();
+	@Test
+	@WithMockUser(username = "patient1", roles = {"patient"})
 
-	boolean condition2 = true;
-	for (Patient patient : patients) {
+	void shouldFindCurrentDoctorPatientsAuthority() {
 
-		if (!patient.getGeneralPractitioner().getUsername().equals("doctor2")) {
-			condition2 = false;
-			break;
-		}
-
+		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
+		Assertions.assertThat(patients).isEmpty();
 	}
 
-	Assertions.assertThat(condition2).isFalse();
-
-}
-
-@Test
-@WithMockUser(username = "patient1", roles = {"patient"})
-
-void shouldFindCurrentDoctorPatientsAuthority() {
-
-	Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
-	Assertions.assertThat(patients).isEmpty();
-}
-
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindCurrentPatient() {
 		Patient patient1 = this.patientService.findCurrentPatient();
 		Assertions.assertThat(patient1.getId()).isEqualTo(4);
 	}
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {
-		"doctor"
-	})
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void shouldNotFindCurrentPatient() {
 		Patient patient1 = this.patientService.findCurrentPatient();
 		Assertions.assertThat(patient1).isEqualTo(null);
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindPatientByUsername() {
-		Patient patient1 = this.patientService.findPatientByUsername();
+		Patient patient1 = this.patientService.findCurrentPatient();
 		Assertions.assertThat(patient1.getId()).isEqualTo(4);
 	}
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {
-		"doctor"
-	})
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void shouldNotFindPatientByUsername() {
-		Patient patient1 = this.patientService.findPatientByUsername();
+		Patient patient1 = this.patientService.findCurrentPatient();
 		Assertions.assertThat(patient1).isEqualTo(null);
 	}
+
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 
 	void shouldFindPatientByPatientId() {
-		Patient patient1 = this.patientService.findPatient(4);
+		Patient patient1 = this.patientService.findPatientById(4);
 		Assertions.assertThat(patient1.getId()).isEqualTo(4);
 
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 
 	void shouldNotFindPatientByPatientId() {
-		Patient patient2 = this.patientService.findPatient(-1);
+		Patient patient2 = this.patientService.findPatientById(-1);
 		Assertions.assertThat(patient2).isEqualTo(null);
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindAllPatients() {
 		Collection<Patient> patients = this.patientService.findPatients();
 		Assertions.assertThat(patients.size()).isEqualTo(2);
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindDoctorByPatient() {
 		int doctorId = 1;
 		int patientId = 4;
@@ -142,9 +134,7 @@ void shouldFindCurrentDoctorPatientsAuthority() {
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldNotFindDoctorByPatient() {
 
 		Doctor doctor2 = this.patientService.findDoctorByPatient(-1);
@@ -214,7 +204,7 @@ void shouldFindCurrentDoctorPatientsAuthority() {
 
 		Assertions.assertThat(condition).isTrue();
 
-		}
+	}
 
 	@Test
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
@@ -254,7 +244,7 @@ void shouldFindCurrentDoctorPatientsAuthority() {
 
 		Assertions.assertThat(condition).isTrue();
 
-		}
+	}
 
 	@Test
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
@@ -279,7 +269,7 @@ void shouldFindCurrentDoctorPatientsAuthority() {
 	@Test
 	void shouldShowValidPatient() {
 		int id = 4;
-		Patient patient = this.patientService.findPatient(id);
+		Patient patient = this.patientService.findPatientById(id);
 		Assertions.assertThat(patient).isNotNull();
 
 		Assertions.assertThat(patient.getUsername()).isNotNull().isNotBlank();

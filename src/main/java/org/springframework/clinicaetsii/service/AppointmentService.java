@@ -26,7 +26,8 @@ public class AppointmentService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<LocalDateTime> findAppointmentByDoctors(final int id) throws DataAccessException {
+	public Collection<LocalDateTime> findAppointmentByDoctors(
+			final int id) throws DataAccessException {
 		return this.appointmentRepository.findAppointmentsDatesByDoctorId(id);
 	}
 
@@ -55,18 +56,14 @@ public class AppointmentService {
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.appointmentRepository.findAppointmentsWithoutConsultationByDoctorUsername(username);
+		return this.appointmentRepository
+				.findAppointmentsWithoutConsultationByDoctorUsername(username);
 	}
 
 	@Transactional
 	@PreAuthorize("hasAuthority('patient')")
 	public void deleteAppointment(final Appointment appointment) {
 		this.appointmentRepository.delete(appointment);
-	}
-
-	@Transactional
-	public Collection<Appointment> findAllAppointmentsByDoctorId(final int id) {
-		return this.appointmentRepository.findAppointmentsByDoctorId(id);
 	}
 
 	@Transactional

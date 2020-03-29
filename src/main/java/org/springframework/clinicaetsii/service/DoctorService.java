@@ -39,10 +39,6 @@ public class DoctorService {
 		return this.doctorRepository.findDoctorByUsername(username);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<Integer> findAllDoctorsId() {
-		return this.doctorRepository.findAllDoctorsId();
-	}
 
 	@Transactional(readOnly = true)
 	public Doctor findDoctorById(final int id) {
@@ -63,7 +59,8 @@ public class DoctorService {
 	}
 
 	@Transactional
-	public void save(final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
+	public void save(
+			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
 		this.doctorRepository.save(doctor);
 	}
 

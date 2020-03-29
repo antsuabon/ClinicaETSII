@@ -4,7 +4,6 @@ package org.springframework.clinicaetsii.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,8 @@ class ConsultationServiceTest {
 	@Test
 	void shouldFindConsultationByPatientId() {
 		int patientId1 = 4;
-		Collection<Consultation> consultations1 = this.consultationService.findConsultationsByPatientId(patientId1);
+		Collection<Consultation> consultations1 =
+				this.consultationService.findConsultationsByPatientId(patientId1);
 
 		Boolean condition = true;
 		for (Consultation c : consultations1) {
@@ -49,7 +49,8 @@ class ConsultationServiceTest {
 		Assertions.assertThat(condition).isTrue();
 
 		int patientId2 = -1;
-		Collection<Consultation> consultations2 = this.consultationService.findConsultationsByPatientId(patientId2);
+		Collection<Consultation> consultations2 =
+				this.consultationService.findConsultationsByPatientId(patientId2);
 
 		Assertions.assertThat(consultations2).isEmpty();
 
@@ -69,31 +70,25 @@ class ConsultationServiceTest {
 	@Test
 	void shouldFindAllDiagnoses() {
 		Collection<Diagnosis> diagnoses = this.consultationService.findAllDiagnoses();
-		Assertions.assertThat(diagnoses)
-		.isNotEmpty()
-		.allMatch(s -> s.getId() != null)
-		.allMatch(s -> s.getName() != null)
-		.allMatch(s -> !s.getName().isEmpty());
+		Assertions.assertThat(diagnoses).isNotEmpty().allMatch(s -> s.getId() != null)
+				.allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
 	}
 
 	@Test
 	void shouldFindAllDischargeTypes() {
 		Collection<DischargeType> dischargeTypes = this.consultationService.findDischargeTypes();
-		Assertions.assertThat(dischargeTypes)
-		.isNotEmpty()
-		.allMatch(s -> s.getId() != null)
-		.allMatch(s -> s.getName() != null)
-		.allMatch(s -> !s.getName().isEmpty());
+		Assertions.assertThat(dischargeTypes).isNotEmpty().allMatch(s -> s.getId() != null)
+				.allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
 	}
 
 	@Test
 	@Transactional
 	void shouldInsertConsultation() {
 		Consultation consultation = new Consultation();
-//			consultation.setConstants(constants);
-			Appointment appointment = this.appoinService.findAppointmentById(4);
-			Assertions.assertThat(appointment).isNotNull();
-			consultation.setAppointment(appointment);
+		// consultation.setConstants(constants);
+		Appointment appointment = this.appoinService.findAppointmentById(4);
+		Assertions.assertThat(appointment).isNotNull();
+		consultation.setAppointment(appointment);
 
 		consultation.setStartTime(LocalDateTime.of(2020, 3, 2, 11, 01));
 		consultation.setEndTime(LocalDateTime.of(2020, 3, 2, 11, 07));
@@ -108,7 +103,8 @@ class ConsultationServiceTest {
 		Assertions.assertThat(consultation).isNotNull();
 		Assertions.assertThat(consultation.getAppointment()).isNotNull();
 		Assertions.assertThat(consultation.getAppointment().getId()).isEqualTo(4);
-		Assertions.assertThat(consultation.getAnamnesis()).isNotNull().isEqualTo("Dolor de estómago");
+		Assertions.assertThat(consultation.getAnamnesis()).isNotNull()
+				.isEqualTo("Dolor de estómago");
 		Assertions.assertThat(consultation.getRemarks()).isNotNull().isEqualTo("Fiebres altas");
 	}
 
@@ -122,10 +118,10 @@ class ConsultationServiceTest {
 		Assertions.assertThat(consultation.getRemarks()).isNotNull();
 		consultation.setAnamnesis(consultation.getRemarks() + "Updated");
 		Assertions.assertThat(consultation.getExaminations()).isNotNull();
-			Examination examination = new Examination();
-			examination.setId(2);
-			examination.setDescription("Tiene la cara pálida");
-			consultation.getExaminations().remove(examination);
+		Examination examination = new Examination();
+		examination.setId(2);
+		examination.setDescription("Tiene la cara pálida");
+		consultation.getExaminations().remove(examination);
 
 		this.consultationService.save(consultation);
 
@@ -135,7 +131,8 @@ class ConsultationServiceTest {
 		Assertions.assertThat(consultation.getAppointment().getId()).isEqualTo(4);
 		Assertions.assertThat(consultation.getAnamnesis()).isNotNull().contains("Updated");
 		Assertions.assertThat(consultation.getRemarks()).isNotNull().contains("Updated");
-		Assertions.assertThat(consultation.getExaminations()).isNotNull().doesNotContain(examination);
+		Assertions.assertThat(consultation.getExaminations()).isNotNull()
+				.doesNotContain(examination);
 
 	}
 
