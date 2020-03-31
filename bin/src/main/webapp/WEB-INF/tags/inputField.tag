@@ -16,10 +16,10 @@
 
 			<c:choose>
 				<c:when test="${empty type}">
-					<form:input class="form-control" path="${name}" />
+					<form:input class="form-control" id="${name}" path="${name}" />
 				</c:when>
 				<c:otherwise>
-					<form:input class="form-control" path="${name}" type="${type}" />
+					<form:input class="form-control" id="${name}" path="${name}" type="${type}" />
 				</c:otherwise>
 			</c:choose>
 
