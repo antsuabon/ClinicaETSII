@@ -37,10 +37,11 @@ import org.springframework.transaction.annotation.Transactional;
 class DoctorServiceTests {
 
 	@Autowired
-	protected DoctorService doctorService;
+	protected DoctorService	doctorService;
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager	entityManager;
+
 
 	@Test
 	void shouldListDoctorsSortedByServices() {
@@ -66,7 +67,9 @@ class DoctorServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	@WithMockUser(username = "doctor1", roles = {
+		"doctor"
+	})
 	void doctorShouldFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -78,9 +81,10 @@ class DoctorServiceTests {
 
 	}
 
-
 	@Test
-	@WithMockUser(username = "patient1", roles = {"patient"})
+	@WithMockUser(username = "patient1", roles = {
+		"patient"
+	})
 	void patientShouldNotFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -96,7 +100,6 @@ class DoctorServiceTests {
 		Assertions.assertThat(doctor.getUsername()).isNotNull().isEqualTo("doctor1");
 	}
 
-
 	@Test
 	void shouldNotFindByUsername() {
 		Doctor doctor = this.doctorService.findDoctorByUsername("doctor4");
@@ -105,9 +108,10 @@ class DoctorServiceTests {
 
 	}
 
-
 	@Test
-	@WithMockUser(username = "administrative1", roles = {"administrative"})
+	@WithMockUser(username = "administrative1", roles = {
+		"administrative"
+	})
 	void administrativeShouldNotFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -124,13 +128,10 @@ class DoctorServiceTests {
 
 	@Test
 	void shouldFindAllServices() {
-		Collection<org.springframework.clinicaetsii.model.Service> services =
-				this.doctorService.findAllServices();
+		Collection<org.springframework.clinicaetsii.model.Service> services = this.doctorService.findAllServices();
 
-		Assertions.assertThat(services).isNotEmpty().allMatch(s -> s.getId() != null)
-				.allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
+		Assertions.assertThat(services).isNotEmpty().allMatch(s -> s.getId() != null).allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
 	}
-
 
 	@Test
 	@Transactional
@@ -178,12 +179,29 @@ class DoctorServiceTests {
 		doctor.setPhone("956784325");
 		doctor.setCollegiateCode("303012345");
 
-
 		Assertions.assertThatThrownBy(() -> {
 			this.doctorService.save(doctor);
 			this.entityManager.flush();
-		}).isInstanceOf(PersistenceException.class)
-				.hasCauseInstanceOf(ConstraintViolationException.class);
+		}).isInstanceOf(PersistenceException.class).hasCauseInstanceOf(ConstraintViolationException.class);
+
+	}
+
+	@Test
+	void shouldListDoctors() {
+		Collection<Doctor> doctors = this.doctorService.findAllDoctors();
+		Assertions.assertThat(doctors.size()).isEqualTo(3);
+
+	}
+
+	@Test
+	void shouldFindDoctor() {
+		Doctor doctor1 = this.doctorService.findDoctorById(1);
+		String username = doctor1.getUsername();
+
+		Assertions.assertThat(username.equals("doctor1"));
+
+		Doctor doctor2 = this.doctorService.findDoctorById(-1);
+		Assertions.assertThat(doctor2).isNull();
 
 	}
 }
