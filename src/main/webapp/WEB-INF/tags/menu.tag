@@ -111,6 +111,11 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
+							
+							<petclinic:menuItem active="${name eq 'administrative doctors'}" url="/administrative/doctors" title="list my doctors">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Listar Médicos</span>
+							</petclinic:menuItem>
 
 						</ul></li>
 				</sec:authorize>
