@@ -16,4 +16,6 @@ public interface ConsultationRepository {
 	Consultation save(Consultation consultation) throws DataAccessException;
 
 	Collection<DischargeType> findDischargeTypes() throws DataAccessException;
+	
+	Collection<Consultation> findConsultationsByDoctorId(int doctorId);
 }

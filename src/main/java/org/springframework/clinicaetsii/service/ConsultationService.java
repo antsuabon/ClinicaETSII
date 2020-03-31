@@ -49,4 +49,9 @@ public class ConsultationService {
 	public Collection<Diagnosis> findAllDiagnoses() throws DataAccessException {
 		return this.diagnosisRepository.findAll();
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Consultation> findAllConsultationsFromDoctor(final int doctorId) throws DataAccessException {
+		return this.consultationRepository.findConsultationsByDoctorId(doctorId);
+	}
 }

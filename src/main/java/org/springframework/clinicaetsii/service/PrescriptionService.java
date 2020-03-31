@@ -49,5 +49,10 @@ public class PrescriptionService {
   public void deletePrescription(final Prescription prescription) throws DataAccessException {
     this.prescriptionRepository.delete(prescription);
   }
+  
+  @Transactional(readOnly = true)
+  public Collection<Prescription> findAllPrescriptionsByDoctor(final int doctorId) throws DataAccessException {
+    return this.prescriptionRepository.findPrescriptionByDoctorId(doctorId);
+  }
 
 }

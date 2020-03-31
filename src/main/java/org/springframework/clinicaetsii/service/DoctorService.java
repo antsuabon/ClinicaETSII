@@ -68,5 +68,10 @@ public class DoctorService {
 	public Collection<org.springframework.clinicaetsii.model.Service> findAllServices() {
 		return this.doctorRepository.findAllServices();
 	}
+	
+	@Transactional
+	public void delete(final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
+		this.doctorRepository.delete(doctor);
+	}
 
 }
