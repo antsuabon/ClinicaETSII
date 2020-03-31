@@ -7,8 +7,11 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.model.User;
+import org.springframework.clinicaetsii.repository.ConsultationRepository;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
 import org.springframework.clinicaetsii.repository.PatientRepository;
+import org.springframework.clinicaetsii.repository.PrescriptionRepository;
+import org.springframework.clinicaetsii.service.exceptions.DeletePatientException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,12 +25,19 @@ public class PatientService {
 	private PatientRepository patientRepository;
 	private DoctorRepository doctorRepository;
 
+	private ConsultationRepository consultationRepository;
+	private PrescriptionRepository prescriptionRepository;
 
 	@Autowired
 	public PatientService(final PatientRepository patientRepository,
-			final DoctorRepository doctorRepository) {
+			final DoctorRepository doctorRepository,
+			final ConsultationRepository consultationRepository,
+			final PrescriptionRepository prescriptionRepository) {
 		this.patientRepository = patientRepository;
 		this.doctorRepository = doctorRepository;
+
+		this.consultationRepository = consultationRepository;
+		this.prescriptionRepository = prescriptionRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -116,6 +126,20 @@ public class PatientService {
 		return this.patientRepository.findPatientByUsername(username);
 	}
 
+	public Boolean isErasable(final Patient patient) throws DataAccessException {
+		return this.consultationRepository.findConsultationsByPatientId(patient.getId()).isEmpty()
+				&& this.prescriptionRepository
+						.findPrescriptionsByPatientUsername(patient.getUsername()).isEmpty();
+	}
 
+	@Transactional
+	public void delete(final Patient patient) throws DataAccessException, DeletePatientException {
+
+		if (isErasable(patient)) {
+			this.patientRepository.delete(patient);
+		} else {
+			throw new DeletePatientException();
+		}
+	}
 
 }
