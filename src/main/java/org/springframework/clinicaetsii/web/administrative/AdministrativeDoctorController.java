@@ -27,6 +27,7 @@ import org.springframework.clinicaetsii.service.PrescriptionService;
 import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,9 +88,13 @@ public class AdministrativeDoctorController {
 		
 		if(this.consultationService.findAllConsultationsFromDoctor(doctorId).isEmpty() && this.prescriptionService.findAllPrescriptionsByDoctor(doctorId).isEmpty()) {
 			this.doctorService.delete(doctor);
+			return "redirect:/administrative/doctors/";
+		}
+		else {
+			return "exception";
 		}
 		
-		return "redirect:/administrative/doctors/";
+		
 	}
 
 }

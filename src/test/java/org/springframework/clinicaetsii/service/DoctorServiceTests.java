@@ -45,7 +45,7 @@ class DoctorServiceTests {
 	@Test
 	void shouldListDoctorsSortedByServices() {
 		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
-		Assertions.assertThat(doctors.size()).isEqualTo(3);
+		Assertions.assertThat(doctors.size()).isEqualTo(4);
 
 		List<Doctor> listDoctors = new ArrayList<>(doctors);
 		Doctor firstDoctor = listDoctors.get(0);
@@ -99,7 +99,7 @@ class DoctorServiceTests {
 
 	@Test
 	void shouldNotFindByUsername() {
-		Doctor doctor = this.doctorService.findDoctorByUsername("doctor4");
+		Doctor doctor = this.doctorService.findDoctorByUsername("doctor5");
 
 		Assertions.assertThat(doctor).isNull();
 
@@ -186,4 +186,21 @@ class DoctorServiceTests {
 				.hasCauseInstanceOf(ConstraintViolationException.class);
 
 	}
+	
+	
+	@Test
+	@Transactional
+	void shouldDeleteDoctor() {
+
+		Doctor d = this.doctorService.findDoctorById(7);
+		Collection<Doctor> doctors1 = this.doctorService.findAllDoctors();
+		this.doctorService.delete(d);
+		Collection<Doctor> doctors2 = this.doctorService.findAllDoctors();
+
+		Assertions.assertThat(doctors2.size() == doctors1.size()-1);
+			
+
+	}
+	
+	
 }
