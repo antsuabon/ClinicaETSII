@@ -119,6 +119,24 @@
 
 						</ul></li>
 				</sec:authorize>
+				
+				
+				<sec:authorize access="hasAuthority('admin')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrador <span
+							class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+
+						<ul class="dropdown-menu">
+
+							<petclinic:menuItem active="${name eq 'admin list patient'}" url="/admin/patients" title="list patient">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Pacientes del centro</span>
+							</petclinic:menuItem>
+
+
+						</ul></li>
+						
+				</sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
