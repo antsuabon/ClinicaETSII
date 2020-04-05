@@ -25,5 +25,7 @@ public interface DoctorRepository {
 	Doctor save(Doctor doctor) throws DataAccessException, DataIntegrityViolationException;
 
 	Collection<Service> findAllServices() throws DataAccessException;
+	
+	void delete(Doctor d) throws DataAccessException;
 
 }

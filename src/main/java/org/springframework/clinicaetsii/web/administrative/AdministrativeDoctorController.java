@@ -17,12 +17,17 @@ package org.springframework.clinicaetsii.web.administrative;
 import java.util.Collection;
 import java.util.Map;
 
+import org.ehcache.shadow.org.terracotta.offheapstore.util.FindbugsSuppressWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.service.AuthoritiesService;
+import org.springframework.clinicaetsii.service.ConsultationService;
 import org.springframework.clinicaetsii.service.DoctorService;
+import org.springframework.clinicaetsii.service.PrescriptionService;
 import org.springframework.clinicaetsii.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,13 +39,17 @@ public class AdministrativeDoctorController {
 	private DoctorService		doctorService;
 	private AuthoritiesService	authoritiesService;
 	private UserService			userService;
+	private ConsultationService	consultationService;
+	private PrescriptionService	prescriptionService;
 
 
 	@Autowired
-	public AdministrativeDoctorController(final DoctorService doctorService, final AuthoritiesService authoritiesService, final UserService userService) {
+	public AdministrativeDoctorController(final DoctorService doctorService, final AuthoritiesService authoritiesService, final UserService userService, ConsultationService consultationService, PrescriptionService prescriptionService) {
 		this.doctorService = doctorService;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
+		this.consultationService = consultationService;
+		this.prescriptionService = prescriptionService;
 	}
 
 	public void initBinder(final WebDataBinder dataBinder) {
@@ -64,7 +73,28 @@ public class AdministrativeDoctorController {
 	public ModelAndView showDoctor(@PathVariable("doctorId") final int doctorId) {
 		ModelAndView mav = new ModelAndView("/administrative/doctors/doctorDetails");
 		mav.addObject(this.doctorService.findDoctorById(doctorId));
+		boolean deleteable = false;
+		if(this.consultationService.findAllConsultationsFromDoctor(doctorId).isEmpty() && this.prescriptionService.findAllPrescriptionsByDoctor(doctorId).isEmpty()) {
+			deleteable = true;
+		}
+		mav.addObject("deleteable", deleteable);
 		return mav;
+	}
+	
+	@GetMapping("/administrative/doctors/{doctorId}/delete")
+	public String initDelete(@PathVariable("doctorId") final int doctorId, final Map<String, Object> model) {
+
+		Doctor doctor = this.doctorService.findDoctorById(doctorId);
+		
+		if(this.consultationService.findAllConsultationsFromDoctor(doctorId).isEmpty() && this.prescriptionService.findAllPrescriptionsByDoctor(doctorId).isEmpty()) {
+			this.doctorService.delete(doctor);
+			return "redirect:/administrative/doctors/";
+		}
+		else {
+			return "exception";
+		}
+		
+		
 	}
 
 }

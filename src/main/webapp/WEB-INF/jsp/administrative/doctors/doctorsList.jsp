@@ -43,8 +43,7 @@
                     <a href="${fn:escapeXml(doctorUrl)}">Seleccionar Médico</a>
                 
                 </td>
-           
-       
+
                 
             </tr>
             </c:forEach>           

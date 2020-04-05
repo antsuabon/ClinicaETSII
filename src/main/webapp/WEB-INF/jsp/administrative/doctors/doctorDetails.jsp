@@ -51,8 +51,13 @@
                 
             </tr>
     </table>
-
-
+    
+    <c:if test="${deleteable}">
+   		<spring:url value="/administrative/doctors/{doctorId}/delete" var="doctorDeleteUrl">
+        	<spring:param name="doctorId" value="${doctor.id}"/>
+   		</spring:url>
+    	<a href="${fn:escapeXml(doctorDeleteUrl)}" class="btn btn-default">Eliminar Médico</a>
+    </c:if>
     
     
 </petclinic:layout>

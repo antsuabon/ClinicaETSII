@@ -12,6 +12,7 @@ import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
+import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ class ConsultationServiceTest {
 
 	@Autowired
 	protected ExaminationService examinationService;
+	@Autowired
+	protected DoctorService doctorService;
 
 	@Autowired
 	protected AppointmentService appoinService;
@@ -134,6 +137,13 @@ class ConsultationServiceTest {
 		Assertions.assertThat(consultation.getExaminations()).isNotNull()
 				.doesNotContain(examination);
 
+	}
+	
+	@Test
+	void shouldFindConsultationsFromDoctor() {
+		
+		Collection<Consultation> consultations = this.consultationService.findAllConsultationsFromDoctor(7);
+		Assertions.assertThat(consultations).isEmpty();
 	}
 
 }
