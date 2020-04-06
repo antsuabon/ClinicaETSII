@@ -89,8 +89,8 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO authorities VALUES (6,'administrative');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
-(7, 'admin', 'admin', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
-INSERT INTO authorities VALUES (7,'admin');
+(8, 'admin', 'admin', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO authorities VALUES (8,'admin');
 
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);

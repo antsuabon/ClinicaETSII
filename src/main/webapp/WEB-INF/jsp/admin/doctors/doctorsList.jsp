@@ -37,7 +37,7 @@
                 
                 
                 <td>
-                  <spring:url value="/administrative/doctors/{doctorId}" var="doctorUrl">
+                  <spring:url value="/admin/doctors/{doctorId}" var="doctorUrl">
                         <spring:param name="doctorId" value="${doctor.id}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(doctorUrl)}">Seleccionar Médico</a>

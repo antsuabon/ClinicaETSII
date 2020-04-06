@@ -102,7 +102,8 @@
 
 						<ul class="dropdown-menu">
 
-							<petclinic:menuItem active="${name eq 'administrative new patient'}" url="/administrative/patients/new" title="add new patient">
+							<petclinic:menuItem active="${name eq 'administrative new patient'}" url="/administrative/patients/new"
+								title="add new patient">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Añadir Paciente</span>
 							</petclinic:menuItem>
@@ -111,16 +112,11 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
-							
-							<petclinic:menuItem active="${name eq 'administrative doctors'}" url="/administrative/doctors" title="list my doctors">
-								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Listar Médicos</span>
-							</petclinic:menuItem>
 
 						</ul></li>
 				</sec:authorize>
-				
-				
+
+
 				<sec:authorize access="hasAuthority('admin')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrador <span
 							class="glyphicon glyphicon-chevron-down"></span>
@@ -133,9 +129,13 @@
 								<span>Pacientes del centro</span>
 							</petclinic:menuItem>
 
+							<petclinic:menuItem active="${name eq 'administrative doctors'}" url="/admin/doctors" title="list my doctors">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Listar Médicos</span>
+							</petclinic:menuItem>
 
 						</ul></li>
-						
+
 				</sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">

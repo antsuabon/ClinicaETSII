@@ -17,18 +17,19 @@ package org.springframework.clinicaetsii.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-
 import org.assertj.core.api.Assertions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Doctor;
+import org.springframework.clinicaetsii.service.exceptions.DeleteDoctorException;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,10 +38,10 @@ import org.springframework.transaction.annotation.Transactional;
 class DoctorServiceTests {
 
 	@Autowired
-	protected DoctorService	doctorService;
+	protected DoctorService doctorService;
 
 	@PersistenceContext
-	private EntityManager	entityManager;
+	private EntityManager entityManager;
 
 
 	@Test
@@ -67,9 +68,7 @@ class DoctorServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "doctor1", roles = {
-		"doctor"
-	})
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
 	void doctorShouldFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -82,9 +81,7 @@ class DoctorServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "patient1", roles = {
-		"patient"
-	})
+	@WithMockUser(username = "patient1", roles = {"patient"})
 	void patientShouldNotFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -109,9 +106,7 @@ class DoctorServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "administrative1", roles = {
-		"administrative"
-	})
+	@WithMockUser(username = "administrative1", roles = {"administrative"})
 	void administrativeShouldNotFindCurrentDoctor() {
 		Doctor currentDoctor = this.doctorService.findCurrentDoctor();
 
@@ -128,9 +123,11 @@ class DoctorServiceTests {
 
 	@Test
 	void shouldFindAllServices() {
-		Collection<org.springframework.clinicaetsii.model.Service> services = this.doctorService.findAllServices();
+		Collection<org.springframework.clinicaetsii.model.Service> services =
+				this.doctorService.findAllServices();
 
-		Assertions.assertThat(services).isNotEmpty().allMatch(s -> s.getId() != null).allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
+		Assertions.assertThat(services).isNotEmpty().allMatch(s -> s.getId() != null)
+				.allMatch(s -> s.getName() != null).allMatch(s -> !s.getName().isEmpty());
 	}
 
 	@Test
@@ -182,14 +179,15 @@ class DoctorServiceTests {
 		Assertions.assertThatThrownBy(() -> {
 			this.doctorService.save(doctor);
 			this.entityManager.flush();
-		}).isInstanceOf(PersistenceException.class).hasCauseInstanceOf(ConstraintViolationException.class);
+		}).isInstanceOf(PersistenceException.class)
+				.hasCauseInstanceOf(ConstraintViolationException.class);
 
 	}
 
 	@Test
 	void shouldListDoctors() {
 		Collection<Doctor> doctors = this.doctorService.findAllDoctors();
-		Assertions.assertThat(doctors.size()).isEqualTo(3);
+		Assertions.assertThat(doctors.size()).isEqualTo(4);
 
 	}
 
@@ -204,21 +202,32 @@ class DoctorServiceTests {
 		Assertions.assertThat(doctor2).isNull();
 
 	}
-	
-	
+
+
 	@Test
 	@Transactional
 	void shouldDeleteDoctor() {
 
 		Doctor d = this.doctorService.findDoctorById(7);
 		Collection<Doctor> doctors1 = this.doctorService.findAllDoctors();
-		this.doctorService.delete(d);
+		try {
+			this.doctorService.delete(d);
+		} catch (DataIntegrityViolationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DeleteDoctorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Collection<Doctor> doctors2 = this.doctorService.findAllDoctors();
 
-		Assertions.assertThat(doctors2.size() == doctors1.size()-1);
-			
+		Assertions.assertThat(doctors2.size() == doctors1.size() - 1);
+
 
 	}
-	
-	
+
+
 }

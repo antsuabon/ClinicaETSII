@@ -126,6 +126,7 @@ public class PatientService {
 		return this.patientRepository.findPatientByUsername(username);
 	}
 
+	@Transactional(readOnly = true)
 	public Boolean isErasable(final Patient patient) throws DataAccessException {
 		return this.consultationRepository.findConsultationsByPatientId(patient.getId()).isEmpty()
 				&& this.prescriptionRepository
