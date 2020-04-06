@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +65,13 @@ class PatientServiceTests {
 
 	@Test
 	@WithMockUser(username = "patient1", roles = {"patient"})
-
 	void shouldFindCurrentDoctorPatientsAuthority() {
 
 		Collection<Patient> patients = this.patientService.findCurrentDoctorPatients();
 		Assertions.assertThat(patients).isEmpty();
 	}
 
+	@Test
 	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindCurrentPatient() {
 		Patient patient1 = this.patientService.findCurrentPatient();
