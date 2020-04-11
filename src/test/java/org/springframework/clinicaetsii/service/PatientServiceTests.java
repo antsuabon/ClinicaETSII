@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.service.exceptions.DeletePatientException;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -120,7 +121,7 @@ class PatientServiceTests {
 	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindAllPatients() {
 		Collection<Patient> patients = this.patientService.findPatients();
-		Assertions.assertThat(patients.size()).isEqualTo(2);
+		Assertions.assertThat(patients.size()).isEqualTo(3);
 	}
 
 	@Test
@@ -319,5 +320,29 @@ class PatientServiceTests {
 		Assertions.assertThat(initSize).isEqualTo(finalSize);
 	}
 
+	@Test
+	void shouldDeletePatient() throws DataAccessException, DeletePatientException {
+		Patient patient = this.patientService.findPatientById(9);
+		Assertions.assertThat(patient).isNotNull();
+
+		this.patientService.delete(patient);
+
+		patient = this.patientService.findPatientById(9);
+		Assertions.assertThat(patient).isNull();
+
+	}
+
+	@Test
+	void shouldNotDeletePatient() {
+		Assertions.assertThatThrownBy(() -> {
+			Patient patient = this.patientService.findPatientById(5);
+			Assertions.assertThat(patient).isNotNull();
+
+			this.patientService.delete(patient);
+		}).isInstanceOf(DeletePatientException.class);
+
+		Patient patient = this.patientService.findPatientById(5);
+		Assertions.assertThat(patient).isNotNull();
+	}
 
 }

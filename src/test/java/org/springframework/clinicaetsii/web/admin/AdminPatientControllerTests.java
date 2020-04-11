@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -23,6 +22,7 @@ import org.springframework.clinicaetsii.service.AuthoritiesService;
 import org.springframework.clinicaetsii.service.DoctorService;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.service.UserService;
+import org.springframework.clinicaetsii.service.exceptions.DeletePatientException;
 import org.springframework.clinicaetsii.web.formatter.DoctorFormatter;
 import org.springframework.clinicaetsii.web.formatter.LocalDateFormatter;
 import org.springframework.clinicaetsii.web.formatter.ServiceFormatter;
@@ -35,14 +35,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = AdminPatientController.class, includeFilters = {
-	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = ServiceFormatter.class),
-	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-			classes = LocalDateFormatter.class),
-	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = DoctorFormatter.class),},
-	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-			classes = WebSecurityConfigurer.class),
-	excludeAutoConfiguration = SecurityConfiguration.class)
-
+		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = ServiceFormatter.class),
+		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+				classes = LocalDateFormatter.class),
+		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = DoctorFormatter.class),},
+		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+				classes = WebSecurityConfigurer.class),
+		excludeAutoConfiguration = SecurityConfiguration.class)
 public class AdminPatientControllerTests {
 
 
@@ -79,6 +78,9 @@ public class AdminPatientControllerTests {
 
 	private Appointment appointment1;
 	private Appointment appointment2;
+
+	private Patient patient9;
+	private Patient patient5;
 
 	@BeforeEach
 	void setup() {
@@ -179,13 +181,16 @@ public class AdminPatientControllerTests {
 		patients.add(this.patient2);
 
 
+
 		BDDMockito.given(this.patientService.findPatients()).willReturn(patients);
 		BDDMockito.given(this.doctorService.findAllDoctors()).willReturn(doctors);
-		BDDMockito.given(this.appointmentService.findAppointmentByDoctors(1)).willReturn(appointments);
+		BDDMockito.given(this.appointmentService.findAppointmentByDoctors(1))
+				.willReturn(appointments);
 		BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
 		BDDMockito.given(this.patientService.findPatientById(2)).willReturn(this.patient1);
 		BDDMockito.given(this.patientService.findDoctorByPatient(1)).willReturn(this.doctor1);
 		BDDMockito.given(this.patientService.findDoctorByPatient(-1)).willReturn(null);
+		BDDMockito.given(this.patientService.findPatientById(9)).willReturn(this.patient9);
 	}
 
 
@@ -219,9 +224,9 @@ public class AdminPatientControllerTests {
 
 		BDDMockito.given(this.patientService.findPatientById(2)).willReturn(this.patient2);
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}",2))
-					.andExpect(MockMvcResultMatchers.status().isOk())
-					.andExpect(MockMvcResultMatchers.view().name("/admin/patients/patientDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}", 2))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("/admin/patients/patientDetails"));
 
 	}
 
@@ -231,10 +236,31 @@ public class AdminPatientControllerTests {
 
 		BDDMockito.given(this.patientService.findPatientById(-2)).willThrow(new RuntimeException());
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}",-2))
-					.andExpect(MockMvcResultMatchers.status().isOk())
-					.andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}", -2))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 
 	}
+
+	@WithMockUser(username = "admin", roles = "admin")
+	@Test
+	void shouldDeleteDoctor() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}/delete", 9))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/admin/patients"));
+	}
+
+	@WithMockUser(username = "admin", roles = "admin")
+	@Test
+	void shouldNotDeleteDoctorWithConsultations() throws Exception {
+		BDDMockito.willThrow(DeletePatientException.class).given(this.patientService)
+				.delete(this.patient5);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/patients/{patientId}/delete", 5))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/admin/patients"));
+	}
+
 
 }

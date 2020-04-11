@@ -1,5 +1,5 @@
 
-package org.springframework.clinicaetsii.web.administrative;
+package org.springframework.clinicaetsii.web.admin;
 
 import java.util.ArrayList;
 import java.util.Collection;

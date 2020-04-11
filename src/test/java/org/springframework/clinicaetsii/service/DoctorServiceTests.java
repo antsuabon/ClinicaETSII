@@ -206,26 +206,36 @@ class DoctorServiceTests {
 
 	@Test
 	@Transactional
-	void shouldDeleteDoctor() {
+	void shouldDeleteDoctor() throws DataIntegrityViolationException, DataAccessException, DeleteDoctorException {
 
 		Doctor d = this.doctorService.findDoctorById(7);
 		Collection<Doctor> doctors1 = this.doctorService.findAllDoctors();
-		try {
-			this.doctorService.delete(d);
-		} catch (DataIntegrityViolationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DeleteDoctorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Assertions.assertThat(doctors1).isNotNull().isNotEmpty();
+
+		this.doctorService.delete(d);
 		Collection<Doctor> doctors2 = this.doctorService.findAllDoctors();
+		Assertions.assertThat(doctors2).isNotNull();
 
-		Assertions.assertThat(doctors2.size() == doctors1.size() - 1);
+		Assertions.assertThat(doctors2).hasSize(doctors1.size() - 1);
 
+	}
+
+	@Test
+	@Transactional
+	void shouldNotDeleteDoctor() {
+
+		Collection<Doctor> doctors1 = this.doctorService.findAllDoctors();
+		Assertions.assertThat(doctors1).isNotNull().isNotEmpty();
+
+		Assertions.assertThatThrownBy(() -> {
+			Doctor d = this.doctorService.findDoctorById(1);
+			this.doctorService.delete(d);
+		}).isInstanceOf(DeleteDoctorException.class);
+
+		Collection<Doctor> doctors2 = this.doctorService.findAllDoctors();
+		Assertions.assertThat(doctors2).isNotNull();
+
+		Assertions.assertThat(doctors2).hasSize(doctors1.size());
 
 	}
 
