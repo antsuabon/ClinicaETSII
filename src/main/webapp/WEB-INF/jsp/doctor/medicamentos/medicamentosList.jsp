@@ -1,64 +1,65 @@
-<%@ page session="false" trimDirectiveWhitespaces="true" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page session="false" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 
 
-<petclinic:layout pageName="medicamentos">
+<petclinic:layout pageName="doctor medicamentos">
 
-    <h2>Medicamentos</h2>
+	<h2>Medicamentos</h2>
 
 	<c:choose>
 
-	<c:when test="${emptylist=='true'}">
+		<c:when test="${emptylist=='true'}">
 
-		<p>No se han encontrado resultados</p>
+			<p>No se han encontrado resultados</p>
 
-	 </c:when>
+		</c:when>
 
-	 <c:otherwise>
+		<c:otherwise>
 
-    <table id="medicamentosTable" class="table table-striped">
+			<table id="medicamentosTable" class="table table-striped">
 
-        <thead>
+				<thead>
 
-        <tr>
+					<tr>
 
-            <th>Nombre</th>
+						<th>Nombre</th>
+						<th></th>
 
-        </tr>
+					</tr>
 
-        </thead>
+				</thead>
 
-        <tbody>
+				<tbody>
 
-           
 
-        <c:forEach items="${consultaMedicamento.resultados}" var="medicamento">
 
-            <tr>
+					<c:forEach items="${consultaMedicamento.resultados}" var="medicamento">
 
-                <td>
+						<tr>
 
-                    <c:out value="${medicamento.nombre}"/>
+							<td><c:out value="${medicamento.nombre}" /></td>
 
-                </td>
+							<td><spring:url value="/doctor/medicamentos/{nregistro}" var="medicamentoUrl">
+									<spring:param name="nregistro" value="${medicamento.nregistro}" />
+								</spring:url> <a href="${fn:escapeXml(medicamentoUrl)}"><c:out value="Ver detalles" /></a></td>
 
-            </tr>
+						</tr>
 
-            
 
-        </c:forEach>
 
-        </tbody>
+					</c:forEach>
 
-    </table>
+				</tbody>
 
-    </c:otherwise>
+			</table>
 
-     </c:choose> 
+		</c:otherwise>
+
+	</c:choose>
 
 </petclinic:layout>

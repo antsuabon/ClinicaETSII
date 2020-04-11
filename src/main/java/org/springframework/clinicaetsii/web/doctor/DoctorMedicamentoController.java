@@ -12,6 +12,7 @@ import org.springframework.clinicaetsii.service.CIMAService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,8 +39,7 @@ public class DoctorMedicamentoController {
 			final BindingResult result,
 			final Map<String, Object> model) {
 
-		System.out.println(medicamento);
-		ConsultaMedicamento consultaMedicamento = this.cimaService.findMedicamentosByAttributesFicha(
+		ConsultaMedicamento consultaMedicamento = this.cimaService.findMedicamentosByAttributes(
 				medicamento.getNombre(), medicamento.getPactivos(), medicamento.getLabtitular());
 
 		model.put("consultaMedicamento", consultaMedicamento);
@@ -48,9 +48,7 @@ public class DoctorMedicamentoController {
 	}
 
 	@GetMapping("/{nregistro}")
-	public String showDetails(final String nregistro,
-			final BindingResult result,
-			final Map<String, Object> model) {
+	public String showDetails(@PathVariable final int nregistro, final Map<String, Object> model) {
 		Medicamento medicamento = this.cimaService.findMedicamentoByNregistro(nregistro);
 		model.put("medicamento", medicamento);
 		return "doctor/medicamentos/medicamentoDetails";

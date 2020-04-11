@@ -2,9 +2,7 @@ package org.springframework.clinicaetsii.model.cima;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Data;
 
 @Data
@@ -23,9 +21,15 @@ public class Medicamento implements Serializable {
 
 	private String cpresc;
 
+	private Filtro formaFarmaceutica;
+
 	private List<PrincipioActivo> principiosActivos;
 
 	private List<Excipiente> excipientes;
+
+	private List<Filtro> viasAdministracion;
+
+	private List<Filtro> presentaciones;
 
 	private String dosis;
 

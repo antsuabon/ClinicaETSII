@@ -7,7 +7,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
-<petclinic:layout pageName="medicamentos">
+<petclinic:layout pageName="doctor medicamentos">
 
 	<script type="text/javascript">
 		$(function(){
