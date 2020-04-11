@@ -20,8 +20,5 @@ public interface SpringDataAppointmentRepository extends AppointmentRepository, 
 	@Query("SELECT appointment.startTime FROM Appointment appointment WHERE appointment.patient.generalPractitioner.id =:id")
 	Collection<LocalDateTime> findAppointmentsDatesByDoctorId(@Param("id") int id);
 
-	@Override
-	@Query("SELECT appointment FROM Appointment appointment WHERE appointment.patient.generalPractitioner.id =:id")
-	Collection<Appointment> findAppointmentsByDoctorId(@Param("id") int id);
 
 }

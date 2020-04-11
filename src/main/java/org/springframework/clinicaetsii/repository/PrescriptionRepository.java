@@ -20,5 +20,7 @@ public interface PrescriptionRepository {
 	Prescription save(Prescription prescription) throws DataAccessException;
 
 	void delete(Prescription prescription) throws DataAccessException;
+	
+	Collection<Prescription> findPrescriptionByDoctorId(int doctorId) throws DataAccessException;
 
 }

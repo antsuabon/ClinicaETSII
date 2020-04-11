@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
@@ -18,13 +19,15 @@ public class AppointmentService {
 
 	private AppointmentRepository appointmentRepository;
 
+
 	@Autowired
 	public AppointmentService(final AppointmentRepository AppointmentRepository) {
 		this.appointmentRepository = AppointmentRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<LocalDateTime> findAppointmentByDoctors(final int id) throws DataAccessException {
+	public Collection<LocalDateTime> findAppointmentByDoctors(
+			final int id) throws DataAccessException {
 		return this.appointmentRepository.findAppointmentsDatesByDoctorId(id);
 	}
 
@@ -36,6 +39,11 @@ public class AppointmentService {
 
 	@Transactional(readOnly = true)
 	@PreAuthorize("hasAuthority('patient')")
+	public Collection<Appointment> findAll() throws DataAccessException {
+		return this.appointmentRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
 	public Appointment findAppointmentById(final int appointmentId) throws DataAccessException {
 		return this.appointmentRepository.findById(appointmentId);
 	}
@@ -48,18 +56,14 @@ public class AppointmentService {
 		UserDetails user = (UserDetails) principal;
 		String username = user.getUsername();
 
-		return this.appointmentRepository.findAppointmentsWithoutConsultationByDoctorUsername(username);
+		return this.appointmentRepository
+				.findAppointmentsWithoutConsultationByDoctorUsername(username);
 	}
 
 	@Transactional
 	@PreAuthorize("hasAuthority('patient')")
 	public void deleteAppointment(final Appointment appointment) {
 		this.appointmentRepository.delete(appointment);
-	}
-
-	@Transactional
-	public Collection<Appointment> findAllAppointmentsByDoctorId(final int id) {
-		return this.appointmentRepository.findAppointmentsByDoctorId(id);
 	}
 
 	@Transactional

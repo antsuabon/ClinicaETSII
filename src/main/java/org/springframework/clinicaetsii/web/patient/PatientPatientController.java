@@ -2,9 +2,7 @@
 package org.springframework.clinicaetsii.web.patient;
 
 import java.util.Collection;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import lombok.Data;
 
 /**
@@ -34,14 +31,15 @@ import lombok.Data;
 @Controller
 public class PatientPatientController {
 
-	private final String			VIEWS_PATIENT_CREATE_OR_UPDATE_FORM	= "patient/updatePatientForm";
+	private final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patient/updatePatientForm";
 
-	private final DoctorService		doctorService;
-	private final PatientService	patientService;
+	private final DoctorService doctorService;
+	private final PatientService patientService;
 
 
 	@Autowired
-	public PatientPatientController(final PatientService patientService, final DoctorService doctorService) {
+	public PatientPatientController(final PatientService patientService,
+			final DoctorService doctorService) {
 		this.patientService = patientService;
 		this.doctorService = doctorService;
 	}
@@ -75,19 +73,20 @@ public class PatientPatientController {
 
 	@GetMapping(value = "/patient/edit")
 	public String initUpdatePatientForm(final Model model) {
-		Patient patientToUpdate = this.patientService.findPatient();
+		Patient patientToUpdate = this.patientService.findCurrentPatient();
 
 		PatientForm patientForm = new PatientForm();
 		patientForm.setPatient(patientToUpdate);
 
 		model.addAttribute(patientForm);
-		return  "/patient/updatePatientForm";
+		return "/patient/updatePatientForm";
 	}
 
 	@PostMapping(value = "/patient/edit")
-	public String processUpdatePatientForm(@Valid final PatientForm patientForm, final BindingResult result) {
+	public String processUpdatePatientForm(@Valid final PatientForm patientForm,
+			final BindingResult result) {
 
-		Patient patientToUpdate = this.patientService.findPatient();
+		Patient patientToUpdate = this.patientService.findCurrentPatient();
 		String oldUsername = String.valueOf(patientToUpdate.getUsername());
 
 		System.out.println(result.getAllErrors());
@@ -98,8 +97,10 @@ public class PatientPatientController {
 
 		} else {
 
-			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password", "username", "enabled");
-			if (patientForm.getNewPassword() != null && !StringUtils.isEmpty(patientForm.getNewPassword())) {
+			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password",
+					"username", "enabled");
+			if (patientForm.getNewPassword() != null
+					&& !StringUtils.isEmpty(patientForm.getNewPassword())) {
 				patientToUpdate.setPassword(patientForm.getNewPassword());
 			}
 

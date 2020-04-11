@@ -8,7 +8,7 @@
 
 <petclinic:layout pageName="patient">
 
-    <h2>Patient Information</h2>
+    <h2>Detalles del paciente</h2>
 
 
     <table class="table table-striped">

@@ -7,7 +7,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="patients">
-    <h2>Patient Information</h2>
+    <h2>Detalles del paciente</h2>
 
 
     <table class="table table-striped">
@@ -54,7 +54,7 @@
     </table>
 
     
-    <a href="/patient/edit" class="btn btn-default">Edit Patient</a>
+    <a href="/patient/edit" class="btn btn-default">Editar Paciente</a>
     
     
 </petclinic:layout>

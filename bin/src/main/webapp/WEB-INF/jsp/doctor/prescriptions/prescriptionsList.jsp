@@ -39,18 +39,17 @@
 							<td><spring:url value="/doctor/patients/{patientId}/prescriptions/{prescriptionId}" var="prescriptionUrl">
 									<spring:param name="patientId" value="${patientId}" />
 									<spring:param name="prescriptionId" value="${prescription.id}" />
-								</spring:url> <a href="${fn:escapeXml(prescriptionUrl)}">Ver prescripciÃ³n</a></td>
+								</spring:url> <a href="${fn:escapeXml(prescriptionUrl)}">Ver prescripción</a></td>
 						</tr>
 
 					</c:forEach>
 
 				</tbody>
 			</table>
-			
 			<spring:url value="/doctor/patients/{patientId}/prescriptions/new" var="newPrescriptionUrl">
 				<spring:param name="patientId" value="${patientId}" />
-			</spring:url> <a class="btn btn-default" href="${fn:escapeXml(newPrescriptionUrl)}">AÃ±adir prescripciÃ³n</a>
-
+			</spring:url> <a class="btn btn-default" href="${fn:escapeXml(newPrescriptionUrl)}">Añadir prescripción</a>
+			
 		</c:otherwise>
 	</c:choose>
 

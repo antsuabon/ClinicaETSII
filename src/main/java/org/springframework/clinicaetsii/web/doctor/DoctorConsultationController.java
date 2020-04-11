@@ -13,6 +13,7 @@ import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.clinicaetsii.service.ConsultationService;
+import org.springframework.clinicaetsii.service.ExaminationService;
 import org.springframework.clinicaetsii.web.validator.ConsultationValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,12 +30,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DoctorConsultationController {
 
 	private ConsultationService consultationService;
+	private ExaminationService examinationService;
 	private AppointmentService appointmentService;
 
 	@Autowired
-	public DoctorConsultationController(final ConsultationService consultationService, final AppointmentService appointmentService) {
+	public DoctorConsultationController(final ConsultationService consultationService, final AppointmentService appointmentService, final ExaminationService examinationService) {
 		this.consultationService = consultationService;
 		this.appointmentService = appointmentService;
+		this.examinationService = examinationService;
 	}
 
 	@GetMapping("/doctor/patients/{patientId}/consultations")
@@ -61,6 +64,7 @@ public class DoctorConsultationController {
 		} else {
 			model.put("patientId", patientId);
 			model.put("consultation", result);
+			model.put("examinationsSorted", this.examinationService.findExaminationsSortedByStartDate(consultationId));
 		}
 
 		return "/doctor/consultations/consultationDetails";
@@ -88,7 +92,7 @@ public class DoctorConsultationController {
 
 	@PostMapping("/doctor/patients/{patientId}/consultations/new")
 	public String processCreationForm(@ModelAttribute("appointmentId") final int appointmentId, @Valid final Consultation consultation, final BindingResult result, final ModelMap model) {
-		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);;
+		Appointment appointment = this.appointmentService.findAppointmentById(appointmentId);
       	consultation.setAppointment(appointment);
 
 		if (result.hasErrors()) {
@@ -133,7 +137,7 @@ public class DoctorConsultationController {
 			}
 
 			this.consultationService.save(consultation);
-			return "redirect:/doctor/patients/{patientId}/consultations/" + consultation.getId();
+			return "redirect:/doctor/patients/{patientId}/consultations/{consultationId}";
 		}
 	}
 

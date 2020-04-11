@@ -23,7 +23,7 @@
             
             <div class="form-group has-feedback">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Owner</label>
+                    <label class="col-sm-2 control-label">Paciente</label>
                     <div class="col-sm-10">
                         <c:out value="${consultation.appointment.patient.fullName}" />
                     </div>

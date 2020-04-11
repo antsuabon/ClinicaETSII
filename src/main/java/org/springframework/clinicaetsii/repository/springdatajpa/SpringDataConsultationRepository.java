@@ -18,5 +18,9 @@ public interface SpringDataConsultationRepository extends ConsultationRepository
 	@Override
 	@Query("SELECT dischargeType FROM DischargeType dischargeType")
 	Collection<DischargeType> findDischargeTypes();
+	
+	@Override
+	@Query("SELECT c FROM Consultation c WHERE c.appointment.patient.generalPractitioner.id =:doctorId")
+	Collection<Consultation> findConsultationsByDoctorId(@Param("doctorId") int doctorId);
 
 }

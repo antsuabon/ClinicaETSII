@@ -65,6 +65,12 @@
 								<span>Solicitar cita médica</span>
 							</petclinic:menuItem>
 
+
+							<petclinic:menuItem active="${name eq 'prescriptions'}" url="/patient/prescriptions" title="list my prescriptions">
+								<span aria-hidden="true"></span>
+								<span>Mis prescripciones</span>
+							</petclinic:menuItem>
+
 						</ul></li>
 				</sec:authorize>
 
@@ -80,7 +86,7 @@
 								<span>Mis Pacientes</span>
 							</petclinic:menuItem>
 
-							<petclinic:menuItem active="${name eq 'doctor patients'}" url="/doctor/appointments" title="list my patients">
+							<petclinic:menuItem active="${name eq 'doctor appointments'}" url="/doctor/appointments" title="list my patients">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Citas Pendientes</span>
 							</petclinic:menuItem>
@@ -95,29 +101,46 @@
 
 
 				<sec:authorize access="hasAuthority('administrative')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrative <span
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrativo <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 
 						<ul class="dropdown-menu">
 
-							<petclinic:menuItem active="${name eq 'admin'}" url="/administrative/patients/new" title="add new patient">
+							<petclinic:menuItem active="${name eq 'administrative new patient'}" url="/administrative/patients/new"
+								title="add new patient">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Añadir Paciente</span>
 							</petclinic:menuItem>
 
 							<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients" title="list my patients">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Crear Cita</span>
-							</petclinic:menuItem>
-
-							<petclinic:menuItem active="${name eq 'administrative consultations'}" url="/administrative/doctors/{doctorId}/appointments"
-								title="list my patients">
-								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Citas Pendientes</span>
+								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
 
 						</ul></li>
+				</sec:authorize>
+
+
+				<sec:authorize access="hasAuthority('admin')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrador <span
+							class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+
+						<ul class="dropdown-menu">
+
+							<petclinic:menuItem active="${name eq 'admin list patient'}" url="/admin/patients" title="list patient">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Pacientes del centro</span>
+							</petclinic:menuItem>
+
+							<petclinic:menuItem active="${name eq 'administrative doctors'}" url="/admin/doctors" title="list my doctors">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Listar Médicos</span>
+							</petclinic:menuItem>
+
+						</ul></li>
+
 				</sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">

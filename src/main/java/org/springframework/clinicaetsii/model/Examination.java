@@ -1,6 +1,6 @@
 package org.springframework.clinicaetsii.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

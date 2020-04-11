@@ -23,7 +23,6 @@ public class ConsultationValidator implements Validator {
 		this.consultationService = consultationService;
 		this.appointmentId = appointmentId;
 		this.consultationId = consultationId;
-		System.out.println(consultationId);
 	}
 
 	@Override

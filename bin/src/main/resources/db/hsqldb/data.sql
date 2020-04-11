@@ -73,6 +73,7 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO doctors (doctor_id, collegiate_code) VALUES (2,'303092345');
 INSERT INTO authorities VALUES (2,'doctor');
 
+
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (3, 'doctor3', 'doctor3', true, 'José', 'Salado Asenjo','12345678P','jose@gmail.com','956780025');
 INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
@@ -81,10 +82,6 @@ INSERT INTO authorities VALUES (3,'doctor');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
 INSERT INTO authorities VALUES (6,'administrative');
-
-INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
-(6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
-INSERT INTO authorities VALUES ('administrative1','administrative');
 
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
@@ -114,14 +111,13 @@ INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (4, false, '2020-03-14 11:00:00', '2020-03-14 11:07:00', 4);
 
-INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications)
-	VALUES(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.');
-INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications)
-	VALUES(2,'Paracetamol','Paracel',1.0,'Dolor y fiebre','Paracetamol debe utilizarse con precaución en alcohólicos crónicos y en
-pacientes con deficiencia en glucosa-6 fosfato-deshidrogenasa.');
-INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications)
-	VALUES(3,'Omeprazol','Arapride',1.0,'Ulcera duodenal o gástrica','Debe utilizarse con precaución durante el embarazo y
-lactancia.');
+
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) VALUES
+(1,'Ibuprofeno','Dalsy',1.0,'Dolor leve y moderado','En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.');
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) VALUES
+(2,'Paracetamol','Paracel',1.0,'Dolor y fiebre','Paracetamol debe utilizarse con precaución en alcohólicos crónicos y en pacientes con deficiencia en glucosa-6 fosfato-deshidrogenasa.');
+INSERT INTO medicines (id, generical_name, commercial_name, quantity, indications, contraindications) VALUES
+(3,'Omeprazol','Arapride',1.0,'Ulcera duodenal o gástrica','Debe utilizarse con precaución durante el embarazo y lactancia.');
 
 
 INSERT INTO consultations (id,start_time,end_time,anamnesis,remarks,discharge_type_id,appointment_id) VALUES
@@ -148,9 +144,9 @@ INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (1,2);
 INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (3,3);
 
 
-INSERT INTO examinations (id, description,consultation_id) VALUES (1,'Tiene el vientre muy hinchado',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (2,'Tiene la cara pálida',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la rodilla enrojecida',2);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (1, '2020-03-07 11:00:00', 'Tiene el vientre muy hinchado',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (2, '2020-04-07 11:00:00', 'Tiene la cara pálida',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (3, '2020-05-07 11:00:00', 'Tiene la rodilla enrojecida',2);
 
 INSERT INTO prescriptions (id, start_date,dosage,days,pharmaceutical_warning,patient_warning,medicine_id,patient_id,doctor_id) VALUES
 (1,'2020-03-09 11:00:00',1,7,'Vender solo con receta','Puede provocar efectos secundarios',1,4,1);

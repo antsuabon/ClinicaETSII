@@ -80,8 +80,17 @@ INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
 INSERT INTO authorities VALUES (3,'doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(7, 'doctor4', 'doctor4', true, 'Pepe', 'Loco Malicioso','12345678L','loco@gmail.com','956780025');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (7,'303012545');
+INSERT INTO authorities VALUES (7,'doctor');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
 INSERT INTO authorities VALUES (6,'administrative');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(8, 'admin', 'admin', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO authorities VALUES (8,'admin');
 
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
@@ -144,9 +153,9 @@ INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (1,2);
 INSERT INTO consultation_constants (consultation_id, constant_id) VALUES (3,3);
 
 
-INSERT INTO examinations (id, description,consultation_id) VALUES (1,'Tiene el vientre muy hinchado',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (2,'Tiene la cara pálida',1);
-INSERT INTO examinations (id, description,consultation_id) VALUES (3,'Tiene la rodilla enrojecida',2);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (1, '2020-03-07 11:00:00', 'Tiene el vientre muy hinchado',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (2, '2020-04-07 11:00:00', 'Tiene la cara pálida',1);
+INSERT INTO examinations (id, start_time, description,consultation_id) VALUES (3, '2020-05-07 11:00:00', 'Tiene la rodilla enrojecida',2);
 
 INSERT INTO prescriptions (id, start_date,dosage,days,pharmaceutical_warning,patient_warning,medicine_id,patient_id,doctor_id) VALUES
 (1,'2020-03-09 11:00:00',1,7,'Vender solo con receta','Puede provocar efectos secundarios',1,4,1);
