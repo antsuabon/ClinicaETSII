@@ -91,6 +91,11 @@
 								<span>Citas Pendientes</span>
 							</petclinic:menuItem>
 
+							<petclinic:menuItem active="${name eq 'doctor medicamentos'}" url="/doctor/medicamentos/find" title="encontrar medicamentos">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Buscar medicamentos</span>
+							</petclinic:menuItem>
+
 						</ul></li>
 				</sec:authorize>
 

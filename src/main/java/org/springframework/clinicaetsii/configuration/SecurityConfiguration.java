@@ -1,7 +1,9 @@
 package org.springframework.clinicaetsii.configuration;
 
+import java.time.Duration;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 /*
  * To change this license header, choose License Headers in Project Properties. To change this
@@ -39,8 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/anonymous/**").permitAll().antMatchers("/patient/**")
 				.hasAnyAuthority("patient").antMatchers("/doctor/**").hasAnyAuthority("doctor")
 				.antMatchers("/administrative/**").hasAnyAuthority("administrative")
-				.antMatchers("/admin/**").hasAnyAuthority("admin").anyRequest().denyAll().and()
-				.formLogin()
+				.antMatchers("/admin/**").hasAnyAuthority("admin")
+				// .antMatchers("/users/new").permitAll()
+				// .antMatchers("/owners/**").hasAnyAuthority("owner","admin")
+				// .antMatchers("/vets/**").authenticated()
+				.anyRequest().denyAll().and().formLogin()
 				/* .loginPage("/login") */
 				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración
@@ -68,4 +74,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return encoder;
 	}
 
+	@Bean
+	public RestTemplate restTemplate(final RestTemplateBuilder builder) {
+
+		return builder.setConnectTimeout(Duration.ofMillis(10 * 1000))
+				.setReadTimeout(Duration.ofMillis(10 * 1000)).build();
+	}
 }
