@@ -80,8 +80,17 @@ INSERT INTO doctors (doctor_id, collegiate_code) VALUES (3,'303012445');
 INSERT INTO authorities VALUES (3,'doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(7, 'doctor4', 'doctor4', true, 'Pepe', 'Loco Malicioso','12345678L','loco@gmail.com','956780025');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (7,'303012545');
+INSERT INTO authorities VALUES (7,'doctor');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
 INSERT INTO authorities VALUES (6,'administrative');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(8, 'admin', 'admin', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO authorities VALUES (8,'admin');
 
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (2,1);
 INSERT INTO doctor_services (doctor_id, service_id) VALUES (3,10);
@@ -100,6 +109,11 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
 (5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',2);
 INSERT INTO authorities VALUES (5,'patient');
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(9, 'patient3', 'patient3', true, 'Jaime', 'Rovira Vázquez','12435675S','jaime@gmail.com','956784321');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
+(9,'12345778S','1999-08-28','953334333','C/García Lorca','Utrera',2);
+INSERT INTO authorities VALUES (9,'patient');
 
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
