@@ -48,12 +48,13 @@ public class FindExistingMedicineUITest {
 		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+		this.driver.get("http://localhost:" + this.port);
 	}
 
 	private FindExistingMedicineUITest as(final String username) {
 		this.username = username;
 
-		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
 
 		this.driver.findElement(By.id("username")).click();
