@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,19 +22,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ListMyPatientsConsultsUITest {
 
 	@LocalServerPort
-	private int				port;
+	private int port;
 
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
-	private String			username;
+	private String username;
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver", "C:\\webdrivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
 		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -57,7 +57,7 @@ public class ListMyPatientsConsultsUITest {
 
 		this.driver.findElement(By.xpath("//input[@id='password']")).click();
 		this.driver.findElement(By.xpath("//input[@id='password']")).clear();
-		this.driver.findElement(By.xpath("//input[@id='password']")).sendKeys(this.passwordOf(username));
+		this.driver.findElement(By.xpath("//input[@id='password']")).sendKeys(passwordOf(username));
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
@@ -66,39 +66,55 @@ public class ListMyPatientsConsultsUITest {
 	@Test
 	public void positiveTestIU014() throws Exception {
 
-		this.as("doctor1");
+		as("doctor1");
 
 		this.driver.findElement(By.xpath("//a[contains(text(),'Médico')]")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/doctor/patients')]")).click();
-		Assertions.assertEquals("Lista de Pacientes", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("Sánchez Saavedra, Alejandro", this.driver.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
+		Assertions.assertEquals("Lista de Pacientes",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Sánchez Saavedra, Alejandro", this.driver
+				.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
-		Assertions.assertEquals("Lista de Consultas", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Lista de Consultas",
+				this.driver.findElement(By.xpath("//h2")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver consulta')]")).click();
-		Assertions.assertEquals("Detalles Consulta", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("Diagnósticos", this.driver.findElement(By.xpath("//h3")).getText());
-		Assertions.assertEquals("Exploraciones", this.driver.findElement(By.xpath("//h3[2]")).getText());
-		Assertions.assertEquals("Constantes", this.driver.findElement(By.xpath("//h3[3]")).getText());
-		Assertions.assertEquals("07/03/2020 11:00", this.driver.findElement(By.xpath("//td")).getText());
+		Assertions.assertEquals("Detalles Consulta",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Diagnósticos",
+				this.driver.findElement(By.xpath("//h3")).getText());
+		Assertions.assertEquals("Exploraciones",
+				this.driver.findElement(By.xpath("//h3[2]")).getText());
+		Assertions.assertEquals("Constantes",
+				this.driver.findElement(By.xpath("//h3[3]")).getText());
+		Assertions.assertEquals("07/03/2020 11:00",
+				this.driver.findElement(By.xpath("//td")).getText());
 	}
 
 	@Test
 	public void negativeTestIU001() throws Exception {
 
-		this.as("doctor1");
+		as("doctor1");
 
 		this.driver.findElement(By.xpath("//a[contains(text(),'Médico')]")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/doctor/patients')]")).click();
-		Assertions.assertNotEquals("Lista diferente", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("Laso Escot, María", this.driver.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
+		Assertions.assertNotEquals("Lista diferente",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertNotEquals("Laso Escot, María", this.driver
+				.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
-		Assertions.assertNotEquals("Lista diferente", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertNotEquals("Lista diferente",
+				this.driver.findElement(By.xpath("//h2")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver consulta')]")).click();
-		Assertions.assertNotEquals("Detalles diferentes", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("Incorrecto", this.driver.findElement(By.xpath("//h3")).getText());
-		Assertions.assertNotEquals("Incorrecto", this.driver.findElement(By.xpath("//h3[2]")).getText());
-		Assertions.assertNotEquals("Incorrecto", this.driver.findElement(By.xpath("//h3[3]")).getText());
-		Assertions.assertNotEquals("07/03/2021 11:00", this.driver.findElement(By.xpath("//td")).getText());
+		Assertions.assertNotEquals("Detalles diferentes",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertNotEquals("Incorrecto",
+				this.driver.findElement(By.xpath("//h3")).getText());
+		Assertions.assertNotEquals("Incorrecto",
+				this.driver.findElement(By.xpath("//h3[2]")).getText());
+		Assertions.assertNotEquals("Incorrecto",
+				this.driver.findElement(By.xpath("//h3[3]")).getText());
+		Assertions.assertNotEquals("07/03/2021 11:00",
+				this.driver.findElement(By.xpath("//td")).getText());
 	}
 
 	@AfterEach

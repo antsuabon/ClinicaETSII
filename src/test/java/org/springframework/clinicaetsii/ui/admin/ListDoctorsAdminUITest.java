@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui.admin;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,17 +22,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ListDoctorsAdminUITest {
 
 	@LocalServerPort
-	private int				port;
+	private int port;
 
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver", "C:\\webdrivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
 		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -42,7 +42,7 @@ public class ListDoctorsAdminUITest {
 	@Test
 	public void positiveTestIU019() throws Exception {
 
-		this.driver.get("http://localhost:9090/");
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -55,19 +55,21 @@ public class ListDoctorsAdminUITest {
 		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/doctors')]")).click();
 		Assertions.assertEquals("Médicos", this.driver.findElement(By.xpath("//h2")).getText());
 		try {
-			Assertions.assertEquals("Pablo Rodriguez Garrido", this.driver.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
+			Assertions.assertEquals("Pablo Rodriguez Garrido", this.driver
+					.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
 		this.driver.findElement(By.xpath("//a[contains(text(),'Seleccionar Médico')]")).click();
-		Assertions.assertEquals("Detalles del médico", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Detalles del médico",
+				this.driver.findElement(By.xpath("//h2")).getText());
 		Assertions.assertEquals("doctor1", this.driver.findElement(By.xpath("//b")).getText());
 	}
 
 	@Test
 	public void negativeTestIU019() throws Exception {
 
-		this.driver.get("http://localhost:9090/");
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -78,15 +80,18 @@ public class ListDoctorsAdminUITest {
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Administrador')]")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/doctors')]")).click();
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto",
+				this.driver.findElement(By.xpath("//h2")).getText());
 		try {
-			Assertions.assertNotEquals("Alejandro Sánchez Saavedra", this.driver.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
+			Assertions.assertNotEquals("Alejandro Sánchez Saavedra", this.driver
+					.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
 		this.driver.findElement(By.xpath("//a[contains(text(),'Seleccionar Médico')]")).click();
-		Assertions.assertNotEquals("Detalles incorrectos", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("doctor2", this.driver.findElement(By.xpath("//b")).getText());
+		Assertions.assertNotEquals("Detalles incorrectos",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("doctor1", this.driver.findElement(By.xpath("//b")).getText());
 	}
 
 	@AfterEach

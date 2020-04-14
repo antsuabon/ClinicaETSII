@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,17 +22,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ListMedicinesUITest {
 
 	@LocalServerPort
-	private int				port;
+	private int port;
 
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver", "C:\\webdrivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
 		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -42,19 +42,31 @@ public class ListMedicinesUITest {
 	@Test
 	public void positiveTestIU003() throws Exception {
 
-		this.driver.get("http://localhost:9090/");
+		this.driver.get("http://localhost:/" + this.port);
 		this.driver.findElement(By.xpath("//div/div/div/div")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]")).click();
-		Assertions.assertEquals("Medicamentos", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("Nombre Comercial", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th")).getText());
-		Assertions.assertEquals("Nombre Genérico", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[2]")).getText());
-		Assertions.assertEquals("Indicaciones", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[3]")).getText());
-		Assertions.assertEquals("Contraindicaciones", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[4]")).getText());
-		Assertions.assertEquals("Ibuprofeno", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td")).getText());
-		Assertions.assertEquals("Dalsy", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[2]")).getText());
-		Assertions.assertEquals("Dolor leve y moderado", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[3]")).getText());
-		Assertions.assertEquals("En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]")).getText());
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
+				.click();
+		Assertions.assertEquals("Medicamentos",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Nombre Comercial", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th")).getText());
+		Assertions.assertEquals("Nombre Genérico", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[2]")).getText());
+		Assertions.assertEquals("Indicaciones", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[3]")).getText());
+		Assertions.assertEquals("Contraindicaciones", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[4]")).getText());
+		Assertions.assertEquals("Ibuprofeno", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td")).getText());
+		Assertions.assertEquals("Dalsy", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[2]")).getText());
+		Assertions.assertEquals("Dolor leve y moderado", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[3]")).getText());
+		Assertions.assertEquals(
+				"En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.",
+				this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]"))
+						.getText());
 	}
 
 	@Test
@@ -62,16 +74,26 @@ public class ListMedicinesUITest {
 		this.driver.get("http://localhost:9090/");
 		this.driver.findElement(By.xpath("//div/div/div/div")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]")).click();
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[2]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[3]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[4]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td")).getText());
-		Assertions.assertNotEquals("Ibuprofeno", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[2]")).getText());
-		Assertions.assertNotEquals("Dolor estómago", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[3]")).getText());
-		Assertions.assertNotEquals("Descripción incorrecta", this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]")).getText());
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
+				.click();
+		Assertions.assertNotEquals("Nombre incorrecto",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[2]")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[3]")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[4]")).getText());
+		Assertions.assertNotEquals("Nombre incorrecto", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td")).getText());
+		Assertions.assertNotEquals("Ibuprofeno", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[2]")).getText());
+		Assertions.assertNotEquals("Dolor estómago", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[3]")).getText());
+		Assertions.assertNotEquals("Descripción incorrecta", this.driver
+				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]")).getText());
 	}
 
 	@AfterEach
