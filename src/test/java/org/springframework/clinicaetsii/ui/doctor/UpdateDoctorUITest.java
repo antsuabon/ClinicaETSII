@@ -1,9 +1,9 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -78,14 +78,14 @@ public class UpdateDoctorUITest {
 	}
 
 	private UpdateDoctorUITest thenISeeMyUsernameInTheMenuBar() {
-		assertEquals(this.username.toUpperCase(),
+		Assertions.assertEquals(this.username.toUpperCase(),
 				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
 		return this;
 	}
 
 	private UpdateDoctorUITest thenIEnterMyProfile() {
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).click();
-		assertEquals("Mi perfil".toUpperCase(),
+		Assertions.assertEquals("Mi perfil".toUpperCase(),
 				this.driver
 						.findElement(
 								By.xpath("//div[@id='main-navbar']/ul[2]/li/ul/li[3]/a/span[2]"))
@@ -93,16 +93,16 @@ public class UpdateDoctorUITest {
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/ul/li[3]/a/span[2]"))
 				.click();
 
-		assertEquals("Datos Personales", this.driver.findElement(By.xpath("//h2")).getText());
-		assertEquals("Nombre completo", this.driver.findElement(By.xpath("//th")).getText());
-		assertEquals("DNI", this.driver.findElement(By.xpath("//tr[2]/th")).getText());
-		assertEquals("Correo electrónico",
+		Assertions.assertEquals("Datos Personales", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Nombre completo", this.driver.findElement(By.xpath("//th")).getText());
+		Assertions.assertEquals("DNI", this.driver.findElement(By.xpath("//tr[2]/th")).getText());
+		Assertions.assertEquals("Correo electrónico",
 				this.driver.findElement(By.xpath("//tr[3]/th")).getText());
-		assertEquals("Teléfono", this.driver.findElement(By.xpath("//tr[4]/th")).getText());
-		assertEquals("Datos Médicos", this.driver.findElement(By.xpath("//h2[2]")).getText());
-		assertEquals("Número de colegiado",
+		Assertions.assertEquals("Teléfono", this.driver.findElement(By.xpath("//tr[4]/th")).getText());
+		Assertions.assertEquals("Datos Médicos", this.driver.findElement(By.xpath("//h2[2]")).getText());
+		Assertions.assertEquals("Número de colegiado",
 				this.driver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
-		assertEquals("Cartera de Servicios",
+		Assertions.assertEquals("Cartera de Servicios",
 				this.driver.findElement(By.xpath("//h2[3]")).getText());
 		return this;
 	}
@@ -110,48 +110,48 @@ public class UpdateDoctorUITest {
 	private UpdateDoctorUITest thenIEnterUpdateForm() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Editar perfil')]")).click();
 
-		assertEquals("Médico", this.driver.findElement(By.xpath("//h2")).getText());
-		assertEquals("Datos Personales", this.driver
+		Assertions.assertEquals("Médico", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Datos Personales", this.driver
 				.findElement(By.xpath("//form[@id='update-doctor-form']/div/h3")).getText());
-		assertEquals("Nombre", this.driver
+		Assertions.assertEquals("Nombre", this.driver
 				.findElement(By.xpath("//form[@id='update-doctor-form']/div/div/label")).getText());
-		assertEquals("Apellidos",
+		Assertions.assertEquals("Apellidos",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[2]/label"))
 						.getText());
-		assertEquals("DNI",
+		Assertions.assertEquals("DNI",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[3]/label"))
 						.getText());
-		assertEquals("Correo electrónico",
+		Assertions.assertEquals("Correo electrónico",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[4]/label"))
 						.getText());
-		assertEquals("Teléfono",
+		Assertions.assertEquals("Teléfono",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[5]/label"))
 						.getText());
-		assertEquals("Datos de Usuario", this.driver
+		Assertions.assertEquals("Datos de Usuario", this.driver
 				.findElement(By.xpath("//form[@id='update-doctor-form']/div/h3[2]")).getText());
-		assertEquals("Nombre de usuario",
+		Assertions.assertEquals("Nombre de usuario",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[6]/label"))
 						.getText());
-		assertEquals("Nueva contraseña",
+		Assertions.assertEquals("Nueva contraseña",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[7]/label"))
 						.getText());
-		assertEquals("Nueva contraseña",
+		Assertions.assertEquals("Nueva contraseña",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[8]/label"))
 						.getText());
-		assertEquals("Datos Médicos", this.driver
+		Assertions.assertEquals("Datos Médicos", this.driver
 				.findElement(By.xpath("//form[@id='update-doctor-form']/div/h3[3]")).getText());
-		assertEquals("Número de colegiado",
+		Assertions.assertEquals("Número de colegiado",
 				this.driver
 						.findElement(By.xpath("//form[@id='update-doctor-form']/div/div[9]/label"))
 						.getText());
-		assertEquals("Servicios",
+		Assertions.assertEquals("Servicios",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[10]/div/label"))
@@ -192,73 +192,73 @@ public class UpdateDoctorUITest {
 				.click(this.driver.findElement(By.xpath("//option[@value='11']")))
 				.keyUp(Keys.LEFT_CONTROL).build().perform();
 
-		assertEquals("Actualizar perfil",
+		Assertions.assertEquals("Actualizar perfil",
 				this.driver.findElement(By.xpath("//button[@type='submit']")).getText());
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
 	private UpdateDoctorUITest thenILoggedOut() {
-		assertEquals("Log Out",
+		Assertions.assertEquals("Log Out",
 				this.driver.findElement(By.xpath("//button[@type='submit']")).getText());
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
 	private UpdateDoctorUITest thenISeeMyUpdatedProfile() {
-		assertEquals(this.surname + ", " + this.name,
+		Assertions.assertEquals(this.surname + ", " + this.name,
 				this.driver.findElement(By.xpath("//b")).getText());
-		assertEquals(this.dni, this.driver.findElement(By.xpath("//tr[2]/td")).getText());
-		assertEquals(this.email, this.driver.findElement(By.xpath("//tr[3]/td")).getText());
-		assertEquals(this.phone, this.driver.findElement(By.xpath("//tr[4]/td")).getText());
-		assertEquals(this.collegiateCode,
+		Assertions.assertEquals(this.dni, this.driver.findElement(By.xpath("//tr[2]/td")).getText());
+		Assertions.assertEquals(this.email, this.driver.findElement(By.xpath("//tr[3]/td")).getText());
+		Assertions.assertEquals(this.phone, this.driver.findElement(By.xpath("//tr[4]/td")).getText());
+		Assertions.assertEquals(this.collegiateCode,
 				this.driver.findElement(By.xpath("//table[2]/tbody/tr/td")).getText());
 		return this;
 	}
 
 	private UpdateDoctorUITest thenISeeFormWithErrors() {
-		assertEquals("Este campo es obligatorio",
+		Assertions.assertEquals("Este campo es obligatorio",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div/div/span[2]"))
 						.getText());
-		assertEquals("Este campo es obligatorio",
+		Assertions.assertEquals("Este campo es obligatorio",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[2]/div/span[2]"))
 						.getText());
-		assertEquals("El campo debe seguir el formato: 12345678A",
+		Assertions.assertEquals("El campo debe seguir el formato: 12345678A",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[3]/div/span[2]"))
 						.getText());
-		assertEquals("No se ha introducido un Email adecuado",
+		Assertions.assertEquals("No se ha introducido un Email adecuado",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[4]/div/span[2]"))
 						.getText());
-		assertEquals("No se ha introducido un número de teléfono adecuado",
+		Assertions.assertEquals("No se ha introducido un número de teléfono adecuado",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[5]/div/span[2]"))
 						.getText());
-		assertEquals("Este campo es obligatorio",
+		Assertions.assertEquals("Este campo es obligatorio",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[6]/div/span[2]"))
 						.getText());
-		assertEquals(
+		Assertions.assertEquals(
 				"La contraseña debe tener entre 6 y 20 caracteres y debe contener al menos un caracter en minúscula, un caracter en mayúscula y un dígito",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[7]/div/span[2]"))
 						.getText());
-		assertEquals("La contraseña no coincide",
+		Assertions.assertEquals("La contraseña no coincide",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[8]/div/span[2]"))
 						.getText());
-		assertEquals("Este campo debe de estar formado por 9 dígitos",
+		Assertions.assertEquals("Este campo debe de estar formado por 9 dígitos",
 				this.driver
 						.findElement(
 								By.xpath("//form[@id='update-doctor-form']/div/div[9]/div/span[2]"))
@@ -290,11 +290,11 @@ public class UpdateDoctorUITest {
 		this.collegiateCode = collegiateCode;
 
 
-		as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenILoggedOut();
 
 		if (newUsername.equals(this.username)) {
-			as(newUsername, newPassword).whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+			this.as(newUsername, newPassword).whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 					.thenIEnterMyProfile().thenISeeMyUpdatedProfile();
 		}
 
@@ -323,7 +323,7 @@ public class UpdateDoctorUITest {
 		this.repeatPassword = repeatPassword;
 		this.collegiateCode = collegiateCode;
 
-		as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenISeeFormWithErrors();
 	}
 
@@ -332,7 +332,7 @@ public class UpdateDoctorUITest {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			Assertions.fail(verificationErrorString);
 		}
 	}
 
