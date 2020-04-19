@@ -156,13 +156,7 @@ public class UpdatePatientProfileUITest {
 		    this.driver.findElement(By.id("patient.generalPractitioner")).click();
 		    new Select(this.driver.findElement(By.id("patient.generalPractitioner"))).selectByVisibleText("Laso Escot, María");
 		    this.driver.findElement(By.xpath("//option[@value='2']")).click();
-//		    this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 
-//			Actions actions = new Actions(this.driver);
-//			actions.keyDown(Keys.LEFT_CONTROL)
-//					.click(this.driver.findElement(By.xpath("//option[@value='10']")))
-//					.click(this.driver.findElement(By.xpath("//option[@value='11']")))
-//					.keyUp(Keys.LEFT_CONTROL).build().perform();
 
 			Assertions.assertEquals("Actualizar Paciente",
 					this.driver.findElement(By.xpath("//button[@type='submit']")).getText());
@@ -238,7 +232,7 @@ public class UpdatePatientProfileUITest {
 	  @ParameterizedTest
 		@CsvSource({
 				"Pablo Prueba, Rodriguez Garrido Prueba, 32145678A, pabloPrueba@gmail.com, +(600) 300 200, 02/02/1999, +(600) 300 200, 12345678912, Prueba, C/Prueba"})
-		public void testUpdateDoctorUI(final String name,
+		public void testUpdatePatientUI(final String name,
 				final String surname,
 				final String dni,
 				final String email,
