@@ -102,7 +102,7 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
-(4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
+(4,'12345678911','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
 INSERT INTO authorities VALUES (4,'patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');
