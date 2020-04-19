@@ -1,9 +1,9 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -43,10 +43,10 @@ public class FindExistingMedicineUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
-		this.baseUrl = "https://www.google.com/";
+		 String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
+		  System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		  this.driver = new FirefoxDriver();
+		  this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -62,7 +62,7 @@ public class FindExistingMedicineUITest {
 
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(this.passwordOf(username));
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
@@ -73,13 +73,13 @@ public class FindExistingMedicineUITest {
 	}
 
 	private FindExistingMedicineUITest thenISeeMyUsernameInTheMenuBar() {
-		assertEquals(this.username.toUpperCase(),
+		Assertions.assertEquals(this.username.toUpperCase(),
 				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
 		return this;
 	}
 
 	private FindExistingMedicineUITest thenISeeMyRoleDropdownInTheMenuBar() {
-		assertEquals("Médico".toUpperCase(),
+		Assertions.assertEquals("Médico".toUpperCase(),
 				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a")).getText());
 		return this;
 	}
@@ -95,16 +95,16 @@ public class FindExistingMedicineUITest {
 		this.driver.findElement(By.id("pactivos")).click();
 		this.driver.findElement(By.id("pactivos")).clear();
 		this.driver.findElement(By.id("pactivos")).sendKeys(this.nombrePractivo);
-		assertEquals(this.practivo1,
+		Assertions.assertEquals(this.practivo1,
 				this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[1]")).getText());
-		assertEquals(this.practivo2,
+		Assertions.assertEquals(this.practivo2,
 				this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).getText());
 		this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).click();
 
 		this.driver.findElement(By.id("labtitular")).click();
 		this.driver.findElement(By.id("labtitular")).clear();
 		this.driver.findElement(By.id("labtitular")).sendKeys(this.nombreLabtitular);
-		assertEquals(this.labtitular,
+		Assertions.assertEquals(this.labtitular,
 				this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).getText());
 		this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).click();
 
@@ -113,29 +113,29 @@ public class FindExistingMedicineUITest {
 	}
 
 	private FindExistingMedicineUITest thenISeeSearchResults() {
-		assertEquals("Medicamentos", this.driver.findElement(By.xpath("//h2")).getText());
-		assertEquals(this.medicamento, this.driver
+		Assertions.assertEquals("Medicamentos", this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals(this.medicamento, this.driver
 				.findElement(By.xpath("//table[@id='medicamentosTable']/tbody/tr/td")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver detalles')]")).click();
 		return this;
 	}
 
 	private FindExistingMedicineUITest thenISeeFirstResultDetails() {
-		assertEquals("Medicamento: " + this.medicamento,
+		Assertions.assertEquals("Medicamento: " + this.medicamento,
 				this.driver.findElement(By.xpath("//h2")).getText());
-		assertEquals("Principios activos", this.driver.findElement(By.xpath("//th")).getText());
-		assertEquals("Laboratorio titular",
+		Assertions.assertEquals("Principios activos", this.driver.findElement(By.xpath("//th")).getText());
+		Assertions.assertEquals("Laboratorio titular",
 				this.driver.findElement(By.xpath("//tr[2]/th")).getText());
-		assertEquals("Condiciones de prescripción",
+		Assertions.assertEquals("Condiciones de prescripción",
 				this.driver.findElement(By.xpath("//tr[3]/th")).getText());
-		assertEquals("Forma farmacéutica",
+		Assertions.assertEquals("Forma farmacéutica",
 				this.driver.findElement(By.xpath("//tr[4]/th")).getText());
-		assertEquals("Dosis", this.driver.findElement(By.xpath("//tr[5]/th")).getText());
-		assertEquals("Principios activos", this.driver.findElement(By.xpath("//h3")).getText());
-		assertEquals("Excipientes", this.driver.findElement(By.xpath("//td[2]/h3")).getText());
-		assertEquals("Vias de administración",
+		Assertions.assertEquals("Dosis", this.driver.findElement(By.xpath("//tr[5]/th")).getText());
+		Assertions.assertEquals("Principios activos", this.driver.findElement(By.xpath("//h3")).getText());
+		Assertions.assertEquals("Excipientes", this.driver.findElement(By.xpath("//td[2]/h3")).getText());
+		Assertions.assertEquals("Vias de administración",
 				this.driver.findElement(By.xpath("//table[3]/tbody/tr/td/h3")).getText());
-		assertEquals("Presentaciones",
+		Assertions.assertEquals("Presentaciones",
 				this.driver.findElement(By.xpath("//table[3]/tbody/tr/td[2]/h3")).getText());
 		return this;
 	}
@@ -161,7 +161,7 @@ public class FindExistingMedicineUITest {
 		this.medicamento = medicamento;
 
 
-		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterMedicineSearchForm()
 				.thenISeeSearchResults().thenISeeFirstResultDetails();
 	}
@@ -171,7 +171,7 @@ public class FindExistingMedicineUITest {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			Assertions.fail(verificationErrorString);
 		}
 	}
 
