@@ -3,7 +3,6 @@ package org.springframework.clinicaetsii.web;
 
 import java.util.Collection;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.service.MedicineService;
@@ -30,8 +29,9 @@ public class MedicineController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/patient/medicines/{medicineId}")
-	public String processDetails(@PathVariable(name = "medicineId") final int medicineId, final Map<String, Object> model) {
+	@GetMapping(value = "/anonymous/medicines/{medicineId}")
+	public String processDetails(@PathVariable(name = "medicineId") final int medicineId,
+			final Map<String, Object> model) {
 
 		Medicine med = this.medicineService.findMedicineById(medicineId);
 
@@ -46,7 +46,9 @@ public class MedicineController {
 	}
 
 	@GetMapping(value = "/anonymous/medicines")
-	public String listMedicines(final Medicine medicine, final BindingResult result, final Map<String, Object> model) {
+	public String listMedicines(final Medicine medicine,
+			final BindingResult result,
+			final Map<String, Object> model) {
 
 		Collection<Medicine> results = this.medicineService.findAllMedicines();
 		if (results.isEmpty()) {
