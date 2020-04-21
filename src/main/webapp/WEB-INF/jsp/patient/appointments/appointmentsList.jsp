@@ -19,7 +19,7 @@
 
 	 <c:otherwise>
 
-    <table id="consultationsTable" class="table table-striped">
+    <table id="appointmentsTable1" class="table table-striped">
 
         <thead>
 
@@ -77,7 +77,7 @@
 
 	 <c:otherwise>
 
-    <table id="consultationsTable" class="table table-striped">
+    <table id="appointmentsTable2" class="table table-striped">
 
         <thead>
 
