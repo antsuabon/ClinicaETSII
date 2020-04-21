@@ -5,8 +5,12 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
@@ -20,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NewConsultationUITest {
 
 	@LocalServerPort
@@ -32,13 +37,14 @@ public class NewConsultationUITest {
 
 	private String username;
 
-	private String fullName = "Sánchez Saavedra, Alejandro";
-	private String appointmentStartTime = "14/03/2020 11:00";
-	private String anamnesis = "Anamnesis de prueba";
-	private String remarks = "observaciones de prueba";
-	private String examination = "Exploracion de prueba";
-	private String constantType = "Temperatura";
-	private String value = "37";
+	private String fullName;
+	private String appointmentStartTime;
+	private String consultationStartTime;
+	private String anamnesis;
+	private String remarks;
+	private String examination;
+	private String constantType;
+	private String value;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -125,6 +131,10 @@ public class NewConsultationUITest {
 		assertEquals("Sánchez Saavedra, Alejandro", this.driver
 				.findElement(By.xpath("//form[@id='consultation']/div/div/div")).getText());
 
+		this.driver.findElement(By.id("startTime")).click();
+		this.driver.findElement(By.id("startTime")).clear();
+		this.driver.findElement(By.id("startTime")).sendKeys(this.consultationStartTime);
+
 		this.driver.findElement(By.id("anamnesis")).click();
 		this.driver.findElement(By.id("anamnesis")).clear();
 		this.driver.findElement(By.id("anamnesis")).sendKeys(this.anamnesis);
@@ -134,6 +144,15 @@ public class NewConsultationUITest {
 		this.driver.findElement(By.id("remarks")).sendKeys(this.remarks);
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		return this;
+	}
+
+	private NewConsultationUITest thenISeeNewConsultationFormWithErrors() {
+		assertEquals("La fecha de inicio de la consulta debe ser igual o posterior al de la cita",
+				this.driver
+						.findElement(
+								By.xpath("//form[@id='consultation']/div/div[2]/div/div/span[2]"))
+						.getText());
 		return this;
 	}
 
@@ -225,29 +244,107 @@ public class NewConsultationUITest {
 		return this;
 	}
 
-	private NewConsultationUITest thenICantSeeButtonsAnymore() {
-		assertEquals(this.anamnesis, this.driver.findElement(By.xpath("//tr[3]/td")).getText());
-		assertEquals(this.remarks, this.driver.findElement(By.xpath("//tr[4]/td")).getText());
-
-		// assertThat(this.driver.findElements(By.xpath("//a[contains(text(),'Editar Consulta')]")),
-		// Matchers.hasSize(0));
-		// assertThat(this.driver.findElements(By.xpath("//a[contains(text(),'Añadir
-		// exploración')]")),
-		// Matchers.hasSize(0));
-		// assertThat(this.driver.findElements(By.xpath("//a[contains(text(),'Añadir
-		// Constante')]")),
-		// Matchers.hasSize(0));
+	public NewConsultationUITest thenISeeUpdateConsultationFormWithErrors() {
+		assertEquals("No es posible dar de alta una consulta sin exploraciones", this.driver
+				.findElement(By.xpath("//form[@id='consultation']/div/div[5]/div[2]/div/span[2]"))
+				.getText());
 		return this;
 	}
 
-	@Test
-	public void shouldCreateNewConsultation() throws Exception {
+	private NewConsultationUITest thenICantSeeButtonsAnymore() {
+		assertEquals(this.anamnesis, this.driver.findElement(By.xpath("//tr[3]/td")).getText());
+		assertEquals(this.remarks, this.driver.findElement(By.xpath("//tr[4]/td")).getText());
+		return this;
+	}
+
+	@ParameterizedTest
+	@Order(3)
+	@CsvSource({
+			"'Sánchez Saavedra, Alejandro', 14/03/2020 11:00, 20/04/2020 22:51, Anamnesis de prueba, observaciones de prueba, Exploracion de prueba, Temperatura, 37"})
+	public void shouldCreateNewConsultation(final String fullName,
+			final String appointmentStartTime,
+			final String consultationStartTime,
+			final String anamnesis,
+			final String remarks,
+			final String examination,
+			final String constantType,
+			final String value) throws Exception {
+
+		this.fullName = fullName;
+		this.appointmentStartTime = appointmentStartTime;
+		this.consultationStartTime = consultationStartTime;
+		this.anamnesis = anamnesis;
+		this.remarks = remarks;
+		this.examination = examination;
+		this.constantType = constantType;
+		this.value = value;
+
+
 		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterAppointmentsList()
 				.thenIEnterNewConsultationForm().thenISeeNewConsultationDetails()
 				.thenIEnterNewExamination().thenIEnterNewConstant().thenIUpdateConsultation()
 				.thenICantSeeButtonsAnymore();
 	}
+
+	@ParameterizedTest
+	@Order(1)
+	@CsvSource({
+			"'Sánchez Saavedra, Alejandro', 14/03/2020 11:00, 14/03/2020 10:00, '', '', '', Temperatura, 37"})
+	public void shouldNotCreateNewConsultation(final String fullName,
+			final String appointmentStartTime,
+			final String consultationStartTime,
+			final String anamnesis,
+			final String remarks,
+			final String examination,
+			final String constantType,
+			final String value) throws Exception {
+
+		this.fullName = fullName;
+		this.appointmentStartTime = appointmentStartTime;
+		this.consultationStartTime = consultationStartTime;
+		this.anamnesis = anamnesis;
+		this.remarks = remarks;
+		this.examination = examination;
+		this.constantType = constantType;
+		this.value = value;
+
+
+		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterAppointmentsList()
+				.thenIEnterNewConsultationForm().thenISeeNewConsultationFormWithErrors();
+	}
+
+	@ParameterizedTest
+	@Order(2)
+	@CsvSource({
+			"'Sánchez Saavedra, Alejandro', 14/03/2020 11:00, 20/04/2020 22:51, '', '', '', Temperatura, 37"})
+	public void shouldNotUpdateConsultation(final String fullName,
+			final String appointmentStartTime,
+			final String consultationStartTime,
+			final String anamnesis,
+			final String remarks,
+			final String examination,
+			final String constantType,
+			final String value) throws Exception {
+
+		this.fullName = fullName;
+		this.appointmentStartTime = appointmentStartTime;
+		this.consultationStartTime = consultationStartTime;
+		this.anamnesis = anamnesis;
+		this.remarks = remarks;
+		this.examination = examination;
+		this.constantType = constantType;
+		this.value = value;
+
+
+		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterAppointmentsList()
+				.thenIEnterNewConsultationForm().thenIUpdateConsultation()
+				.thenISeeUpdateConsultationFormWithErrors();
+	}
+
+
 
 	@AfterEach
 	public void tearDown() throws Exception {
