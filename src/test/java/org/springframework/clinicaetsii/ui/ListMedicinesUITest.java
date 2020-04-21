@@ -42,7 +42,7 @@ public class ListMedicinesUITest {
 	@Test
 	public void positiveTestIU003() throws Exception {
 
-		this.driver.get("http://localhost:/" + this.port);
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//div/div/div/div")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
@@ -71,7 +71,7 @@ public class ListMedicinesUITest {
 
 	@Test
 	public void negativeTestIU003() throws Exception {
-		this.driver.get("http://localhost:9090/");
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//div/div/div/div")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
