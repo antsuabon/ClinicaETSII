@@ -2,15 +2,20 @@ package org.springframework.clinicaetsii.web.validator;
 
 import java.time.LocalDate;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.PatientService;
 import org.springframework.clinicaetsii.service.UserService;
+import org.springframework.clinicaetsii.web.patient.PatientPatientController;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 public class PatientValidator implements Validator {
+	Logger log;
 
 	private Pattern dniPattern = Pattern.compile("^[0-9]{8}[A-Z]{1}$");
 	private Pattern phonePattern =
@@ -25,6 +30,7 @@ public class PatientValidator implements Validator {
 	public PatientValidator(final PatientService patientService, final UserService userService) {
 		this.patientService = patientService;
 		this.userService = userService;
+		log = LoggerFactory.getLogger(PatientValidator.class);
 	}
 
 	@Override
@@ -103,10 +109,13 @@ public class PatientValidator implements Validator {
 			errors.rejectValue("nss", "Este campo debe de estar formado por 11 dígitos",
 					"Este campo debe de estar formado por 11 dígitos");
 		}
-		
+	
 		if(patient.getGeneralPractitioner() == null) {
 			errors.rejectValue("generalPractitioner", "Un médico de cabecera debe ser asignado", "Un médico de cabecera debe ser asignado");
-		} else if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId())
+			
+		} 
+		
+		else if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId())
 				.size() >= 5) {
 			errors.rejectValue("generalPractitioner", "too_many_patients",
 					"Este doctor tiene 5 pacientes asignados");

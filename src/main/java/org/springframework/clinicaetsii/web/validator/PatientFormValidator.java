@@ -1,6 +1,6 @@
 package org.springframework.clinicaetsii.web.validator;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Patient;
@@ -108,14 +108,6 @@ public class PatientFormValidator implements Validator {
 		}
 
 
-		if (patient.getNss() == null || StringUtils.isEmpty(patient.getNss())) {
-			errors.rejectValue("patient.nss", "Este campo es obligatorio",
-					"Este campo es obligatorio");
-		} else if (!this.nssPattern.matcher(patient.getNss()).matches()) {
-			errors.rejectValue("patient.nss", "Este campo debe de estar formado por 11 dígitos",
-					"Este campo debe de estar formado por 11 dígitos");
-		}
-
 		if (patientForm.getNewPassword() != null
 				&& !StringUtils.isEmpty(patientForm.getNewPassword())) {
 
@@ -140,9 +132,12 @@ public class PatientFormValidator implements Validator {
 			}
 		}
 
-		if (this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId())
-				.size() >= 5) {
-			errors.rejectValue("generalPractitioner", "too_many_patients",
+		if (patient.getGeneralPractitioner() == null) {
+			errors.rejectValue("patient.generalPractitioner", "Un médico de cabecera debe ser asignado", "Un médico de cabecera debe ser asignado");
+		
+		} else if
+			(this.patientService.findAllPatientsFromDoctor(patient.getGeneralPractitioner().getId()).size() >= 5) {
+			errors.rejectValue("patient.generalPractitioner", "too_many_patients",
 					"Este doctor tiene 5 pacientes asignados");
 		}
 	}

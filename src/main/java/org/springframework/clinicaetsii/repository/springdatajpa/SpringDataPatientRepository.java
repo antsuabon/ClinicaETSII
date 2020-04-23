@@ -29,7 +29,7 @@ import org.springframework.data.repository.query.Param;
 public interface SpringDataPatientRepository extends PatientRepository, CrudRepository<Patient, Integer> {
 
 	@Override
-	@Query("select p from Patient p where exists (select d from Doctor d where d.id =:id)")
+	@Query("select p from Patient p where p.generalPractitioner.id = :id")
 	Collection<Patient> findDoctorPatients(@Param("id") int id);
 
 	@Override

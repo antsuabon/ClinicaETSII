@@ -1,7 +1,7 @@
 
 package org.springframework.clinicaetsii.web.validator;
 
-import java.util.regex.Pattern;
+import java.util.regex.Pattern; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.form.DoctorForm;

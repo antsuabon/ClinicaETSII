@@ -1,8 +1,14 @@
 
 package org.springframework.clinicaetsii.web.patient;
-
+ 
 import java.util.Collection;
+import java.util.Map;
+
 import javax.validation.Valid;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -35,18 +41,18 @@ public class PatientPatientController {
 
 	private final DoctorService doctorService;
 	private final PatientService patientService;
-
+	Logger log;
 
 	@Autowired
 	public PatientPatientController(final PatientService patientService,
 			final DoctorService doctorService) {
 		this.patientService = patientService;
 		this.doctorService = doctorService;
+		log = LoggerFactory.getLogger(PatientPatientController.class);
 	}
 
-	@InitBinder
+	@InitBinder("patientForm")
 	public void initBinder(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
 		dataBinder.setValidator(new PatientFormValidator(this.patientService));
 	}
 
@@ -77,22 +83,23 @@ public class PatientPatientController {
 
 		PatientForm patientForm = new PatientForm();
 		patientForm.setPatient(patientToUpdate);
-
+		
+		
 		model.addAttribute(patientForm);
 		return "/patient/updatePatientForm";
 	}
 
 	@PostMapping(value = "/patient/edit")
-	public String processUpdatePatientForm(@Valid final PatientForm patientForm,
-			final BindingResult result) {
-
+	public String processUpdatePatientForm(@Valid final PatientForm patientForm, final BindingResult result) {
+		
 		Patient patientToUpdate = this.patientService.findCurrentPatient();
 		String oldUsername = String.valueOf(patientToUpdate.getUsername());
-
+		
 		System.out.println(result.getAllErrors());
 
 		if (result.hasErrors()) {
-
+			
+			
 			return "/patient/updatePatientForm";
 
 		} else {
@@ -102,6 +109,7 @@ public class PatientPatientController {
 			if (patientForm.getNewPassword() != null
 					&& !StringUtils.isEmpty(patientForm.getNewPassword())) {
 				patientToUpdate.setPassword(patientForm.getNewPassword());
+				
 			}
 
 			this.patientService.save(patientToUpdate);

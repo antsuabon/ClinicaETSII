@@ -102,18 +102,35 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
-(4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
+(4,'12345678910','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
 INSERT INTO authorities VALUES (4,'patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
-(5,'12345778S','1999-02-22','953334333','C/Laso','Utrera',2);
+(5,'12345678911','1999-02-22','953334333','C/Laso','Utrera',2);
 INSERT INTO authorities VALUES (5,'patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (9, 'patient3', 'patient3', true, 'Jaime', 'Rovira Vázquez','12435675S','jaime@gmail.com','956784321');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
-(9,'12345778S','1999-08-28','953334333','C/García Lorca','Utrera',2);
+(9,'12345678912','1999-08-28','953334333','C/García Lorca','Utrera',2);
 INSERT INTO authorities VALUES (9,'patient');
+
+-- 
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(101, 'patient101', 'patient101', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
+(101,'12345678910','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',2);
+INSERT INTO authorities VALUES (101,'patient');
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(102, 'patient102', 'patient102', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
+(102,'12345678910','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',2);
+INSERT INTO authorities VALUES (102,'patient');
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(103, 'patient103', 'patient103', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
+(103,'12345678910','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',2);
+INSERT INTO authorities VALUES (103,'patient');
 
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
