@@ -29,18 +29,6 @@ public class ListPatinentsAndShowDetailsUITest {
 	  private boolean acceptNextAlert = true;
 	  private StringBuffer verificationErrors = new StringBuffer();
 
-	  private String username;
-	  private String user;
-	  private String name;
-	  private String surname;
-	  private String dni;
-	  private String email;
-	  private String phone;
-	  private String birthDate;
-	  private String phone2;
-	  private String nss;
-	  private String state;
-	  private String address;
 
 	  @BeforeEach
 		public void setUp() throws Exception {
