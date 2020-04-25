@@ -4,24 +4,23 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ChangeGeneralPractitionerUITest {
+public class ListAndShowPrescriptionUITest {
 
 	@LocalServerPort
 	private int	port;
@@ -32,70 +31,53 @@ public class ChangeGeneralPractitionerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		 System.setProperty("webdriver.gecko.driver","C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-//		this.driver = new ChromeDriver();
+//		System.setProperty("webdriver.gecko.driver","C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
+//		 this.driver = new FirefoxDriver();
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 
-	private ChangeGeneralPractitionerUITest as(final String username, final String password) {
-		this.driver.get("http://localhost:" + this.port);
 
+	private ListAndShowPrescriptionUITest as(final String username, final String password) {
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
+		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys(username);
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys(password);
-		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest whenIamLoggedInTheSystem() {
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest thenCheckImLoggedInAsPatient() {
-		Assert.assertEquals("PATIENT1", this.driver
-			.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest thenIChangeGeneralPractitioner() {
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/ul/li[3]/a/span[2]"))
-				.click();
-		this.driver.findElement(By.xpath("//a[contains(text(),'Editar Paciente')]")).click();
-		this.driver.findElement(By.id("patient.generalPractitioner")).click();
-		new Select(this.driver.findElement(By.id("patient.generalPractitioner")))
-				.selectByVisibleText("Laso Escot, María");
-		this.driver.findElement(By.xpath("//option[@value='2']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
-	private ChangeGeneralPractitionerUITest thenICheckTheGeneralPractitionerHasChanged() {
-		Assert.assertEquals("Laso Escot, María",
-			this.driver.findElement(By.xpath("//tr[10]/td")).getText());
+	private ListAndShowPrescriptionUITest whenIamLoggedInTheSystem() {
 		return this;
-
 	}
 
+	private ListAndShowPrescriptionUITest thenIListMyPrescriptions() {
+		this.driver.findElement(By.xpath("//a[contains(text(),'Paciente')]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li[3]/a/span[2]")).click();
+		return this;
+	}
+
+	private ListAndShowPrescriptionUITest thenIShowAPrescription() {
+		this.driver.findElement(By.xpath("//a[contains(text(),'Ibuprofeno - Dalsy')]")).click();
+		Assertions.assertEquals("Dalsy", this.driver.findElement(By.xpath("//tr[2]/td")).getText());
+		return this;
+	}
 
 	@Test
-	public void shouldChangeGeneralPractitioner() throws Exception {
-
-		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenCheckImLoggedInAsPatient()
-		.thenIChangeGeneralPractitioner().thenICheckTheGeneralPractitionerHasChanged();
-
+	public void shouldListAndShow() throws Exception {
+		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenIListMyPrescriptions()
+		.thenIShowAPrescription();
 
 
 	}
-
 
 	@AfterEach
 	public void tearDown() throws Exception {

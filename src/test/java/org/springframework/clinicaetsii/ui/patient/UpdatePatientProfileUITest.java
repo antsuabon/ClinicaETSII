@@ -1,6 +1,7 @@
 package org.springframework.clinicaetsii.ui.patient;
 
 import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -45,11 +46,11 @@ public class UpdatePatientProfileUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		// System.setProperty("webdriver.gecko.driver", "D:\\Descargas\\geckodriver.exe");
-		// this.driver = new FirefoxDriver();
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		 System.setProperty("webdriver.gecko.driver","C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
+		 this.driver = new FirefoxDriver();
+//		System.setProperty("webdriver.chrome.driver",
+//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+//		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -339,7 +340,7 @@ public class UpdatePatientProfileUITest {
 		this.address = address;
 
 
-		as("patient1", "patient1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenISeeMyUpdatedProfile()
 				.thenILoggedOut();
 
@@ -371,7 +372,7 @@ public class UpdatePatientProfileUITest {
 		this.state = state;
 		this.address = address;
 
-		as("patient1", "patient1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenISeeFormWithErrors();
 	}
 
