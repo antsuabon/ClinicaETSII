@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AddPatientIUTest {
+public class AddPatientUITest {
 
 
 	@LocalServerPort
@@ -55,7 +55,7 @@ public class AddPatientIUTest {
 			this.driver.get("http://localhost:" + this.port);
 		}
 
-	  private AddPatientIUTest as(final String username, final String password) {
+	  private AddPatientUITest as(final String username, final String password) {
 		    this.username = username;
 
 			this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
@@ -72,17 +72,17 @@ public class AddPatientIUTest {
 			return this;
 		}
 
-	  private AddPatientIUTest whenIamLoggedInTheSystem() {
+	  private AddPatientUITest whenIamLoggedInTheSystem() {
 			return this;
 		}
 
-	  private AddPatientIUTest thenISeeMyUsernameInTheMenuBar() {
+	  private AddPatientUITest thenISeeMyUsernameInTheMenuBar() {
 			Assertions.assertEquals(this.username.toUpperCase(),
 			this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
 			return this;
 		}
 
-	  private AddPatientIUTest thenIEnterForm() {
+	  private AddPatientUITest thenIEnterForm() {
 
 		  	this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
 //			this.driver.findElement(By.xpath("//a[contains(@href, '/admin/patients/new')]")).click();
@@ -146,7 +146,7 @@ public class AddPatientIUTest {
 
 	  }
 
-	  private AddPatientIUTest thenILoggedOut() {
+	  private AddPatientUITest thenILoggedOut() {
 
 		  	this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
 		  	Assertions.assertEquals(this.username.toUpperCase(), this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
@@ -159,7 +159,7 @@ public class AddPatientIUTest {
 			return this;
 		}
 
-	  private AddPatientIUTest thenISeeInPaientListNewPatient() {
+	  private AddPatientUITest thenISeeInPaientListNewPatient() {
 
 		  	this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
 		  	this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li[2]/a/span[2]")).click();
@@ -171,7 +171,7 @@ public class AddPatientIUTest {
 		    return this;
 		}
 
-	  private AddPatientIUTest thenISeePaientDetails() {
+	  private AddPatientUITest thenISeePaientDetails() {
 
 		  Assertions.assertEquals("Nombre de usuario", this.driver.findElement(By.xpath("//th")).getText());
 		  Assertions.assertEquals("Nombre completo", this.driver.findElement(By.xpath("//tr[2]/th")).getText());
@@ -203,7 +203,7 @@ public class AddPatientIUTest {
 		}
 
 
-	  private AddPatientIUTest thenISeeFormWithErrors() {
+	  private AddPatientUITest thenISeeFormWithErrors() {
 
 		    Assertions.assertEquals("Este campo es obligatorio", this.driver.findElement(By.xpath("//form[@id='add-patient-form']/div/div/div/span[2]")).getText());
 		    Assertions.assertEquals("Este campo es obligatorio", this.driver.findElement(By.xpath("//form[@id='add-patient-form']/div/div[2]/div/span[2]")).getText());
