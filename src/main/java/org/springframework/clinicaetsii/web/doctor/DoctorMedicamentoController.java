@@ -42,7 +42,11 @@ public class DoctorMedicamentoController {
 		ConsultaMedicamento consultaMedicamento = this.cimaService.findMedicamentosByAttributes(
 				medicamento.getNombre(), medicamento.getPactivos(), medicamento.getLabtitular());
 
-		model.put("consultaMedicamento", consultaMedicamento);
+		if (consultaMedicamento == null || consultaMedicamento.getResultados().isEmpty()) {
+			model.put("emptyList", "true");
+		} else {
+			model.put("consultaMedicamento", consultaMedicamento);
+		}
 
 		return "doctor/medicamentos/medicamentosList";
 	}

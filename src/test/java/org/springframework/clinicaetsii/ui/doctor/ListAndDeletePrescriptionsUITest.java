@@ -39,62 +39,114 @@ public class ListAndDeletePrescriptionsUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-	@Test
-	public void positiveTestIU017() throws Exception {
+	private String username;
+
+	private ListAndDeletePrescriptionsUITest as(final String username) {
+
+		this.username = username;
 
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
+
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("doctor1");
+		this.driver.findElement(By.id("username")).sendKeys(username);
+
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("doctor1");
+		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest whenIAmLoggedIntoTheSystem() {
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenISeeMyUsernameInTheMenuBar() {
+		Assertions.assertEquals(this.username.toUpperCase(),
+				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenISeeMyRoleDropdownInTheMenuBar() {
+		Assertions.assertEquals("Médico".toUpperCase(),
+				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a")).getText());
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenIEnterPatientsList() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Médico')]")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li/a/span[2]"))
 				.click();
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenIEnterPrescriptionsList() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Prescripciones del paciente')]"))
 				.click();
+
 		Assertions.assertEquals("Lista de Prescripciones",
 				this.driver.findElement(By.xpath("//h2")).getText());
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenICanSeePrescriptionsList() {
+
 		Assertions.assertEquals("20/02/2020 13:00", this.driver
 				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
+
 		Assertions.assertEquals("Detalles de la prescripción",
 				this.driver.findElement(By.xpath("//h2")).getText());
+
+
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenIDeletePescription() {
 		this.driver.findElement(By.xpath("//h4")).click();
 		Assertions.assertEquals("09/03/2020 11:00", this.driver
 				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+		return this;
+	}
+
+	private ListAndDeletePrescriptionsUITest thenICantSeePrescriptionsList() {
+
+		Assertions.assertNotEquals("09/03/2020 11:00", this.driver
+				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+
+		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
+
+		Assertions.assertNotEquals("Detalles diferentes",
+				this.driver.findElement(By.xpath("//h2")).getText());
+
+		this.driver.findElement(By.xpath("//h4")).click();
+
+		Assertions.assertNotEquals("20/02/2020 13:00", this.driver
+				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+		return this;
 	}
 
 	@Test
-	public void negativeTestIU017() throws Exception {
+	public void shouldListPrescriptions() throws Exception {
 
-		this.driver.get("http://localhost:" + this.port);
-		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
-		this.driver.findElement(By.id("username")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("doctor1");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("doctor1");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//a[contains(text(),'Médico')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li/a/span[2]"))
-				.click();
-		this.driver.findElement(By.xpath("//a[contains(text(),'Prescripciones del paciente')]"))
-				.click();
-		Assertions.assertNotEquals("Lista diferente",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("09/03/2020 11:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
-		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
-		Assertions.assertNotEquals("Detalles diferentes",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		this.driver.findElement(By.xpath("//h4")).click();
-		Assertions.assertNotEquals("20/02/2020 13:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+		as("doctor1").whenIAmLoggedIntoTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterPatientsList()
+				.thenIEnterPrescriptionsList().thenICanSeePrescriptionsList()
+				.thenIDeletePescription();
+
+	}
+
+	@Test
+	public void shouldNotListPrescriptions() throws Exception {
+
+		as("doctor1").whenIAmLoggedIntoTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterPatientsList()
+				.thenIEnterPrescriptionsList().thenICantSeePrescriptionsList();
+
 	}
 
 	@AfterEach
@@ -104,6 +156,10 @@ public class ListAndDeletePrescriptionsUITest {
 		if (!"".equals(verificationErrorString)) {
 			Assertions.fail(verificationErrorString);
 		}
+	}
+
+	private String passwordOf(final String username) {
+		return username;
 	}
 
 	private boolean isElementPresent(final By by) {

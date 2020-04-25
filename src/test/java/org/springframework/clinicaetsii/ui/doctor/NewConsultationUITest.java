@@ -20,6 +20,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -261,6 +263,7 @@ public class NewConsultationUITest {
 	@Order(3)
 	@CsvSource({
 			"'Sánchez Saavedra, Alejandro', 14/03/2020 11:00, 20/04/2020 22:51, Anamnesis de prueba, observaciones de prueba, Exploracion de prueba, Temperatura, 37"})
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	public void shouldCreateNewConsultation(final String fullName,
 			final String appointmentStartTime,
 			final String consultationStartTime,
@@ -319,6 +322,7 @@ public class NewConsultationUITest {
 	@Order(2)
 	@CsvSource({
 			"'Sánchez Saavedra, Alejandro', 14/03/2020 11:00, 20/04/2020 22:51, '', '', '', Temperatura, 37"})
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	public void shouldNotUpdateConsultation(final String fullName,
 			final String appointmentStartTime,
 			final String consultationStartTime,

@@ -39,13 +39,24 @@ public class ListDoctorsUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-	@Test
-	public void positiveTestIU001() throws Exception {
-
+	private ListDoctorsUITest asAnonymous() {
 		this.driver.get("http://localhost:" + this.port);
+
+		return this;
+	}
+
+	private ListDoctorsUITest thenISeeMyUserRole() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
+		return this;
+	}
+
+	private ListDoctorsUITest thenIEnterDoctorList() {
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li/a/span[2]"))
 				.click();
+		return this;
+	}
+
+	private ListDoctorsUITest thenISeeDoctorList() {
 		Assertions.assertEquals("Nombre Completo", this.driver
 				.findElement(By.xpath("//table[@id='doctorsTable']/thead/tr/th")).getText());
 		Assertions.assertEquals("Servicios", this.driver
@@ -53,23 +64,12 @@ public class ListDoctorsUITest {
 		Assertions.assertEquals("Médicos", this.driver.findElement(By.xpath("//h2")).getText());
 		Assertions.assertEquals("Salado Asenjo, José", this.driver
 				.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
+		return this;
 	}
 
 	@Test
-	public void negativeTestIU001() throws Exception {
-
-		this.driver.get("http://localhost:" + this.port);
-		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li/a/span[2]"))
-				.click();
-		Assertions.assertNotEquals("Nombre Incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='doctorsTable']/thead/tr/th")).getText());
-		Assertions.assertNotEquals("Nombre Incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='doctorsTable']/thead/tr/th[2]")).getText());
-		Assertions.assertNotEquals("Nombre Incorrecto",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("Laso Escot, María", this.driver
-				.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr/td")).getText());
+	public void shouldListDoctors() throws Exception {
+		asAnonymous().thenISeeMyUserRole().thenIEnterDoctorList().thenISeeDoctorList();
 	}
 
 	@AfterEach

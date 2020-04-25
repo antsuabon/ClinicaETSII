@@ -1,30 +1,30 @@
 package org.springframework.clinicaetsii.ui.patient;
 
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ChangeGeneralPractitionerUITest {
+public class PatientCreateAppointmentUITest {
 
 	@LocalServerPort
-	private int	port;
+	private int port;
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -32,77 +32,69 @@ public class ChangeGeneralPractitionerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		 System.setProperty("webdriver.gecko.driver","C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-//		this.driver = new ChromeDriver();
+		// String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
+		// System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		// this.driver = new FirefoxDriver();
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-
-	private ChangeGeneralPractitionerUITest as(final String username, final String password) {
-		this.driver.get("http://localhost:" + this.port);
-
+	private PatientCreateAppointmentUITest as(final String username, final String password) {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
+		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys(username);
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys(password);
-		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest whenIamLoggedInTheSystem() {
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest thenCheckImLoggedInAsPatient() {
-		Assert.assertEquals("PATIENT1", this.driver
-			.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-		return this;
-	}
-
-	private ChangeGeneralPractitionerUITest thenIChangeGeneralPractitioner() {
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/ul/li[3]/a/span[2]"))
-				.click();
-		this.driver.findElement(By.xpath("//a[contains(text(),'Editar Paciente')]")).click();
-		this.driver.findElement(By.id("patient.generalPractitioner")).click();
-		new Select(this.driver.findElement(By.id("patient.generalPractitioner")))
-				.selectByVisibleText("Laso Escot, María");
-		this.driver.findElement(By.xpath("//option[@value='2']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+
 		return this;
 	}
 
-	private ChangeGeneralPractitionerUITest thenICheckTheGeneralPractitionerHasChanged() {
-		Assert.assertEquals("Laso Escot, María",
-			this.driver.findElement(By.xpath("//tr[10]/td")).getText());
-		return this;
+	private PatientCreateAppointmentUITest thenICreateAnAppointment() {
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a/span[2]")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Paciente')]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li[2]/a/span[2]"))
+				.click();
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 
+		return this;
 	}
 
+	private PatientCreateAppointmentUITest thenICheckTheAppointmentCreated(
+			final String fechaInicio) {
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Paciente')]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li/a")).click();
+		List<WebElement> citasCreadas =
+				this.driver.findElements(By.xpath("//table[@id='appointmentsTable1']/tbody/tr/td"));
+		String fechaCreada = citasCreadas.get(citasCreadas.size() - 3).getText();
+		Assertions.assertEquals(fechaInicio, fechaCreada);
+
+		return this;
+	}
 
 	@Test
-	public void shouldChangeGeneralPractitioner() throws Exception {
-
-		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenCheckImLoggedInAsPatient()
-		.thenIChangeGeneralPractitioner().thenICheckTheGeneralPractitionerHasChanged();
-
-
-
+	public void testCreateAppointmentUI() throws Exception {
+		this.driver.get("http://localhost:" + this.port);
+		as("patient1", "patient1").thenICreateAnAppointment();
+		String fechaInicio = this.driver
+				.findElement(
+						By.xpath("//table[@id='appointmentsTable']/tbody/tr/td[@id='fechaInicio']"))
+				.getText();
+		thenICheckTheAppointmentCreated(fechaInicio);
 	}
-
 
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			Assert.fail(verificationErrorString);
+			Assertions.fail(verificationErrorString);
 		}
 	}
 
@@ -139,3 +131,4 @@ public class ChangeGeneralPractitionerUITest {
 		}
 	}
 }
+
