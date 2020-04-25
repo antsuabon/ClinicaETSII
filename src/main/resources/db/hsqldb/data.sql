@@ -114,7 +114,11 @@ INSERT INTO users (id, username, password, enabled, name, surname, dni, email, p
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
 (9,'12345778S','1999-08-28','953334333','C/García Lorca','Utrera',2);
 INSERT INTO authorities VALUES (9,'patient');
-
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(10, 'patient4', 'patient4', true, 'Lucas', 'Perez Lopez','12435655S','lucas@gmail.com','956784321');
+INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
+(10,'12345678912','1999-08-28','953334333','C/García Lorca','Utrera',2);
+INSERT INTO authorities VALUES (10,'patient');
 
 INSERT INTO appointments (id, priority, start_time, end_time, patient_id) VALUES
 (1, false, '2020-03-07 11:00:00', '2020-03-07 11:07:00', 4);
