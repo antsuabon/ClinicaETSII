@@ -13,7 +13,7 @@
 
 	<c:choose>
 
-		<c:when test="${emptylist=='true'}">
+		<c:when test="${emptyList=='true'}">
 
 			<p>No se han encontrado resultados</p>
 

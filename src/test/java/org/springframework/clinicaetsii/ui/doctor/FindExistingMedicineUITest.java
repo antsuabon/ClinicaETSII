@@ -1,6 +1,7 @@
 
 package org.springframework.clinicaetsii.ui.doctor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -96,29 +97,40 @@ public class FindExistingMedicineUITest {
 		this.driver.findElement(By.id("pactivos")).click();
 		this.driver.findElement(By.id("pactivos")).clear();
 		this.driver.findElement(By.id("pactivos")).sendKeys(this.nombrePractivo);
-		Assertions.assertEquals(this.practivo1,
-				this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[1]")).getText());
-		Assertions.assertEquals(this.practivo2,
-				this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).getText());
-		this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).click();
+		if (!this.nombreMedicamento.equals("no existente")) {
+			Assertions.assertEquals(this.practivo1,
+					this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[1]")).getText());
+			Assertions.assertEquals(this.practivo2,
+					this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).getText());
+			this.driver.findElement(By.xpath("//ul[@id='ui-id-1']/li[2]")).click();
+		}
 
 		this.driver.findElement(By.id("labtitular")).click();
 		this.driver.findElement(By.id("labtitular")).clear();
 		this.driver.findElement(By.id("labtitular")).sendKeys(this.nombreLabtitular);
-		Assertions.assertEquals(this.labtitular,
-				this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).getText());
-		this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).click();
+		if (!this.nombreMedicamento.equals("no existente")) {
+			Assertions.assertEquals(this.labtitular,
+					this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).getText());
+			this.driver.findElement(By.xpath("//ul[@id='ui-id-2']/li[1]")).click();
+		}
+
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
 	private FindExistingMedicineUITest thenISeeSearchResults() {
-		Assertions.assertEquals("Medicamentos",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals(this.medicamento, this.driver
+		assertEquals("Medicamentos", this.driver.findElement(By.xpath("//h2")).getText());
+		assertEquals(this.medicamento, this.driver
 				.findElement(By.xpath("//table[@id='medicamentosTable']/tbody/tr/td")).getText());
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver detalles')]")).click();
+		return this;
+	}
+
+	private FindExistingMedicineUITest thenICantSeeSearchResults() {
+		assertEquals("Medicamentos", this.driver.findElement(By.xpath("//h2")).getText());
+		assertEquals("No se han encontrado resultados",
+				this.driver.findElement(By.xpath("//body/div/div/p")).getText());
 		return this;
 	}
 
@@ -149,7 +161,7 @@ public class FindExistingMedicineUITest {
 	@CsvSource({
 			"ibuprofeno, ibuprofeno, DEXIBUPROFENO, IBUPROFENO, cinfa, 'LABORATORIOS CINFA, S.A.', CINFADOL IBUPROFENO 50 mg/g GEL",
 			"aspirina, acetilsalici, ACETILSALICILATO LISINA, ACETILSALICILICO ACIDO, bayer hispania, 'BAYER HISPANIA, S.L.', ASPIRINA C 400 mg/240 mg COMPRIMIDOS EFERVESCENTES"})
-	public void testFindExistingMedicineUI(final String nombreMedicamento,
+	public void shouldFindExistingMedicine(final String nombreMedicamento,
 			final String nombrePractivo,
 			final String practivo1,
 			final String practivo2,
@@ -168,6 +180,29 @@ public class FindExistingMedicineUITest {
 		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterMedicineSearchForm()
 				.thenISeeSearchResults().thenISeeFirstResultDetails();
+	}
+
+	@ParameterizedTest
+	@CsvSource({"no existente, '', '', '', '', '', ''"})
+	public void shouldNotFindNotExistingMedicine(final String nombreMedicamento,
+			final String nombrePractivo,
+			final String practivo1,
+			final String practivo2,
+			final String nombreLabtitular,
+			final String labtitular,
+			final String medicamento) throws Exception {
+
+		this.nombreMedicamento = nombreMedicamento;
+		this.nombrePractivo = nombrePractivo;
+		this.practivo1 = practivo1;
+		this.practivo2 = practivo2;
+		this.nombreLabtitular = nombreLabtitular;
+		this.labtitular = labtitular;
+		this.medicamento = medicamento;
+
+		as("doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterMedicineSearchForm()
+				.thenICantSeeSearchResults();
 	}
 
 	@AfterEach

@@ -2,33 +2,42 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
 import java.util.concurrent.TimeUnit;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ListAndDeletePrescriptionsUITest {
+public class CreatePrescriptionUITest {
 
 	@LocalServerPort
 	private int port;
-
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
 	private StringBuffer verificationErrors = new StringBuffer();
 
+	private String username;
+
+	private String dosage;
+	private String days;
+	private String pharmaceuticalWarning;
+	private String patientWarning;
+	private String medicine;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -39,13 +48,11 @@ public class ListAndDeletePrescriptionsUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-	private String username;
-
-	private ListAndDeletePrescriptionsUITest as(final String username) {
-
+	private CreatePrescriptionUITest as(final String username, final String password) {
 		this.username = username;
 
 		this.driver.get("http://localhost:" + this.port);
+
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
 
 		this.driver.findElement(By.id("username")).click();
@@ -54,99 +61,81 @@ public class ListAndDeletePrescriptionsUITest {
 
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(password);
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest whenIAmLoggedIntoTheSystem() {
+	private CreatePrescriptionUITest whenIamLoggedInTheSystem() {
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest thenISeeMyUsernameInTheMenuBar() {
+	private CreatePrescriptionUITest thenISeeMyUsernameInTheMenuBar() {
 		Assertions.assertEquals(this.username.toUpperCase(),
 				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest thenISeeMyRoleDropdownInTheMenuBar() {
-		Assertions.assertEquals("Médico".toUpperCase(),
-				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a")).getText());
-		return this;
-	}
-
-	private ListAndDeletePrescriptionsUITest thenIEnterPatientsList() {
+	private CreatePrescriptionUITest thenIEnterPatientList() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Médico')]")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li/a/span[2]"))
 				.click();
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest thenIEnterPrescriptionsList() {
+	private CreatePrescriptionUITest thenIEnterPrescriptionList() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Prescripciones del paciente')]"))
 				.click();
-
-		Assertions.assertEquals("Lista de Prescripciones",
-				this.driver.findElement(By.xpath("//h2")).getText());
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest thenICanSeePrescriptionsList() {
+	private CreatePrescriptionUITest thenIEnterPrescriptionForm() {
+		this.driver.findElement(By.xpath("//a[contains(text(),'Añadir prescripción')]")).click();
 
-		Assertions.assertEquals("20/02/2020 13:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
+		this.driver.findElement(By.id("dosage")).click();
+		this.driver.findElement(By.id("dosage")).clear();
+		this.driver.findElement(By.id("dosage")).sendKeys(this.dosage);
 
-		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
+		this.driver.findElement(By.id("days")).click();
+		this.driver.findElement(By.id("days")).clear();
+		this.driver.findElement(By.id("days")).sendKeys(this.days);
 
-		Assertions.assertEquals("Detalles de la prescripción",
-				this.driver.findElement(By.xpath("//h2")).getText());
+		this.driver.findElement(By.id("pharmaceuticalWarning")).click();
+		this.driver.findElement(By.id("pharmaceuticalWarning")).clear();
+		this.driver.findElement(By.id("pharmaceuticalWarning"))
+				.sendKeys(this.pharmaceuticalWarning);
 
+		this.driver.findElement(By.id("patientWarning")).click();
+		this.driver.findElement(By.id("patientWarning")).clear();
+		this.driver.findElement(By.id("patientWarning")).sendKeys(this.patientWarning);
 
+		this.driver.findElement(By.id("medicine")).click();
+		new Select(this.driver.findElement(By.id("medicine"))).selectByVisibleText(this.medicine);
+		this.driver.findElement(By.xpath("//option[@value='2']")).click();
+
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+		this.driver.findElement(By.xpath("(//a[contains(text(),'Ver prescripción')])[3]")).click();
 		return this;
 	}
 
-	private ListAndDeletePrescriptionsUITest thenIDeletePescription() {
-		this.driver.findElement(By.xpath("//h4")).click();
-		Assertions.assertEquals("09/03/2020 11:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
-		return this;
-	}
+	@ParameterizedTest
+	@CsvSource({"3, 3, Advertencia 1, Advertencia 2, Paracel (Paracetamol)"})
+	public void shouldCreatePrescription(final String dosage,
+			final String days,
+			final String pharmaceuticalWarning,
+			final String patientWarning,
+			final String medicine) throws Exception {
 
-	private ListAndDeletePrescriptionsUITest thenICantSeePrescriptionsList() {
+		this.dosage = dosage;
+		this.days = days;
+		this.pharmaceuticalWarning = pharmaceuticalWarning;
+		this.patientWarning = patientWarning;
+		this.medicine = medicine;
 
-		Assertions.assertNotEquals("09/03/2020 11:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
-
-		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
-
-		Assertions.assertNotEquals("Detalles diferentes",
-				this.driver.findElement(By.xpath("//h2")).getText());
-
-		this.driver.findElement(By.xpath("//h4")).click();
-
-		Assertions.assertNotEquals("20/02/2020 13:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
-		return this;
-	}
-
-	@Test
-	public void shouldListPrescriptions() throws Exception {
-
-		as("doctor1").whenIAmLoggedIntoTheSystem().thenISeeMyUsernameInTheMenuBar()
-				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterPatientsList()
-				.thenIEnterPrescriptionsList().thenICanSeePrescriptionsList()
-				.thenIDeletePescription();
-
-	}
-
-	@Test
-	public void shouldNotListPrescriptions() throws Exception {
-
-		as("doctor1").whenIAmLoggedIntoTheSystem().thenISeeMyUsernameInTheMenuBar()
-				.thenISeeMyRoleDropdownInTheMenuBar().thenIEnterPatientsList()
-				.thenIEnterPrescriptionsList().thenICantSeePrescriptionsList();
-
+		as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenIEnterPatientList().thenIEnterPrescriptionList().thenIEnterPrescriptionForm();
 	}
 
 	@AfterEach
@@ -154,12 +143,8 @@ public class ListAndDeletePrescriptionsUITest {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			Assertions.fail(verificationErrorString);
+			Assert.fail(verificationErrorString);
 		}
-	}
-
-	private String passwordOf(final String username) {
-		return username;
 	}
 
 	private boolean isElementPresent(final By by) {

@@ -15,52 +15,52 @@
 -- INSERT INTO vets VALUES (5, 'Henry', 'Stevens');
 -- INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins');
 --
-INSERT INTO services VALUES (1, 'Consulta Niños');
-INSERT INTO services VALUES (2, 'Consulta Adultos');
-INSERT INTO services VALUES (3, 'Vacunaciones infantiles');
-INSERT INTO services VALUES (4, 'Vacunación de la Gripe');
-INSERT INTO services VALUES (5, 'Vacunación del Tétanos');
-INSERT INTO services VALUES (6, 'Vacunación de la Hepatitis «B»');
-INSERT INTO services VALUES (7, 'Prevención de Enfermedades Cardiovasculares');
-INSERT INTO services VALUES (8, 'Atención a Pacientes Crónicos: Hipertensión Arterial');
-INSERT INTO services VALUES (9, 'Atención a Pacientes Crónicos: Diabetes');
-INSERT INTO services VALUES (10, 'Atención a Pacientes Crónicos: EPOC');
-INSERT INTO services VALUES (11, 'Atención a Pacientes Crónicos: Obesidad');
-INSERT INTO services VALUES (12, 'Atención a Pacientes Crónicos: Hipercolesterolemia');
-INSERT INTO services VALUES (13, 'Diagnóstico Precoz del Cáncer de Cérvix');
-INSERT INTO services VALUES (14, 'Atención al Consumidor Excesivo de Alcohol');
-INSERT INTO services VALUES (15, 'Atención a Pacientes con VIH-SIDA');
-INSERT INTO services VALUES (16, 'Cirugía Menor');
-INSERT INTO services VALUES (17, 'Retinografía');
-INSERT INTO services VALUES (18, 'Infintración');
-INSERT INTO services VALUES (19, 'Teledermatología');
+INSERT INTO services (id, name) VALUES (1, 'Consulta Niños');
+INSERT INTO services (id, name) VALUES (2, 'Consulta Adultos');
+INSERT INTO services (id, name) VALUES (3, 'Vacunaciones infantiles');
+INSERT INTO services (id, name) VALUES (4, 'Vacunación de la Gripe');
+INSERT INTO services (id, name) VALUES (5, 'Vacunación del Tétanos');
+INSERT INTO services (id, name) VALUES (6, 'Vacunación de la Hepatitis «B»');
+INSERT INTO services (id, name) VALUES (7, 'Prevención de Enfermedades Cardiovasculares');
+INSERT INTO services (id, name) VALUES (8, 'Atención a Pacientes Crónicos: Hipertensión Arterial');
+INSERT INTO services (id, name) VALUES (9, 'Atención a Pacientes Crónicos: Diabetes');
+INSERT INTO services (id, name) VALUES (10, 'Atención a Pacientes Crónicos: EPOC');
+INSERT INTO services (id, name) VALUES (11, 'Atención a Pacientes Crónicos: Obesidad');
+INSERT INTO services (id, name) VALUES (12, 'Atención a Pacientes Crónicos: Hipercolesterolemia');
+INSERT INTO services (id, name) VALUES (13, 'Diagnóstico Precoz del Cáncer de Cérvix');
+INSERT INTO services (id, name) VALUES (14, 'Atención al Consumidor Excesivo de Alcohol');
+INSERT INTO services (id, name) VALUES (15, 'Atención a Pacientes con VIH-SIDA');
+INSERT INTO services (id, name) VALUES (16, 'Cirugía Menor');
+INSERT INTO services (id, name) VALUES (17, 'Retinografía');
+INSERT INTO services (id, name) VALUES (18, 'Infintración');
+INSERT INTO services (id, name) VALUES (19, 'Teledermatología');
 
-INSERT INTO constant_types VALUES (1, 'Peso');
-INSERT INTO constant_types VALUES (2, 'IMC');
-INSERT INTO constant_types VALUES (3, 'PerCef');
-INSERT INTO constant_types VALUES (4, 'PerAbd');
-INSERT INTO constant_types VALUES (5, 'Temperatura');
-INSERT INTO constant_types VALUES (6, 'FrecCard');
-INSERT INTO constant_types VALUES (7, 'FrecResp');
-INSERT INTO constant_types VALUES (8, 'TAS');
-INSERT INTO constant_types VALUES (9, 'TAD');
-INSERT INTO constant_types VALUES (10, 'Diuresis');
-INSERT INTO constant_types VALUES (11, 'Pulsioximetría');
-INSERT INTO constant_types VALUES (12, 'PVC');
-INSERT INTO constant_types VALUES (13, 'SNG');
-INSERT INTO constant_types VALUES (14, 'Drenajes');
-INSERT INTO constant_types VALUES (15, 'GI Basal');
-INSERT INTO constant_types VALUES (16, 'SA02');
-INSERT INTO constant_types VALUES (17, 'GCS');
-INSERT INTO constant_types VALUES (18, 'EVA');
-INSERT INTO constant_types VALUES (19, 'HbA1c');
+INSERT INTO constant_types (id, name) VALUES (1, 'Peso');
+INSERT INTO constant_types (id, name) VALUES (2, 'IMC');
+INSERT INTO constant_types (id, name) VALUES (3, 'PerCef');
+INSERT INTO constant_types (id, name) VALUES (4, 'PerAbd');
+INSERT INTO constant_types (id, name) VALUES (5, 'Temperatura');
+INSERT INTO constant_types (id, name) VALUES (6, 'FrecCard');
+INSERT INTO constant_types (id, name) VALUES (7, 'FrecResp');
+INSERT INTO constant_types (id, name) VALUES (8, 'TAS');
+INSERT INTO constant_types (id, name) VALUES (9, 'TAD');
+INSERT INTO constant_types (id, name) VALUES (10, 'Diuresis');
+INSERT INTO constant_types (id, name) VALUES (11, 'Pulsioximetría');
+INSERT INTO constant_types (id, name) VALUES (12, 'PVC');
+INSERT INTO constant_types (id, name) VALUES (13, 'SNG');
+INSERT INTO constant_types (id, name) VALUES (14, 'Drenajes');
+INSERT INTO constant_types (id, name) VALUES (15, 'GI Basal');
+INSERT INTO constant_types (id, name) VALUES (16, 'SA02');
+INSERT INTO constant_types (id, name) VALUES (17, 'GCS');
+INSERT INTO constant_types (id, name) VALUES (18, 'EVA');
+INSERT INTO constant_types (id, name) VALUES (19, 'HbA1c');
 
-INSERT INTO discharge_types VALUES (1, 'Domicilio');
-INSERT INTO discharge_types VALUES (2, 'Hospital');
-INSERT INTO discharge_types VALUES (3, 'Hospital (Acompañado de personal sanitario)');
-INSERT INTO discharge_types VALUES (4, 'Revisión');
-INSERT INTO discharge_types VALUES (5, 'Especialidad');
-INSERT INTO discharge_types VALUES (6, 'Fuga');
+INSERT INTO discharge_types (id, name) VALUES (1, 'Domicilio');
+INSERT INTO discharge_types (id, name) VALUES (2, 'Hospital');
+INSERT INTO discharge_types (id, name) VALUES (3, 'Hospital (Acompañado de personal sanitario)');
+INSERT INTO discharge_types (id, name) VALUES (4, 'Revisión');
+INSERT INTO discharge_types (id, name) VALUES (5, 'Especialidad');
+INSERT INTO discharge_types (id, name) VALUES (6, 'Fuga');
 
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
@@ -102,7 +102,7 @@ INSERT INTO doctor_services (doctor_id, service_id) VALUES (1,2);
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (4, 'patient1', 'patient1', true, 'Alejandro', 'Sánchez Saavedra','12345678N','alejandro@gmail.com','956784225');
 INSERT INTO patients (patient_id, nss, birth_date, phone2, address, state, general_practitioner_id) VALUES
-(4,'12345678S','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
+(4,'12345678911','1982-02-22','953333333','C/Calle de ejemplo','Sevilla',1);
 INSERT INTO authorities VALUES (4,'patient');
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (5, 'patient2', 'patient2', true, 'Maria', 'Laso Escot','12345675N','maria@gmail.com','956787225');

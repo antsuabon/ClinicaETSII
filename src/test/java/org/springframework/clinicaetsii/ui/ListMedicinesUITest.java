@@ -39,14 +39,25 @@ public class ListMedicinesUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-	@Test
-	public void positiveTestIU003() throws Exception {
+	private ListMedicinesUITest asAnonymous() {
+		this.driver.get("http://localhost:" + this.port);
 
-		this.driver.get("http://localhost:/" + this.port);
-		this.driver.findElement(By.xpath("//div/div/div/div")).click();
+		return this;
+	}
+
+	private ListMedicinesUITest thenISeeMyUserRole() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
+		return this;
+	}
+
+	private ListMedicinesUITest thenIEnterMedicineList() {
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li/a/span[2]"))
 				.click();
+		return this;
+	}
+
+	private ListMedicinesUITest thenISeeMedicineList() {
+
 		Assertions.assertEquals("Medicamentos",
 				this.driver.findElement(By.xpath("//h2")).getText());
 		Assertions.assertEquals("Nombre Comercial", this.driver
@@ -67,33 +78,13 @@ public class ListMedicinesUITest {
 				"En síndrome de pólipos nasales, angioedema y reactividad broncoespástica a aspirina u otros AINEs.",
 				this.driver.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]"))
 						.getText());
+
+		return this;
 	}
 
 	@Test
-	public void negativeTestIU003() throws Exception {
-		this.driver.get("http://localhost:9090/");
-		this.driver.findElement(By.xpath("//div/div/div/div")).click();
-		this.driver.findElement(By.xpath("//a[contains(text(),'Anónimo')]")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a/span[2]"))
-				.click();
-		Assertions.assertNotEquals("Nombre incorrecto",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[2]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[3]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/thead/tr/th[4]")).getText());
-		Assertions.assertNotEquals("Nombre incorrecto", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td")).getText());
-		Assertions.assertNotEquals("Ibuprofeno", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[2]")).getText());
-		Assertions.assertNotEquals("Dolor estómago", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[3]")).getText());
-		Assertions.assertNotEquals("Descripción incorrecta", this.driver
-				.findElement(By.xpath("//table[@id='medicinesTable']/tbody/tr/td[4]")).getText());
+	public void shouldListMedicines() throws Exception {
+		asAnonymous().thenISeeMyUserRole().thenIEnterMedicineList().thenISeeMedicineList();
 	}
 
 	@AfterEach
