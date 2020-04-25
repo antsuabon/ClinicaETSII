@@ -29,6 +29,7 @@ public class ListPatinentsAndShowDetailsUITest {
 	  private boolean acceptNextAlert = true;
 	  private StringBuffer verificationErrors = new StringBuffer();
 
+    private String username;
 
 	  @BeforeEach
 		public void setUp() throws Exception {
