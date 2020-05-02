@@ -7,10 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataAppointmentRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataConsultationRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPatientRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPrescriptionRepository;
+import org.springframework.clinicaetsii.repository.AppointmentRepository;
+import org.springframework.clinicaetsii.repository.ConsultationRepository;
+import org.springframework.clinicaetsii.repository.PatientRepository;
+import org.springframework.clinicaetsii.repository.PrescriptionRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.annotation.DirtiesContext;
@@ -182,24 +182,24 @@ public class AdministrativePatientControllerE2ETests {
 	}
 
 	@Autowired
-	private SpringDataConsultationRepository springDataConsultationRepository;
+	private ConsultationRepository consultationRepository;
 
 	@Autowired
-	private SpringDataPrescriptionRepository springDataPrescriptionRepository;
+	private PrescriptionRepository prescriptionRepository;
 
 	@Autowired
-	private SpringDataPatientRepository springDataPatientRepository;
+	private PatientRepository patientRepository;
 
 	@Autowired
-	private SpringDataAppointmentRepository springDataAppointmentRepository;
+	private AppointmentRepository appointmentRepository;
 
 	public void clearPatients() {
 		try {
 
-			this.springDataPrescriptionRepository.deleteAll();
-			this.springDataConsultationRepository.deleteAll();
-			this.springDataAppointmentRepository.deleteAll();
-			this.springDataPatientRepository.deleteAll();
+			this.prescriptionRepository.deleteAll();
+			this.consultationRepository.deleteAll();
+			this.appointmentRepository.deleteAll();
+			this.patientRepository.deleteAll();
 
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());

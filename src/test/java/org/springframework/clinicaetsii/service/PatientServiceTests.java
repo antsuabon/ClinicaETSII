@@ -121,7 +121,7 @@ class PatientServiceTests {
 	@WithMockUser(username = "patient1", roles = {"patient"})
 	void shouldFindAllPatients() {
 		Collection<Patient> patients = this.patientService.findPatients();
-		Assertions.assertThat(patients.size()).isEqualTo(3);
+		Assertions.assertThat(patients.size()).isEqualTo(4);
 	}
 
 	@Test

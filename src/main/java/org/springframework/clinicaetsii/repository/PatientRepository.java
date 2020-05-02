@@ -51,4 +51,5 @@ public interface PatientRepository {
 			@Param("patientUsername") String patientUsername) throws DataAccessException;
 
 
+	void deleteAll() throws DataAccessException;
 }

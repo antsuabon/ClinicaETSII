@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
-
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Service;
 import org.springframework.dao.DataAccessException;
@@ -20,12 +19,14 @@ public interface DoctorRepository {
 
 	Doctor findDoctorById(int id) throws DataAccessException;
 
-	Doctor findDoctorByPatientId(@Param("id") int id)throws DataAccessException;
+	Doctor findDoctorByPatientId(@Param("id") int id) throws DataAccessException;
 
 	Doctor save(Doctor doctor) throws DataAccessException, DataIntegrityViolationException;
 
 	Collection<Service> findAllServices() throws DataAccessException;
-	
+
 	void delete(Doctor d) throws DataAccessException;
+
+	void deleteAll() throws DataAccessException;
 
 }
