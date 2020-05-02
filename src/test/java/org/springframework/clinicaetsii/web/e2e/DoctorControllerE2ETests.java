@@ -13,13 +13,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataConstantRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataConsultationRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataDiagnosisRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataDoctorRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataExaminationRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPatientRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPrescriptionRepository;
+import org.springframework.clinicaetsii.repository.ConstantRepository;
+import org.springframework.clinicaetsii.repository.ConsultationRepository;
+import org.springframework.clinicaetsii.repository.DiagnosisRepository;
+import org.springframework.clinicaetsii.repository.DoctorRepository;
+import org.springframework.clinicaetsii.repository.ExaminationRepository;
+import org.springframework.clinicaetsii.repository.PatientRepository;
+import org.springframework.clinicaetsii.repository.PrescriptionRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
@@ -60,50 +60,50 @@ public class DoctorControllerE2ETests {
 
 
 	@Autowired
-	private SpringDataDiagnosisRepository springDataDiagnosisRepository;
+	private DiagnosisRepository diagnosisRepository;
 
 	@Autowired
-	private SpringDataExaminationRepository springDataExaminationRepository;
+	private ExaminationRepository examinationRepository;
 
 	@Autowired
-	private SpringDataConstantRepository springDataConstantRepository;
+	private ConstantRepository constantRepository;
 
 	@Autowired
-	private SpringDataConsultationRepository springDataConsultationRepository;
+	private ConsultationRepository consultationRepository;
 
 	@Autowired
-	private SpringDataPrescriptionRepository springDataPrescriptionRepository;
+	private PrescriptionRepository prescriptionRepository;
 
 	@Autowired
-	private SpringDataPatientRepository springDataPatientRepository;
+	private PatientRepository patientRepository;
 
 	@Autowired
-	private SpringDataDoctorRepository springDataDoctorRepository;
+	private DoctorRepository doctorRepository;
 
 	public void clearDoctors() {
 		try {
-			for (Consultation consultation : this.springDataConsultationRepository.findAll()) {
+			for (Consultation consultation : this.consultationRepository.findAll()) {
 				consultation.setConstants(null);
 				consultation.setExaminations(null);
 				consultation.setDiagnoses(null);
 
-				this.springDataConsultationRepository.save(consultation);
-				this.springDataConsultationRepository.delete(consultation);
+				this.consultationRepository.save(consultation);
+				this.consultationRepository.delete(consultation);
 
 			}
 
-			this.springDataConstantRepository.deleteAll();
-			this.springDataExaminationRepository.deleteAll();
-			this.springDataDiagnosisRepository.deleteAll();
-			this.springDataPrescriptionRepository.deleteAll();
+			this.constantRepository.deleteAll();
+			this.examinationRepository.deleteAll();
+			this.diagnosisRepository.deleteAll();
+			this.prescriptionRepository.deleteAll();
 
-			for (Patient patient : this.springDataPatientRepository.findAll()) {
+			for (Patient patient : this.patientRepository.findAll()) {
 				patient.setGeneralPractitioner(null);
 
-				this.springDataPatientRepository.save(patient);
+				this.patientRepository.save(patient);
 			}
 
-			this.springDataDoctorRepository.deleteAll();
+			this.doctorRepository.deleteAll();
 
 		} catch (Exception e) {
 			fail(e.getMessage());
