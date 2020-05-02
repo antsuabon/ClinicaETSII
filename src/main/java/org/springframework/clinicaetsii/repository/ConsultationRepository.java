@@ -22,4 +22,6 @@ public interface ConsultationRepository {
 	Collection<Consultation> findAll() throws DataAccessException;
 
 	void delete(Consultation consultation) throws DataAccessException;
+
+	void deleteAll() throws DataAccessException;
 }
