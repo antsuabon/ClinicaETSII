@@ -111,7 +111,7 @@ class MedicineControllerTests {
 	@Test
 	void testShowMedicine() throws Exception {
 		given(this.MedicineService.findMedicineById(TEST_MEDICINE_ID_1)).willReturn(this.medicine1);
-		this.mockMvc.perform(get("/patient/medicines/{medicineId}", TEST_MEDICINE_ID_1))
+		this.mockMvc.perform(get("/anonymous/medicines/{medicineId}", TEST_MEDICINE_ID_1))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("medicine"))
 				.andExpect(view().name("/medicines/medicineDetails"));
 	}
@@ -119,8 +119,8 @@ class MedicineControllerTests {
 	@WithMockUser(username = "patient1", roles = "patient")
 	@Test
 	void testNotShowMedicine() throws Exception {
-		this.mockMvc.perform(get("/patient/medicines/{medicineId}", -1)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("empty"))
+		this.mockMvc.perform(get("/anonymous/medicines/{medicineId}", -1))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("empty"))
 				.andExpect(view().name("/medicines/medicineDetails"));
 	}
 

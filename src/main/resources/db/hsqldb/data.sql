@@ -85,6 +85,11 @@ INSERT INTO doctors (doctor_id, collegiate_code) VALUES (7,'303012545');
 INSERT INTO authorities VALUES (7,'doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(11, 'doctor5', 'doctor5', true, 'James', 'Smith Rodriguez','12345678L','smith@gmail.com','956780025');
+INSERT INTO doctors (doctor_id, collegiate_code) VALUES (11,'303012645');
+INSERT INTO authorities VALUES (11,'doctor');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
 INSERT INTO authorities VALUES (6,'administrative');
 

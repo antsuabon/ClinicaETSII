@@ -1,14 +1,20 @@
 
 package org.springframework.clinicaetsii.web.e2e.administrative;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataAppointmentRepository;
+import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataConsultationRepository;
+import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPatientRepository;
+import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPrescriptionRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,14 +44,18 @@ public class AdministrativePatientControllerE2ETests {
 						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
 	}
 
-	// @WithMockUser(username = "administrative1", authorities = {"administrative"})
-	// @Test
-	// void shouldNotListPatients() throws Exception {
-	// this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
-	// .andExpect(MockMvcResultMatchers.status().isOk())
-	// .andExpect(MockMvcResultMatchers.model().attributeExists("emptyList")).andExpect(
-	// MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
-	// }
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	@WithMockUser(username = "administrative1", authorities = {"administrative"})
+	@Test
+	void shouldNotListPatients() throws Exception {
+
+		clearPatients();
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("emptyList")).andExpect(
+						MockMvcResultMatchers.view().name("/administrative/patients/patientsList"));
+	}
 
 	@WithMockUser(username = "administrative1", authorities = {"administrative"})
 	@Test
@@ -72,7 +82,7 @@ public class AdministrativePatientControllerE2ETests {
 	@WithMockUser(username = "administrative1", authorities = {"administrative"})
 	void shouldInitCreatePatientForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("patient"))
 				.andExpect(MockMvcResultMatchers.view()
 						.name("/administrative/patients/createPatientForm"));
@@ -83,7 +93,7 @@ public class AdministrativePatientControllerE2ETests {
 	@WithMockUser(username = "doctor1", authorities = {"doctor"})
 	void doctorShouldNotInitCreatePatientForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(status().is(403));
+				.andExpect(MockMvcResultMatchers.status().is(403));
 
 	}
 
@@ -91,7 +101,7 @@ public class AdministrativePatientControllerE2ETests {
 	@WithMockUser(username = "patient1", authorities = {"patient"})
 	void patientShouldNotInitCreatePatientForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/administrative/patients/new"))
-				.andExpect(status().is(403));
+				.andExpect(MockMvcResultMatchers.status().is(403));
 	}
 
 	@Test
@@ -120,6 +130,7 @@ public class AdministrativePatientControllerE2ETests {
 	}
 
 
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	@Test
 	@WithMockUser(username = "administrative1", authorities = {"administrative"})
 	void shouldNotProcessCreatePatientForm() throws Exception {
@@ -155,7 +166,7 @@ public class AdministrativePatientControllerE2ETests {
 						.name("/administrative/patients/createPatientForm"));
 	}
 
-
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	@Test
 	@WithMockUser(username = "administrative1", authorities = {"administrative"})
 	void shouldProcessCreatePatientFormPhone2() throws Exception {
@@ -170,4 +181,28 @@ public class AdministrativePatientControllerE2ETests {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
+	@Autowired
+	private SpringDataConsultationRepository springDataConsultationRepository;
+
+	@Autowired
+	private SpringDataPrescriptionRepository springDataPrescriptionRepository;
+
+	@Autowired
+	private SpringDataPatientRepository springDataPatientRepository;
+
+	@Autowired
+	private SpringDataAppointmentRepository springDataAppointmentRepository;
+
+	public void clearPatients() {
+		try {
+
+			this.springDataPrescriptionRepository.deleteAll();
+			this.springDataConsultationRepository.deleteAll();
+			this.springDataAppointmentRepository.deleteAll();
+			this.springDataPatientRepository.deleteAll();
+
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package org.springframework.clinicaetsii.web.admin;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Patient;
 import org.springframework.clinicaetsii.service.PatientService;

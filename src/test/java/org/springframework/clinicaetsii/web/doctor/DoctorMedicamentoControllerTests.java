@@ -181,9 +181,7 @@ public class DoctorMedicamentoControllerTests {
 		this.mockMvc.perform(get(
 				"/doctor/medicamentos?nombre={nombre}&pactivos={pactivos}&labtitular={labtitular}",
 				"no existente", "", "no existente").with(csrf())).andExpect(status().isOk())
-				.andExpect(model().attributeExists("consultaMedicamento"))
-				.andExpect(model().attribute("consultaMedicamento",
-						hasProperty("resultados", empty())))
+				.andExpect(model().attributeExists("emptyList"))
 				.andExpect(view().name("doctor/medicamentos/medicamentosList"));
 	}
 }

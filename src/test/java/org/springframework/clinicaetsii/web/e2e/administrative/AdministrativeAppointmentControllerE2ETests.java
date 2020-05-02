@@ -24,10 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class AdministrativeAppointmentControllerTests {
-
-	private static final int TEST_APPOINTMENT_ID_1 = 1;
-	private static final int TEST_APPOINTMENT_ID_2 = 2;
+public class AdministrativeAppointmentControllerE2ETests {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -38,7 +35,7 @@ public class AdministrativeAppointmentControllerTests {
 	void testGenerateTable() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/administrative/patients/{patientId}/appointments/table", 1))
+						.get("/administrative/patients/{patientId}/appointments/table", 4))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("hours"))
 				.andExpect(MockMvcResultMatchers.view().name("/administrative/timeTable"));
@@ -49,7 +46,7 @@ public class AdministrativeAppointmentControllerTests {
 	void testGenerateEmptyTable() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/administrative/patients/{patientId}/appointments/table", 1))
+						.get("/administrative/patients/{patientId}/appointments/table", 4))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("/administrative/timeTable"));
 	}
@@ -60,7 +57,7 @@ public class AdministrativeAppointmentControllerTests {
 		String fecha = LocalDateTime.now().plusHours(8).format(DateTimeFormatter.ISO_DATE_TIME);
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/administrative/patients/{patientId}/appointments/new", 1)
+						.get("/administrative/patients/{patientId}/appointments/new", 4)
 						.param("fecha", fecha))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("appointment"))
@@ -78,7 +75,7 @@ public class AdministrativeAppointmentControllerTests {
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
-						.post("/administrative/patients/{patientId}/appointments/save", 1)
+						.post("/administrative/patients/{patientId}/appointments/save", 4)
 						.with(SecurityMockMvcRequestPostProcessors.csrf())
 						.param("startTime", startTime).param("endTime", endTime))
 				.andDo(MockMvcResultHandlers.print())
@@ -95,7 +92,7 @@ public class AdministrativeAppointmentControllerTests {
 				LocalDateTime.of(2020, 3, 26, 9, 0).format(DateTimeFormatter.ISO_DATE_TIME);
 
 		this.mockMvc
-				.perform(post("/administrative/patients/{patientId}/appointments/save", 1)
+				.perform(post("/administrative/patients/{patientId}/appointments/save", 4)
 						.with(csrf()).param("startTime", startTime))
 				.andDo(print()).andExpect(status().is3xxRedirection()).andExpect(view()
 						.name("redirect:/administrative/patients/{patientId}/appointments/new"));

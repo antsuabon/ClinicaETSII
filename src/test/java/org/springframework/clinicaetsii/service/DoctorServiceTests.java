@@ -47,7 +47,7 @@ class DoctorServiceTests {
 	@Test
 	void shouldListDoctorsSortedByServices() {
 		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
-		Assertions.assertThat(doctors.size()).isEqualTo(4);
+		Assertions.assertThat(doctors.size()).isEqualTo(5);
 
 		List<Doctor> listDoctors = new ArrayList<>(doctors);
 		Doctor firstDoctor = listDoctors.get(0);
@@ -99,7 +99,7 @@ class DoctorServiceTests {
 
 	@Test
 	void shouldNotFindByUsername() {
-		Doctor doctor = this.doctorService.findDoctorByUsername("doctor5");
+		Doctor doctor = this.doctorService.findDoctorByUsername("notAnUsername");
 
 		Assertions.assertThat(doctor).isNull();
 
@@ -187,7 +187,7 @@ class DoctorServiceTests {
 	@Test
 	void shouldListDoctors() {
 		Collection<Doctor> doctors = this.doctorService.findAllDoctors();
-		Assertions.assertThat(doctors.size()).isEqualTo(4);
+		Assertions.assertThat(doctors.size()).isEqualTo(5);
 
 	}
 
