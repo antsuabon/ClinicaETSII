@@ -15,7 +15,7 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Principios activos</th>
-			<td><c:out value="${medicamento.nombre}" /></td>
+			<td><c:out value="${medicamento.pactivos}" /></td>
 		</tr>
 		<tr>
 			<th>Laboratorio titular</th>

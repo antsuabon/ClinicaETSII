@@ -4,11 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class UserServiceTests {
 
 	@Autowired
@@ -21,7 +24,7 @@ public class UserServiceTests {
 		assertThat(this.userService.findUserByUsername("administrative1")).isNotNull();
 		Assertions.assertThat(this.userService.findUserByUsername("patient1")).isNotNull();
 	}
-	
+
 	@Test
 	void shouldNotFindUser() {
 

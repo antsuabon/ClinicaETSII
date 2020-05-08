@@ -3,17 +3,12 @@ package org.springframework.clinicaetsii.web.validator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
-import org.springframework.clinicaetsii.web.validator.AppointmentValidator;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
@@ -21,8 +16,7 @@ import org.springframework.validation.Errors;
  * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful when
  *         upgrading to a new version of Hibernate Validator/ Bean Validation)
  */
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class AppointmentValidatorTests {
+public class AppointmentValidatorTests {
 
 	private Appointment appointment;
 	private Patient patient1;
@@ -76,7 +70,7 @@ class AppointmentValidatorTests {
 	@Test
 	void shouldNotValidateStartTimeAppointment() {
 
-		AppointmentValidator validator = this.createValidator();
+		AppointmentValidator validator = createValidator();
 
 		this.appointment.setStartTime(null);
 
@@ -95,7 +89,7 @@ class AppointmentValidatorTests {
 	@Test
 	void shouldNotValidateEndTimeAppointment() {
 
-		AppointmentValidator validator = this.createValidator();
+		AppointmentValidator validator = createValidator();
 
 		this.appointment.setEndTime(null);
 
@@ -114,7 +108,7 @@ class AppointmentValidatorTests {
 	@Test
 	void shouldNotValidateOverEndTimeAppointment() {
 
-		AppointmentValidator validator = this.createValidator();
+		AppointmentValidator validator = createValidator();
 
 		this.appointment.setEndTime(this.appointment.getEndTime().plusMinutes(1));
 

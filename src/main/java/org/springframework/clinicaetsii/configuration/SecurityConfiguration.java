@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.client.RestTemplate;
 
 /*
@@ -37,6 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
+
+		http.addFilterBefore(new EncodingFilter(), ChannelProcessingFilter.class);
+
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**")
 				.permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 				.antMatchers("/anonymous/**").permitAll().antMatchers("/patient/**")

@@ -58,7 +58,7 @@ public class DoctorMedicamentoControllerTests {
 
 		this.medicamento1 = new Medicamento();
 		this.medicamento1.setNombre("ASPIRINA C 400 mg/240 mg COMPRIMIDOS EFERVESCENTES");
-		this.medicamento1.setPactivos("ASPIRINA C 400 mg/240 mg COMPRIMIDOS EFERVESCENTES");
+		this.medicamento1.setPactivos("ACETILSALICILICO ACIDO, ASCORBICO ACIDO");
 		this.medicamento1.setLabtitular("Bayer Hispania, S.L.");
 		this.medicamento1.setCpresc("Sin Receta");
 
