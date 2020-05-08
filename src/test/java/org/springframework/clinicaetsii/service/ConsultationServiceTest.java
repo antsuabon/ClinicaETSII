@@ -7,18 +7,20 @@ import java.util.Collection;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
-import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Examination;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class ConsultationServiceTest {
 
 	@Autowired
@@ -138,11 +140,12 @@ class ConsultationServiceTest {
 				.doesNotContain(examination);
 
 	}
-	
+
 	@Test
 	void shouldFindConsultationsFromDoctor() {
-		
-		Collection<Consultation> consultations = this.consultationService.findAllConsultationsFromDoctor(7);
+
+		Collection<Consultation> consultations =
+				this.consultationService.findAllConsultationsFromDoctor(7);
 		Assertions.assertThat(consultations).isEmpty();
 	}
 

@@ -51,8 +51,7 @@ public class ListMedicinesUITest {
 	}
 
 	private ListMedicinesUITest thenIEnterMedicineList() {
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li/a/span[2]"))
-				.click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/ul/li[2]/a")).click();
 		return this;
 	}
 

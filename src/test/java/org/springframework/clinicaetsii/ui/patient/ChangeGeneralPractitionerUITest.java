@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.ui.patient;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ChangeGeneralPractitionerUITest {
 
 	@LocalServerPort
-	private int	port;
+	private int port;
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -32,11 +32,12 @@ public class ChangeGeneralPractitionerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		 System.setProperty("webdriver.gecko.driver","C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-//		this.driver = new ChromeDriver();
+		// System.setProperty("webdriver.gecko.driver",
+		// "C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+		System.setProperty("webdriver.chrome.driver",
+				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -61,7 +62,7 @@ public class ChangeGeneralPractitionerUITest {
 
 	private ChangeGeneralPractitionerUITest thenCheckImLoggedInAsPatient() {
 		Assert.assertEquals("PATIENT1", this.driver
-			.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
+				.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
 		return this;
 	}
 
@@ -80,7 +81,7 @@ public class ChangeGeneralPractitionerUITest {
 
 	private ChangeGeneralPractitionerUITest thenICheckTheGeneralPractitionerHasChanged() {
 		Assert.assertEquals("Laso Escot, María",
-			this.driver.findElement(By.xpath("//tr[10]/td")).getText());
+				this.driver.findElement(By.xpath("//tr[10]/td")).getText());
 		return this;
 
 	}
@@ -89,8 +90,8 @@ public class ChangeGeneralPractitionerUITest {
 	@Test
 	public void shouldChangeGeneralPractitioner() throws Exception {
 
-		this.as("patient1", "patient1").whenIamLoggedInTheSystem().thenCheckImLoggedInAsPatient()
-		.thenIChangeGeneralPractitioner().thenICheckTheGeneralPractitionerHasChanged();
+		as("patient1", "patient1").whenIamLoggedInTheSystem().thenCheckImLoggedInAsPatient()
+				.thenIChangeGeneralPractitioner().thenICheckTheGeneralPractitionerHasChanged();
 
 
 
