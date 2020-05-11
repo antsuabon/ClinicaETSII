@@ -1,6 +1,7 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Medicine;
 import org.springframework.clinicaetsii.repository.MedicineRepository;
@@ -28,4 +29,13 @@ public class MedicineService {
 		return this.medicineRepository.findById(id);
 	}
 
+	@Transactional
+	public void saveMedicine(final Medicine medicine) throws DataAccessException {
+		this.medicineRepository.save(medicine);
+	}
+
+	@Transactional
+	  public void deleteMedicine(final Medicine medicine) throws DataAccessException {
+	    this.medicineRepository.delete(medicine);
+	  }
 }

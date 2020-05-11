@@ -24,10 +24,8 @@
         <c:forEach items="${prescriptions}" var="prescription">
             <tr>
                 <td>
-                    <spring:url value="/patient/medicines/{medicineId}" var="medicineUrl">
-                        <spring:param name="medicineId" value="${prescription.medicine.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(medicineUrl)}"><c:out value="${prescription.medicine.genericalName} - ${prescription.medicine.commercialName}"/></a>
+                 
+                <c:out value="${prescription.medicine.genericalName} - ${prescription.medicine.commercialName}"/>
                 </td>
                 <td>
                     <c:out value="${prescription.startDate}"/>

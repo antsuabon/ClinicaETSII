@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.springframework.clinicaetsii.model.Prescription;
 import org.springframework.dao.DataAccessException;
 
@@ -25,5 +26,7 @@ public interface PrescriptionRepository {
 	Collection<Prescription> findPrescriptionByDoctorId(int doctorId) throws DataAccessException;
 
 	void deleteAll() throws DataAccessException;
+
+	Prescription findPrescriptionByMedicineId(int medicineId) throws DataAccessException;
 
 }

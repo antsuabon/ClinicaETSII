@@ -27,4 +27,8 @@ public interface MedicineRepository {
 
 	Medicine findById(int id) throws DataAccessException;
 
+	Medicine save(Medicine medicine) throws DataAccessException;
+
+	void delete(Medicine medicine) throws DataAccessException;
+
 }
