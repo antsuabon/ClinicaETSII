@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -46,9 +46,10 @@ public class AddPatientUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -197,10 +198,10 @@ public class AddPatientUITest {
 				.click();
 
 		Assertions.assertEquals(this.surname + ", " + this.name, this.driver
-				.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr[4]/td")).getText());
+				.findElement(By.xpath("//*[@id='patientsTable']/tbody/tr[last()]/td")).getText());
 		Assertions.assertEquals("Ver detalles", this.driver
-				.findElement(By.xpath("(//a[contains(text(),'Ver detalles')])[4]")).getText());
-		this.driver.findElement(By.xpath("(//a[contains(text(),'Ver detalles')])[4]")).click();
+				.findElement(By.xpath("(//a[contains(text(),'Ver detalles')])[last()]")).getText());
+		this.driver.findElement(By.xpath("(//a[contains(text(),'Ver detalles')])[last()]")).click();
 
 		return this;
 	}

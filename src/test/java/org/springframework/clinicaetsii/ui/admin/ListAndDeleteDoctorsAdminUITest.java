@@ -1,8 +1,8 @@
 
 package org.springframework.clinicaetsii.ui.admin;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.util.concurrent.TimeUnit;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +13,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ListAndDeleteDoctorsAdminUITest {
 
 	@LocalServerPort
@@ -35,9 +38,10 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -86,8 +90,10 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	private ListAndDeleteDoctorsAdminUITest thenIDeleteDoctor() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Médico')]")).click();
-		Assert.assertFalse(
-				isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")));
+		if (isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td"))) {
+			assertNotEquals("Pepe Loco Malicioso", this.driver
+					.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")).getText());
+		}
 		return this;
 	}
 

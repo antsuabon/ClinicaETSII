@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataMedicineRepository;
-import org.springframework.clinicaetsii.repository.springdatajpa.SpringDataPrescriptionRepository;
+import org.springframework.clinicaetsii.repository.MedicineRepository;
+import org.springframework.clinicaetsii.repository.PrescriptionRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -73,15 +73,15 @@ public class MedicineControllerE2ETests {
 
 
 	@Autowired
-	private SpringDataPrescriptionRepository springDataPrescriptionRepository;
+	private PrescriptionRepository prescriptionRepository;
 
 	@Autowired
-	private SpringDataMedicineRepository springDataMedicineRepository;
+	private MedicineRepository medicineRepository;
 
 	public void clearMedicines() {
 		try {
-			this.springDataPrescriptionRepository.deleteAll();
-			this.springDataMedicineRepository.deleteAll();
+			this.prescriptionRepository.deleteAll();
+			this.medicineRepository.deleteAll();
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

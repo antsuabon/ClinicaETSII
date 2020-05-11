@@ -12,7 +12,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,12 +31,10 @@ public class ChangeGeneralPractitionerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		// System.setProperty("webdriver.gecko.driver",
-		// "C:\\Users\\angel\\Downloads\\webdrivers\\geckodriver.exe");
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}

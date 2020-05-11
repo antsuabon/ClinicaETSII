@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,18 +9,22 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UpdateDoctorUITest {
 
 	@LocalServerPort
@@ -47,9 +50,10 @@ public class UpdateDoctorUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -93,13 +97,17 @@ public class UpdateDoctorUITest {
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/ul/li[3]/a/span[2]"))
 				.click();
 
-		Assertions.assertEquals("Datos Personales", this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("Nombre completo", this.driver.findElement(By.xpath("//th")).getText());
+		Assertions.assertEquals("Datos Personales",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		Assertions.assertEquals("Nombre completo",
+				this.driver.findElement(By.xpath("//th")).getText());
 		Assertions.assertEquals("DNI", this.driver.findElement(By.xpath("//tr[2]/th")).getText());
 		Assertions.assertEquals("Correo electrónico",
 				this.driver.findElement(By.xpath("//tr[3]/th")).getText());
-		Assertions.assertEquals("Teléfono", this.driver.findElement(By.xpath("//tr[4]/th")).getText());
-		Assertions.assertEquals("Datos Médicos", this.driver.findElement(By.xpath("//h2[2]")).getText());
+		Assertions.assertEquals("Teléfono",
+				this.driver.findElement(By.xpath("//tr[4]/th")).getText());
+		Assertions.assertEquals("Datos Médicos",
+				this.driver.findElement(By.xpath("//h2[2]")).getText());
 		Assertions.assertEquals("Número de colegiado",
 				this.driver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
 		Assertions.assertEquals("Cartera de Servicios",
@@ -186,6 +194,9 @@ public class UpdateDoctorUITest {
 		this.driver.findElement(By.id("doctor.collegiateCode")).sendKeys(this.collegiateCode);
 
 
+		((JavascriptExecutor) this.driver).executeScript("arguments[0].scrollIntoView();",
+				this.driver.findElement(By.xpath("//button[@type='submit']")));
+
 		Actions actions = new Actions(this.driver);
 		actions.keyDown(Keys.LEFT_CONTROL)
 				.click(this.driver.findElement(By.xpath("//option[@value='10']")))
@@ -208,9 +219,12 @@ public class UpdateDoctorUITest {
 	private UpdateDoctorUITest thenISeeMyUpdatedProfile() {
 		Assertions.assertEquals(this.surname + ", " + this.name,
 				this.driver.findElement(By.xpath("//b")).getText());
-		Assertions.assertEquals(this.dni, this.driver.findElement(By.xpath("//tr[2]/td")).getText());
-		Assertions.assertEquals(this.email, this.driver.findElement(By.xpath("//tr[3]/td")).getText());
-		Assertions.assertEquals(this.phone, this.driver.findElement(By.xpath("//tr[4]/td")).getText());
+		Assertions.assertEquals(this.dni,
+				this.driver.findElement(By.xpath("//tr[2]/td")).getText());
+		Assertions.assertEquals(this.email,
+				this.driver.findElement(By.xpath("//tr[3]/td")).getText());
+		Assertions.assertEquals(this.phone,
+				this.driver.findElement(By.xpath("//tr[4]/td")).getText());
 		Assertions.assertEquals(this.collegiateCode,
 				this.driver.findElement(By.xpath("//table[2]/tbody/tr/td")).getText());
 		return this;
@@ -290,11 +304,11 @@ public class UpdateDoctorUITest {
 		this.collegiateCode = collegiateCode;
 
 
-		this.as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenILoggedOut();
 
 		if (newUsername.equals(this.username)) {
-			this.as(newUsername, newPassword).whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+			as(newUsername, newPassword).whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 					.thenIEnterMyProfile().thenISeeMyUpdatedProfile();
 		}
 
@@ -323,7 +337,7 @@ public class UpdateDoctorUITest {
 		this.repeatPassword = repeatPassword;
 		this.collegiateCode = collegiateCode;
 
-		this.as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		as("doctor1", "doctor1").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterMyProfile().thenIEnterUpdateForm().thenISeeFormWithErrors();
 	}
 

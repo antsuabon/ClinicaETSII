@@ -5,13 +5,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.clinicaetsii.model.Consultation;
+import org.springframework.clinicaetsii.repository.AppointmentRepository;
+import org.springframework.clinicaetsii.repository.ConstantRepository;
+import org.springframework.clinicaetsii.repository.ConsultationRepository;
+import org.springframework.clinicaetsii.repository.DiagnosisRepository;
+import org.springframework.clinicaetsii.repository.ExaminationRepository;
+import org.springframework.clinicaetsii.repository.PrescriptionRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -94,16 +104,20 @@ public class PatientAppointmentControllerE2ETests {
 
 	}
 
-	// @Test
-	// @WithMockUser(username = "patient1", authorities = {"patient"})
-	// void shouldListEmptyAppointments() throws Exception {
-	// this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments"))
-	// .andExpect(MockMvcResultMatchers.model().attribute("appointmentsDone", true))
-	// .andExpect(MockMvcResultMatchers.model().attribute("appointmentsDelete", true))
-	// .andExpect(MockMvcResultMatchers.view()
-	// .name("/patient/appointments/appointmentsList"));
-	//
-	// }
+	@Test
+	@WithMockUser(username = "patient1", authorities = {"patient"})
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	void shouldListEmptyAppointments() throws Exception {
+
+		clearAppointments();
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/patient/appointments"))
+				.andExpect(MockMvcResultMatchers.model().attribute("appointmentsDone", true))
+				.andExpect(MockMvcResultMatchers.model().attribute("appointmentsDelete", true))
+				.andExpect(MockMvcResultMatchers.view()
+						.name("/patient/appointments/appointmentsList"));
+
+	}
 
 	@Test
 	@WithMockUser(username = "doctor1", authorities = {"doctor"})
@@ -232,4 +246,46 @@ public class PatientAppointmentControllerE2ETests {
 	}
 
 
+	@Autowired
+	private DiagnosisRepository diagnosisRepository;
+
+	@Autowired
+	private ExaminationRepository examinationRepository;
+
+	@Autowired
+	private ConstantRepository constantRepository;
+
+	@Autowired
+	private ConsultationRepository consultationRepository;
+
+	@Autowired
+	private PrescriptionRepository prescriptionRepository;
+
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+
+	public void clearAppointments() {
+		try {
+			for (Consultation consultation : this.consultationRepository.findAll()) {
+				consultation.setConstants(null);
+				consultation.setExaminations(null);
+				consultation.setDiagnoses(null);
+
+				this.consultationRepository.save(consultation);
+				this.consultationRepository.delete(consultation);
+
+			}
+
+			this.constantRepository.deleteAll();
+			this.examinationRepository.deleteAll();
+			this.diagnosisRepository.deleteAll();
+			this.prescriptionRepository.deleteAll();
+			this.appointmentRepository.deleteAll();
+
+
+
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
 }

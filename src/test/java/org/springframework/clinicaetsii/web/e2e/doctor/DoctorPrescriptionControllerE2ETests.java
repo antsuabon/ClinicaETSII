@@ -77,23 +77,18 @@ class DoctorPrescriptionControllerE2ETests {
 				.andExpect(MockMvcResultMatchers.view()
 						.name("/doctor/prescriptions/prescriptionDetails"));
 	}
-	//
-	// @WithMockUser(value = "spring")
-	// @Test
-	// void deletePrescription() throws Exception {
-	// Map<String, Object> model = new HashMap<>();
-	// this.doctorPrescriptionController.initDelete(1, model);
-	// Mockito.verify(this.prescriptionService).deletePrescription(this.prescription1);
-	// }
-	//
-	// @WithMockUser(value = "spring")
-	// @Test
-	// void notDeletePrescription() throws Exception {
-	// Map<String, Object> model = new HashMap<>();
-	// this.doctorPrescriptionController.initDelete(-1, model);
-	// Mockito.verify(this.prescriptionService).deletePrescription(null);
-	//
-	// }
+
+	@WithMockUser(username = "doctor1", authorities = {"doctor"})
+	@Test
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	void deletePrescription() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get(
+						"/doctor/patients/{patientId}/prescriptions/{prescriptionId}/delete", 4, 1))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view()
+						.name("redirect:/doctor/patients/{patientId}/prescriptions"));
+	}
 
 	@Test
 	@WithMockUser(username = "doctor1", authorities = {"doctor"})
