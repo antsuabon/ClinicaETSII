@@ -140,7 +140,6 @@ public class PatientPatientControllerE2ETests {
 				.andExpect(status().is(403));
 	}
 
-	@Test
 	@WithMockUser(username = "patient1", authorities = {"patient"})
 	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	void shouldProcessUpdatePatientForm() throws Exception {
