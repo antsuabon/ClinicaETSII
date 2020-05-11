@@ -152,7 +152,7 @@ public class PatientPatientControllerE2ETests {
 				.param("patient.address", "C/Calle de ejemplo").param("patient.state", "Sevilla")
 				.param("patient.nss", "11111111111").param("patient.email", "pablo@gmail.com")
 				.param("patient.phone", "955668756").param("patient.phone2", "955668756")
-				.param("patient.username", "patient1").param("patient.generalPractitioner", "11"))
+				.param("patient.username", "patient1").param("patient.generalPractitioner", "1"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/patient"));
 	}
