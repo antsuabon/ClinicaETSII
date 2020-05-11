@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui.doctor;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,13 +34,10 @@ public class ListMyPatientsConsultsUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		 String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
-		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
 
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-//		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -62,7 +58,7 @@ public class ListMyPatientsConsultsUITest {
 
 		this.driver.findElement(By.xpath("//input[@id='password']")).click();
 		this.driver.findElement(By.xpath("//input[@id='password']")).clear();
-		this.driver.findElement(By.xpath("//input[@id='password']")).sendKeys(this.passwordOf(username));
+		this.driver.findElement(By.xpath("//input[@id='password']")).sendKeys(passwordOf(username));
 
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
@@ -78,11 +74,11 @@ public class ListMyPatientsConsultsUITest {
 
 	private ListMyPatientsConsultsUITest thenIListAPatientConsultations() {
 		Assertions.assertEquals("Sánchez Saavedra, Alejandro", this.driver
-			.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
-	this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
-	Assertions.assertEquals("Lista de Consultas",
-			this.driver.findElement(By.xpath("//h2")).getText());
-	return this;
+				.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
+		this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
+		Assertions.assertEquals("Lista de Consultas",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		return this;
 	}
 
 	private ListMyPatientsConsultsUITest thenIShowAPatientConsultation() {
@@ -104,8 +100,8 @@ public class ListMyPatientsConsultsUITest {
 	@Test
 	public void positiveTestIU014() throws Exception {
 
-		this.as("doctor1").thenIListMyPatients().thenIListAPatientConsultations()
-		.thenIShowAPatientConsultation();
+		as("doctor1").thenIListMyPatients().thenIListAPatientConsultations()
+				.thenIShowAPatientConsultation();
 
 	}
 
@@ -119,11 +115,11 @@ public class ListMyPatientsConsultsUITest {
 
 	private ListMyPatientsConsultsUITest thenINotListAPatientConsultations() {
 		Assertions.assertNotEquals("Laso Escot, María", this.driver
-			.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
-	this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
-	Assertions.assertNotEquals("Lista diferente",
-			this.driver.findElement(By.xpath("//h2")).getText());
-	return this;
+				.findElement(By.xpath("//table[@id='patientsTable']/tbody/tr/td")).getText());
+		this.driver.findElement(By.xpath("//a[contains(text(),'Consultas del paciente')]")).click();
+		Assertions.assertNotEquals("Lista diferente",
+				this.driver.findElement(By.xpath("//h2")).getText());
+		return this;
 	}
 
 	private ListMyPatientsConsultsUITest thenINotShowAPatientConsultation() {
@@ -147,7 +143,8 @@ public class ListMyPatientsConsultsUITest {
 	@Test
 	public void negativeTestIU001() throws Exception {
 
-		this.as("doctor1").thenINotListMyPatients().thenINotListAPatientConsultations().thenINotShowAPatientConsultation();
+		as("doctor1").thenINotListMyPatients().thenINotListAPatientConsultations()
+				.thenINotShowAPatientConsultation();
 
 
 

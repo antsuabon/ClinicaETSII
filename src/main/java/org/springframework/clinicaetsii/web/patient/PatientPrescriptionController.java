@@ -47,7 +47,7 @@ public class PatientPrescriptionController {
 			model.put("prescriptions", prescriptionList);
 
 		}
-		return "/prescriptions/prescriptionList";
+		return "/patient/prescriptions/prescriptionList";
 	}
 
 	@GetMapping(value = "/patient/prescriptions/{prescriptionId}")
@@ -59,10 +59,10 @@ public class PatientPrescriptionController {
 		if (pres == null) {
 			model.put("empty", true);
 		} else {
-			model.put("consultation", pres);
+			model.put("prescription", pres);
 		}
 
-		return "/prescriptions/prescriptionDetails";
+		return "/patient/prescriptions/prescriptionDetails";
 	}
 
 }

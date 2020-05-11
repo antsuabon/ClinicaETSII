@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -139,19 +141,21 @@ public class PatientPatientControllerE2ETests {
 	}
 
 
-	// @Test
-	// @WithMockUser(username = "patient1", roles = {"patient"})
-	// void shouldProcessUpdatePatientForm() throws Exception {
-	// BDDMockito.given(this.patientService.findCurrentPatient()).willReturn(this.patient1);
-	// BDDMockito.given(this.doctorService.findAllDoctors()).willReturn(this.doctors);
-	// BDDMockito.given(this.doctorService.findDoctorById(4)).willReturn(this.doctor4);
-	// this.mockMvc
-	// .perform(MockMvcRequestBuilders.post("/patient/edit")
-	// .with(SecurityMockMvcRequestPostProcessors.csrf())
-	// .param("generalPractitioner", "4"))
-	// .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-	// .andExpect(MockMvcResultMatchers.view().name("redirect:/patient"));
-	// }
+	@Test
+	@WithMockUser(username = "patient1", authorities = {"patient"})
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	void shouldProcessUpdatePatientForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/patient/edit")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("patient.name", "Pablo")
+				.param("patient.surname", "Rodriguez Garrido")
+				.param("patient.birthDate", "22/02/1982").param("patient.dni", "45612378P")
+				.param("patient.address", "C/Calle de ejemplo").param("patient.state", "Sevilla")
+				.param("patient.nss", "11111111111").param("patient.email", "pablo@gmail.com")
+				.param("patient.phone", "955668756").param("patient.phone2", "955668756")
+				.param("patient.username", "patient1").param("patient.generalPractitioner", "11"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/patient"));
+	}
 
 
 }

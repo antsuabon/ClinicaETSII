@@ -3,7 +3,6 @@ package org.springframework.clinicaetsii.ui.administrative;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,17 +25,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class AdministrativeCreateAppointmentUITest {
 
 	@LocalServerPort
-	private int				port;
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private int port;
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver", "D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -76,11 +77,13 @@ public class AdministrativeCreateAppointmentUITest {
 		return this;
 	}
 
-	private AdministrativeCreateAppointmentUITest thenICheckTheAppointmentCreated(final String fechaCreada) {
+	private AdministrativeCreateAppointmentUITest thenICheckTheAppointmentCreated(
+			final String fechaCreada) {
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a")).click();
 		this.driver.findElement(By.xpath("//a[contains(text(),'Paciente')]")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/ul/li/a")).click();
-		List<WebElement> citasCreadas = this.driver.findElements(By.xpath("//table[@id='appointmentsTable1']/tbody/tr/td"));
+		List<WebElement> citasCreadas =
+				this.driver.findElements(By.xpath("//table[@id='appointmentsTable1']/tbody/tr/td"));
 		String fechaPaciente = citasCreadas.get(citasCreadas.size() - 3).getText();
 		Assertions.assertEquals(fechaCreada, fechaPaciente);
 		return this;
@@ -89,9 +92,11 @@ public class AdministrativeCreateAppointmentUITest {
 	@Test
 	public void shouldCreateAppointment() throws Exception {
 
-		this.as("administrative1", "administrative1").whenIamLoggedInTheSystem().thenICreateAnAppointment();
-		String fechaCreada = this.driver.findElement(By.xpath("//table[@id='table']/tbody/tr/td")).getText();
-		this.thenILoggedOut().as("patient1", "patient1").thenICheckTheAppointmentCreated(fechaCreada);
+		as("administrative1", "administrative1").whenIamLoggedInTheSystem()
+				.thenICreateAnAppointment();
+		String fechaCreada =
+				this.driver.findElement(By.xpath("//table[@id='table']/tbody/tr/td")).getText();
+		thenILoggedOut().as("patient1", "patient1").thenICheckTheAppointmentCreated(fechaCreada);
 
 	}
 

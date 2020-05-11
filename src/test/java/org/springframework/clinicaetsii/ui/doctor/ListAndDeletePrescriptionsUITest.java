@@ -12,13 +12,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ListAndDeletePrescriptionsUITest {
 
 	@LocalServerPort
@@ -32,9 +35,10 @@ public class ListAndDeletePrescriptionsUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -115,18 +119,13 @@ public class ListAndDeletePrescriptionsUITest {
 
 	private ListAndDeletePrescriptionsUITest thenICantSeePrescriptionsList() {
 
-		Assertions.assertNotEquals("09/03/2020 11:00", this.driver
+		Assertions.assertNotEquals("20/02/2020 13:00", this.driver
 				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
 
 		this.driver.findElement(By.xpath("//a[contains(text(),'Ver prescripción')]")).click();
 
 		Assertions.assertNotEquals("Detalles diferentes",
 				this.driver.findElement(By.xpath("//h2")).getText());
-
-		this.driver.findElement(By.xpath("//h4")).click();
-
-		Assertions.assertNotEquals("20/02/2020 13:00", this.driver
-				.findElement(By.xpath("//table[@id='prescriptionsTable']/tbody/tr/td")).getText());
 		return this;
 	}
 
