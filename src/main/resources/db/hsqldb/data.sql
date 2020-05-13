@@ -91,6 +91,7 @@ INSERT INTO authorities VALUES (11,'doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO administratives (administrative_id) VALUES (6);
 INSERT INTO authorities VALUES (6,'administrative');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES

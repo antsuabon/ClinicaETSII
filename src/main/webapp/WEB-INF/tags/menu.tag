@@ -138,6 +138,11 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Médicos</span>
 							</petclinic:menuItem>
+							
+							<petclinic:menuItem active="${name eq 'admin list administratives'}" url="/admin/administratives" title="list administratives">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Administrativos del centro</span>
+							</petclinic:menuItem>
 
 						</ul></li>
 
