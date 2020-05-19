@@ -1,3 +1,4 @@
+
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
@@ -12,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MedicineService {
 
-	private MedicineRepository medicineRepository;
+	private MedicineRepository		medicineRepository;
+
+
 
 	@Autowired
 	public MedicineService(final MedicineRepository medicineRepository) {
@@ -35,7 +38,8 @@ public class MedicineService {
 	}
 
 	@Transactional
-	  public void deleteMedicine(final Medicine medicine) throws DataAccessException {
-	    this.medicineRepository.delete(medicine);
-	  }
+	public void deleteMedicine(final Medicine medicine) throws DataAccessException {
+		this.medicineRepository.delete(medicine);
+
+	}
 }

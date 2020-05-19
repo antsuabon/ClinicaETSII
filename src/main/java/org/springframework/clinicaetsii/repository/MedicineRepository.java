@@ -30,5 +30,5 @@ public interface MedicineRepository {
 	Medicine save(Medicine medicine) throws DataAccessException;
 
 	void delete(Medicine medicine) throws DataAccessException;
-
+	void deleteAll() throws DataAccessException;
 }

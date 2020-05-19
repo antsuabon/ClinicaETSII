@@ -2,6 +2,7 @@
 package org.springframework.clinicaetsii.ui.admin;
 
 import java.util.concurrent.TimeUnit;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,9 +36,12 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+//		System.setProperty("webdriver.chrome.driver",
+//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+//		this.driver = new ChromeDriver();
+		String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
+		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		 this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -53,7 +57,7 @@ public class ListAndDeleteDoctorsAdminUITest {
 		this.driver.findElement(By.id("username")).sendKeys(username);
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(this.passwordOf(username));
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
@@ -87,19 +91,19 @@ public class ListAndDeleteDoctorsAdminUITest {
 	private ListAndDeleteDoctorsAdminUITest thenIDeleteDoctor() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Médico')]")).click();
 		Assert.assertFalse(
-				isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")));
+				this.isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")));
 		return this;
 	}
 
 	@Test
 	public void shouldListDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList();
 	}
 
 	@Test
 	public void shouldDeleteDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList().thenIDeleteDoctor();
 	}
 
