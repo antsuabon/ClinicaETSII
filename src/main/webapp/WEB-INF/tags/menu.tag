@@ -117,6 +117,11 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
+							
+							<petclinic:menuItem active="${name eq 'administrative medicines'}" url="/administrative/medicines" title="list my medicines">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Listar Medicamentos</span>
+							</petclinic:menuItem>
 
 						</ul></li>
 				</sec:authorize>

@@ -14,7 +14,7 @@
         	<th style="width: 150px;">Medicamento</th>
             <th style="width: 150px;">Fecha de inicio</th>
             <th style="width: 150px;">Dosis</th>
-            <th style="width: 150px;">Dias de duración</th>
+            <th style="width: 150px;">Dias de duraciï¿½n</th>
             <th style="width: 150px;">Indicaciones</th>
             <th style="width: 150px;">Advertencias al paciente</th>
 
@@ -44,7 +44,7 @@
                   <td>
                     <c:out value="${prescription.patientWarning}"/>
                 </td>
-                
+
             </tr>
         </c:forEach>
         </tbody>

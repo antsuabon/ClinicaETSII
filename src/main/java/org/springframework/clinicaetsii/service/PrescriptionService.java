@@ -1,6 +1,7 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Prescription;
 import org.springframework.clinicaetsii.repository.PrescriptionRepository;
@@ -49,10 +50,16 @@ public class PrescriptionService {
   public void deletePrescription(final Prescription prescription) throws DataAccessException {
     this.prescriptionRepository.delete(prescription);
   }
-  
+
   @Transactional(readOnly = true)
   public Collection<Prescription> findAllPrescriptionsByDoctor(final int doctorId) throws DataAccessException {
     return this.prescriptionRepository.findPrescriptionByDoctorId(doctorId);
   }
+
+  @Transactional(readOnly = true)
+  public Prescription findPrescriptionByMedicineId(final int medicineId) throws DataAccessException {
+    return this.prescriptionRepository.findPrescriptionByMedicineId(medicineId);
+  }
+
 
 }

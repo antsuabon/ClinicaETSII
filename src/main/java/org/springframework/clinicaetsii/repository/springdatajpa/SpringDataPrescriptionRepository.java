@@ -17,9 +17,12 @@ public interface SpringDataPrescriptionRepository extends PrescriptionRepository
 	@Override
 	@Query("select pr from Prescription pr where pr.patient.id =:patientId order by pr.startDate asc")
 	Collection<Prescription> findPrescriptionsByPatientIdOrdered(@Param("patientId") int patientId);
-	
+
 	@Override
 	@Query("select p from Prescription p where p.doctor.id =:doctorId")
 	Collection<Prescription> findPrescriptionByDoctorId(@Param("doctorId")int doctorId);
 
+	@Override
+	@Query("select p from Prescription p where p.medicine.id =:medicineId")
+	Prescription findPrescriptionByMedicineId(@Param("medicineId")int medicineId);
 }
