@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class ListShowAndDeleteAdministrativeUITests {
+public class ListShowAndDeleteAdministrativeUITest {
 	
   private WebDriver driver;
   private String baseUrl;

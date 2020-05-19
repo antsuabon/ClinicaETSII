@@ -73,8 +73,24 @@ INSERT INTO doctors (doctor_id, collegiate_code) VALUES (11,'303012645');
 INSERT INTO authorities VALUES (11,'doctor');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
-(6, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
-INSERT INTO authorities VALUES (6,'administrative');
+(101, 'administrative1', 'administrative1', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
+INSERT INTO administratives (administrative_id) VALUES (101);
+INSERT INTO authorities VALUES (101,'administrative');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(102, 'administrative2', 'administrative2', true, 'María', 'Rodríguez Fernandez','12345671P','maria@gmail.com','983762578');
+INSERT INTO administratives (administrative_id) VALUES (102);
+INSERT INTO authorities VALUES (102,'administrative');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(103, 'administrative3', 'administrative3', true, 'José', 'Gómez Gómez ','12345672P','jose@gmail.com','983762178');
+INSERT INTO administratives (administrative_id) VALUES (103);
+INSERT INTO authorities VALUES (103,'administrative');
+
+INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
+(104, 'administrative4', 'administrative4', true, 'Gabriel', 'Salgado Tena','12345638P','gabriel@gmail.com','983763578');
+INSERT INTO administratives (administrative_id) VALUES (104);
+INSERT INTO authorities VALUES (104,'administrative');
 
 INSERT INTO users (id, username, password, enabled, name, surname, dni, email, phone) VALUES
 (8, 'admin', 'admin', true, 'Jesús', 'Fernandez Rodríguez','12345678P','jesús@gmail.com','983762578');
