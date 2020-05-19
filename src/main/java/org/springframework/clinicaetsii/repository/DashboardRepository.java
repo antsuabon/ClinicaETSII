@@ -1,25 +1,23 @@
 package org.springframework.clinicaetsii.repository;
 
+import java.util.List;
+import javax.persistence.Tuple;
+
 public interface DashboardRepository {
 
-	// public Double getAverageNumberOfPrescriptionsByDoctor();
-	//
-	// public List<String> getMostFrequentDiagnosesLabels();
-	//
-	// public List<Long> getMostFrequentDiagnosesValues();
-	//
-	// public List<String> getNumberOfConsultationsByDischargeTypeLabels();
-	//
-	// public List<Long> getNumberOfConsultationsByDischargeTypeValues();
-	//
-	// public List<String> getMostFrequestMedicinesLabels();
-	//
-	// public List<Long> getMostFrequestMedicinesValues();
-	//
-	// public Double getAverageWaitingTime();
-	//
+	public Double getAverageNumberOfPrescriptionsByDoctor();
 
-	// public Long getAverageDiagnosesPerConsultation();
+	public List<Tuple> getMostFrequentDiagnoses();
+
+	public List<Tuple> getNumberOfConsultationsByDischargeType();
+
+	public List<Tuple> getMostFrequestMedicines();
+
+	public Double getAverageWaitingTime();
+
+	public List<Tuple> getRatioServicesPatientsNumServices();
+
+	public Double getAverageDiagnosesPerConsultation();
 
 	public Double getAverageAge();
 

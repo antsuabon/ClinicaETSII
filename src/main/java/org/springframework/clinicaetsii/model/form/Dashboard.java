@@ -25,7 +25,11 @@ public class Dashboard implements Serializable {
 
 	private Double averageWaitingTime;
 
-	private Long averageDiagnosesPerConsultation;
+	private List<Long> ratioServicesPatientsNumServices;
+
+	private List<Double> ratioServicesPatientsAvgPatients;
+
+	private Double averageDiagnosesPerConsultation;
 
 	private Double averageAge;
 
