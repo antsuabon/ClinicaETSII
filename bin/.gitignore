@@ -74,9 +74,9 @@ _site/
 /.vscode/
 /Sprints/
 /docker-compose.yml
+/java/
 /mvnw
 /mvnw.cmd
 /pom.xml
 /readme.md
 /src/
-/java/
