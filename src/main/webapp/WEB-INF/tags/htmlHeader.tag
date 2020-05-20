@@ -37,4 +37,9 @@ PetClinic :: a Spring Framework demonstration
  	<script type="text/javascript" src="${jQueryJs}"></script>
  	<spring:url value="/webjars/jquery-ui/1.11.4/jquery-ui.min.js" var="jQueryUiJs"/>
  	<script type="text/javascript" src="${jQueryUiJs}"></script>
+ 	
+ 	<!-- chart.js -->
+ 	<spring:url value="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" var="chartJs"/>
+ 	<script type="text/javascript" src="${chartJs}"></script>
+ 	
 </head>
