@@ -1,7 +1,9 @@
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.List;
+
 import javax.persistence.Tuple;
+
 import org.springframework.clinicaetsii.model.NamedEntity;
 import org.springframework.clinicaetsii.repository.DashboardRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,7 +30,7 @@ public interface SpringDataDashboardRepository
 	public List<Tuple> getMostFrequestMedicines();
 
 	@Override
-	@Query("select avg(datediff(second, consultation.startTime, consultation.appointment.startTime)) from Consultation consultation")
+	@Query("select avg(timediff(consultation.startTime, consultation.appointment.startTime)) from Consultation consultation")
 	public Double getAverageWaitingTime();
 
 	@Override
@@ -40,6 +42,6 @@ public interface SpringDataDashboardRepository
 	public Double getAverageDiagnosesPerConsultation();
 
 	@Override
-	@Query("select avg(datediff(year, patient.birthDate, CURRENT_TIMESTAMP)) from Patient patient")
+	@Query("select avg(datediff(CURRENT_TIMESTAMP,patient.birthDate)/365) from Patient patient")
 	public Double getAverageAge();
 }
