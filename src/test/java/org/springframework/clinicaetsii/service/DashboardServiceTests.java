@@ -8,15 +8,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.clinicaetsii.model.form.Dashboard;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-@DataJpaTest(includeFilters = {@ComponentScan.Filter(Service.class),
-		@ComponentScan.Filter(Repository.class)})
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DashboardServiceTests {
 
 	@Autowired

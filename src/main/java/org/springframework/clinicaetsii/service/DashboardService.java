@@ -8,12 +8,13 @@ import javax.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.form.Dashboard;
 import org.springframework.clinicaetsii.repository.DashboardRepository;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@ComponentScan("org.springframework.clinicaetsii.repository.custom")
 public class DashboardService {
-
 
 	private DashboardRepository dashboardRepository;
 
