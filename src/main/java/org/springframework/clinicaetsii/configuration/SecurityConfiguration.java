@@ -41,7 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		http.addFilterBefore(new EncodingFilter(), ChannelProcessingFilter.class);
 
-		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**")
+		http.authorizeRequests()
+				.antMatchers("/resources/**", "/webjars/**", "/h2-console/**", "/monitoring/**")
 				.permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 				.antMatchers("/anonymous/**").permitAll().antMatchers("/patient/**")
 				.hasAnyAuthority("patient").antMatchers("/doctor/**").hasAnyAuthority("doctor")

@@ -28,6 +28,7 @@ class ConsultationServiceTest {
 
 	@Autowired
 	protected ExaminationService examinationService;
+
 	@Autowired
 	protected DoctorService doctorService;
 
