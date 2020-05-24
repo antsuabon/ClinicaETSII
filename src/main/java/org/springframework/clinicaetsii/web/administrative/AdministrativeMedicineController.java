@@ -42,8 +42,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AdministrativeMedicineController {
 
-	private final MedicineService medicineService;
-	private PrescriptionService	prescriptionService;
+	private final MedicineService	medicineService;
+	private PrescriptionService		prescriptionService;
+
 
 	@Autowired
 	public AdministrativeMedicineController(final MedicineService medicineService, final PrescriptionService prescriptionService) {
@@ -57,8 +58,7 @@ public class AdministrativeMedicineController {
 	}
 
 	@GetMapping(value = "/administrative/medicines/{medicineId}")
-	public String processDetails(@PathVariable("medicineId") final int medicineId,
-			final Map<String, Object> model) {
+	public String processDetails(@PathVariable("medicineId") final int medicineId, final Map<String, Object> model) {
 
 		Medicine med = this.medicineService.findMedicineById(medicineId);
 
@@ -73,9 +73,7 @@ public class AdministrativeMedicineController {
 	}
 
 	@GetMapping(value = "/administrative/medicines")
-	public String listMedicines(final Medicine medicine,
-			final BindingResult result,
-			final Map<String, Object> model) {
+	public String listMedicines(final Medicine medicine, final BindingResult result, final Map<String, Object> model) {
 
 		Collection<Medicine> results = this.medicineService.findAllMedicines();
 		if (results.isEmpty()) {
@@ -99,22 +97,20 @@ public class AdministrativeMedicineController {
 		System.out.println(prescription);
 		System.out.println(medicine);
 
-		if(medicine.getQuantity() < 0 ) {
-			result.rejectValue("quantity", "incorrect_quantity","La cantidad introducida debe de ser mayor que 0");
+		if (medicine.getQuantity() < 0) {
+			result.rejectValue("quantity", "incorrect_quantity", "La cantidad introducida debe de ser mayor que 0");
 		}
 
 		if (result.hasErrors()) {
 			model.put("medicine", medicine);
 			return "/administrative/medicine/updateMedicineForm";
-		}
-		else {
+		} else {
 			medicine.setId(medicineId);
 			this.medicineService.saveMedicine(medicine);
 			return "redirect:/administrative/medicines/{medicineId}";
 		}
 
 	}
-
 
 	@GetMapping(value = "/administrative/medicines/{medicineId}/delete")
 	public String initDelete(@PathVariable("medicineId") final int medicineId) {
@@ -125,9 +121,8 @@ public class AdministrativeMedicineController {
 		}
 
 
+
 		return "redirect:/administrative/medicines";
 	}
-
-
 
 }

@@ -57,7 +57,7 @@ public class ListAndDeleteDoctorsAdminUITest {
 		this.driver.findElement(By.id("username")).sendKeys(username);
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(this.passwordOf(username));
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
@@ -90,22 +90,20 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	private ListAndDeleteDoctorsAdminUITest thenIDeleteDoctor() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Médico')]")).click();
-		if (isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td"))) {
-			assertNotEquals("Pepe Loco Malicioso", this.driver
-					.findElement(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")).getText());
-		}
+		Assert.assertFalse(
+				this.isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")));
 		return this;
 	}
 
 	@Test
 	public void shouldListDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList();
 	}
 
 	@Test
 	public void shouldDeleteDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList().thenIDeleteDoctor();
 	}
 

@@ -44,7 +44,7 @@ class DoctorPrescriptionControllerE2ETests {
 	@Test
 	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	void testNotListPrescriptions() throws Exception {
-		clearPrescriptions();
+		this.clearPrescriptions();
 		this.mockMvc
 				.perform(
 						MockMvcRequestBuilders.get("/doctor/patients/{patientId}/prescriptions", 4))
