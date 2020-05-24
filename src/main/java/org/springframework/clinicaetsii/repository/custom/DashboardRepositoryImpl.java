@@ -53,10 +53,10 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public Double getAverageWaitingTime() {
 		TypedQuery<Double> query = this.entityManager.createQuery(
-				"select avg(datediff(second, consultation.appointment.startTime, consultation.startTime)) from Consultation consultation",
+				"select avg(extract(SECOND FROM (consultation.startTime)) - extract(SECOND FROM consultation.appointment.startTime)) from Consultation consultation",
 				Double.class);
 
-		return query.getResultList().get(0);
+		return query.getSingleResult();
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public Double getAverageAge() {
 		TypedQuery<Double> query = this.entityManager.createQuery(
-				"select avg(datediff(day, patient.birthDate, CURRENT_TIMESTAMP) / 365) from Patient patient",
+				"select avg(datediff(CURRENT_TIMESTAMP, patient.birthDate) / 365.) from Patient patient",
 				Double.class);
 
 		return query.getSingleResult();

@@ -27,8 +27,11 @@ public class DashboardService {
 	public Dashboard getDashboard() {
 		Dashboard dashboard = new Dashboard();
 
+		Double averageNumberOfPrescriptionsByDoctor =
+				this.dashboardRepository.getAverageNumberOfPrescriptionsByDoctor();
 		dashboard.setAverageNumberOfPrescriptionsByDoctor(
-				this.dashboardRepository.getAverageNumberOfPrescriptionsByDoctor());
+				averageNumberOfPrescriptionsByDoctor != null ? averageNumberOfPrescriptionsByDoctor
+						: 0.);
 
 		List<Tuple> diagnosesByName = this.dashboardRepository.getMostFrequentDiagnoses();
 		dashboard.setMostFrequentDiagnosesLabels(diagnosesByName.stream()
@@ -60,12 +63,17 @@ public class DashboardService {
 				dashboard.getRatioServicesPatientsNumServices().stream()
 						.map(n -> ratioServicesPatients.get(n)).collect(Collectors.toList()));
 
-		dashboard.setAverageWaitingTime(this.dashboardRepository.getAverageWaitingTime());
 
+		Double averageWaitingTime = this.dashboardRepository.getAverageWaitingTime();
+		dashboard.setAverageWaitingTime(averageWaitingTime != null ? averageWaitingTime : 0.);
+
+		Double averageDiagnosesPerConsultation =
+				this.dashboardRepository.getAverageDiagnosesPerConsultation();
 		dashboard.setAverageDiagnosesPerConsultation(
-				this.dashboardRepository.getAverageDiagnosesPerConsultation());
+				averageDiagnosesPerConsultation != null ? averageDiagnosesPerConsultation : 0.);
 
-		dashboard.setAverageAge(this.dashboardRepository.getAverageAge());
+		Double averageAge = this.dashboardRepository.getAverageAge();
+		dashboard.setAverageAge(averageAge != null ? averageAge : 0.);
 
 		return dashboard;
 	}

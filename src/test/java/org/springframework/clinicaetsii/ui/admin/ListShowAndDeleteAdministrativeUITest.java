@@ -1,18 +1,20 @@
 package org.springframework.clinicaetsii.ui.admin;
 
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
-
-import org.openqa.selenium.*;
+import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -21,78 +23,84 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ListShowAndDeleteAdministrativeUITest {
-	
-  private WebDriver driver;
-  private String baseUrl;
-  private boolean acceptNextAlert = true;
-  private StringBuffer verificationErrors = new StringBuffer();
 
-  @BeforeEach
-  public void setUp() throws Exception {
-	String pathToGeckoDriver = "C:\\Users\\aleja\\Desktop\\universidad\\gecko";
-	System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-    driver = new FirefoxDriver();
-    baseUrl = "https://www.google.com/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-  }
+	@LocalServerPort
+	private int port;
 
-  @Test
-  public void listShowAndDeleteAdministrative() throws Exception {
-    driver.get("http://localhost:9090/");
-    driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
-    driver.findElement(By.id("username")).click();
-    driver.findElement(By.id("username")).clear();
-    driver.findElement(By.id("username")).sendKeys("admin");
-    driver.findElement(By.id("password")).click();
-    driver.findElement(By.id("password")).clear();
-    driver.findElement(By.id("password")).sendKeys("admin");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
-    driver.findElement(By.xpath("//a[contains(text(),'Administrador')]")).click();
-    driver.findElement(By.xpath("//a[contains(@href, '/admin/administratives')]")).click();
-    driver.findElement(By.xpath("//a[contains(text(),'Seleccionar Administrativo')]")).click();
-    driver.findElement(By.xpath("//a[contains(text(),'Eliminar Administrativo')]")).click();
-    assertFalse(isElementPresent(By.xpath("//table[@id='administrativesTable']/tbody/tr[4]/td")));
-  }
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
-  @AfterEach
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-  }
+	@BeforeEach
+	public void setUp() throws Exception {
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
+		this.baseUrl = "https://www.google.com/";
+		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	}
 
-  private boolean isElementPresent(By by) {
-    try {
-      driver.findElement(by);
-      return true;
-    } catch (NoSuchElementException e) {
-      return false;
-    }
-  }
+	@Test
+	public void listShowAndDeleteAdministrative() throws Exception {
+		this.driver.get("http://localhost:" + this.port);
+		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
+		this.driver.findElement(By.id("username")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("admin");
+		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("admin");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Administrador')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/administratives')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Seleccionar Administrativo')]"))
+				.click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Administrativo')]"))
+				.click();
+		assertFalse(
+				isElementPresent(By.xpath("//table[@id='administrativesTable']/tbody/tr[4]/td")));
+	}
 
-  private boolean isAlertPresent() {
-    try {
-      driver.switchTo().alert();
-      return true;
-    } catch (NoAlertPresentException e) {
-      return false;
-    }
-  }
+	@AfterEach
+	public void tearDown() throws Exception {
+		this.driver.quit();
+		String verificationErrorString = this.verificationErrors.toString();
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
 
-  private String closeAlertAndGetItsText() {
-    try {
-      Alert alert = driver.switchTo().alert();
-      String alertText = alert.getText();
-      if (acceptNextAlert) {
-        alert.accept();
-      } else {
-        alert.dismiss();
-      }
-      return alertText;
-    } finally {
-      acceptNextAlert = true;
-    }
-  }
+	private boolean isElementPresent(final By by) {
+		try {
+			this.driver.findElement(by);
+			return true;
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+
+	private boolean isAlertPresent() {
+		try {
+			this.driver.switchTo().alert();
+			return true;
+		} catch (NoAlertPresentException e) {
+			return false;
+		}
+	}
+
+	private String closeAlertAndGetItsText() {
+		try {
+			Alert alert = this.driver.switchTo().alert();
+			String alertText = alert.getText();
+			if (this.acceptNextAlert) {
+				alert.accept();
+			} else {
+				alert.dismiss();
+			}
+			return alertText;
+		} finally {
+			this.acceptNextAlert = true;
+		}
+	}
 }

@@ -25,7 +25,7 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> AnÃ³nimo <span
+				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Anónimo <span
 						class="glyphicon glyphicon-chevron-down"></span>
 				</a>
 
@@ -33,7 +33,7 @@
 
 						<petclinic:menuItem active="${name eq 'doctors'}" url="/anonymous/doctors" title="list doctors">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							<span>MÃ©dicos</span>
+							<span>Médicos</span>
 						</petclinic:menuItem>
 
 						<petclinic:menuItem active="${name eq 'medicines'}" url="/anonymous/medicines" title="list medicines">
@@ -62,7 +62,7 @@
 
 							<petclinic:menuItem active="${name eq 'appointments'}" url="/patient/appointments/table" title="request appointment">
 								<span aria-hidden="true"></span>
-								<span>Solicitar cita mÃ©dica</span>
+								<span>Solicitar cita médica</span>
 							</petclinic:menuItem>
 
 
@@ -75,7 +75,7 @@
 				</sec:authorize>
 
 				<sec:authorize access="hasAuthority('doctor')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> MÃ©dico <span
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Médico <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 
@@ -110,7 +110,7 @@
 							<petclinic:menuItem active="${name eq 'administrative new patient'}" url="/administrative/patients/new"
 								title="add new patient">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>AÃ±adir Paciente</span>
+								<span>Añadir Paciente</span>
 							</petclinic:menuItem>
 
 							<petclinic:menuItem active="${name eq 'administrative patients'}" url="/administrative/patients" title="list my patients">
@@ -141,7 +141,7 @@
 
 							<petclinic:menuItem active="${name eq 'administrative doctors'}" url="/admin/doctors" title="list my doctors">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								<span>Listar MÃ©dicos</span>
+								<span>Listar Médicos</span>
 							</petclinic:menuItem>
 
 							<petclinic:menuItem active="${name eq 'admin list administratives'}" url="/admin/administratives" title="list administratives">
@@ -169,7 +169,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar sesiÃ³n</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
 					<!-- <li><a href="<c:url value="/users/new" />">Register</a></li> -->
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
