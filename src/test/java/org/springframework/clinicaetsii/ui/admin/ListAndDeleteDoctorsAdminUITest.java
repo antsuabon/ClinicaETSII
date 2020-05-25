@@ -1,7 +1,6 @@
 
 package org.springframework.clinicaetsii.ui.admin;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -57,7 +56,7 @@ public class ListAndDeleteDoctorsAdminUITest {
 		this.driver.findElement(By.id("username")).sendKeys(username);
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(this.passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
@@ -90,20 +89,19 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	private ListAndDeleteDoctorsAdminUITest thenIDeleteDoctor() {
 		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Médico')]")).click();
-		Assert.assertFalse(
-				this.isElementPresent(By.xpath("//table[@id='doctorsTable']/tbody/tr[4]/td")));
+		Assertions.assertFalse(isElementPresent(By.xpath("//td[text(), 'James Smith Rodriguez']")));
 		return this;
 	}
 
 	@Test
 	public void shouldListDoctor() throws Exception {
-		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList();
 	}
 
 	@Test
 	public void shouldDeleteDoctor() throws Exception {
-		this.as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
 				.thenIEnterDoctorList().thenISeeDoctorList().thenIDeleteDoctor();
 	}
 

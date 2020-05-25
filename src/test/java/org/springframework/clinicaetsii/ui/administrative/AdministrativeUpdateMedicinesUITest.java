@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui.administrative;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +33,10 @@ public class AdministrativeUpdateMedicinesUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
 
-		 String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
-		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -58,13 +55,14 @@ public class AdministrativeUpdateMedicinesUITest {
 	}
 
 	private AdministrativeUpdateMedicinesUITest thenISeeMyUserRole() {
-		 this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a")).click();
-		 this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
 		return this;
 	}
 
 	private AdministrativeUpdateMedicinesUITest thenIEnterMedicineList() {
-		this.driver.findElement(By.xpath("//a[contains(@href, '/administrative/medicines')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/administrative/medicines')]"))
+				.click();
 		return this;
 	}
 
@@ -95,20 +93,21 @@ public class AdministrativeUpdateMedicinesUITest {
 	}
 
 	private AdministrativeUpdateMedicinesUITest thenIModify() {
-			this.driver.findElement(By.xpath("//a[contains(text(),'Ibuprofeno')]")).click();
-		    this.driver.findElement(By.xpath("//h4")).click();
-		    this.driver.findElement(By.id("genericalName")).click();
-		    this.driver.findElement(By.id("genericalName")).clear();
-		    this.driver.findElement(By.id("genericalName")).sendKeys("Ib");
-		    this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		    this.driver.findElement(By.xpath("//td")).click();
-		    return this;
+		this.driver.findElement(By.xpath("//a[contains(text(),'Ibuprofeno')]")).click();
+		this.driver.findElement(By.xpath("//h4")).click();
+		this.driver.findElement(By.id("genericalName")).click();
+		this.driver.findElement(By.id("genericalName")).clear();
+		this.driver.findElement(By.id("genericalName")).sendKeys("Ib");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//td")).click();
+		return this;
 	}
 
 
 	@Test
 	public void shouldListMedicines() throws Exception {
-		this.as("administrative1","administrative1").thenISeeMyUserRole().thenIEnterMedicineList().thenIModify();
+		as("administrative1", "administrative1").thenISeeMyUserRole().thenIEnterMedicineList()
+				.thenIModify();
 
 	}
 

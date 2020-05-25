@@ -2,7 +2,6 @@
 package org.springframework.clinicaetsii.ui.administrative;
 
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +33,10 @@ public class AdministrativeDeleteMedicinesUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		System.setProperty("webdriver.chrome.driver",
-//				"D:\\Aplicaciones\\chromedriver_win32\\chromedriver.exe");
+		String pathToGeckoDriver = "D:\\geckodriver";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		this.driver = new FirefoxDriver();
 
-		 String pathToGeckoDriver="C:\\Users\\angel\\Downloads\\webdrivers";
-		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		 this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
@@ -58,13 +55,14 @@ public class AdministrativeDeleteMedicinesUITest {
 	}
 
 	private AdministrativeDeleteMedicinesUITest thenISeeMyUserRole() {
-		 this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a")).click();
-		 this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Administrativo')]")).click();
 		return this;
 	}
 
 	private AdministrativeDeleteMedicinesUITest thenIEnterMedicineList() {
-		this.driver.findElement(By.xpath("//a[contains(@href, '/administrative/medicines')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/administrative/medicines')]"))
+				.click();
 		return this;
 	}
 
@@ -94,18 +92,21 @@ public class AdministrativeDeleteMedicinesUITest {
 		return this;
 	}
 
-	private AdministrativeDeleteMedicinesUITest thenIDeleteMedicine(){
+	private AdministrativeDeleteMedicinesUITest thenIDeleteMedicine() {
 
 		this.driver.findElement(By.xpath("//a[contains(text(),'Omeprazol')]")).click();
 		this.driver.findElement(By.xpath("//a[2]/h4")).click();
-	  Assertions.assertFalse(this.isElementPresent(By.xpath("//table[@id='medicinesTable']/tbody/tr[3]/td")));
+		Assertions.assertFalse(
+				isElementPresent(By.xpath("//table[@id='medicinesTable']/tbody/tr[3]/td")));
 
 
-	    return this;
+		return this;
 	}
+
 	@Test
 	public void shouldListMedicines() throws Exception {
-		this.as("administrative1","administrative1").thenISeeMyUserRole().thenIEnterMedicineList().thenIDeleteMedicine();
+		as("administrative1", "administrative1").thenISeeMyUserRole().thenIEnterMedicineList()
+				.thenIDeleteMedicine();
 
 	}
 
