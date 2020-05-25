@@ -68,8 +68,8 @@ class TwoScenariesPerformanceTestingHU025 extends Simulation {
 
 
 	setUp(
-		scn1.inject(rampUsers(2000) during (100 seconds)),
-		scn2.inject(rampUsers(2000) during (100 seconds))
+		scn1.inject(rampUsers(8000) during (100 seconds)),
+		scn2.inject(rampUsers(8000) during (100 seconds))
 		)
 		.protocols(httpProtocol)
 		.assertions(

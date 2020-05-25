@@ -66,12 +66,12 @@ class TwoScenariesPerformanceTestingHU021 extends Simulation {
 	)
 
 	setUp(
-		scn1.inject(rampUsers(2000) during (100 seconds)),
-		scn2.inject(rampUsers(2000) during (100 seconds)))
+		scn1.inject(rampUsers(5000) during (100 seconds)),
+		scn2.inject(rampUsers(5000) during (100 seconds)))
 	.protocols(httpProtocol)
 	.assertions(
 		global.responseTime.max.lt(5000),
-		global.responseTime.min.lt(1000),
+		global.responseTime.mean.lt(1000),
 		global.successfulRequests.percent.gt(95)
 	)
 }

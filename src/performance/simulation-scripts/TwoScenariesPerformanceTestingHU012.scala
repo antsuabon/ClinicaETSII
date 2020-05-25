@@ -35,7 +35,8 @@ class TwoScenariesPerformanceTestingHU012 extends Simulation {
 	object Login {
 		val login = exec(http("Login")
 			.get("/login")
-			.headers(headers_0))
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(11)
 	}
 
@@ -45,14 +46,15 @@ class TwoScenariesPerformanceTestingHU012 extends Simulation {
 			.headers(headers_2)
 			.formParam("username", "administrative1")
 			.formParam("password", "administrative1")
-			.formParam("_csrf", "191b7ee2-ead0-4b9a-a21d-0f0e467c5dd2"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(22)
 	}
 
 	object CrearPaciente {
 		val crearPaciente = exec(http("CrearPaciente")
 			.get("/administrative/patients/new")
-			.headers(headers_0))
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(175)
 	}
 
@@ -72,7 +74,7 @@ class TwoScenariesPerformanceTestingHU012 extends Simulation {
 			.formParam("phone", "654321987")
 			.formParam("phone2", "654987321")
 			.formParam("generalPractitioner", "2")
-			.formParam("_csrf", "369b7e2e-d617-4265-b9fe-86c015e7a206"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(19)
 	}
 	
@@ -90,8 +92,8 @@ class TwoScenariesPerformanceTestingHU012 extends Simulation {
 
 
 	setUp(
-		scn1.inject(rampUsers(2000) during (100 seconds)),
-		scn2.inject(rampUsers(2000) during (100 seconds))
+		scn1.inject(rampUsers(5000) during (100 seconds)),
+		scn2.inject(rampUsers(5000) during (100 seconds))
 		)
 		.protocols(httpProtocol)
 		.assertions(

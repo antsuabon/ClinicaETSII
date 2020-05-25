@@ -121,8 +121,7 @@ class TwoScenariesPerformanceTestingHU013 extends Simulation {
 			.formParam("doctor.services", "4")
 			.formParam("doctor.services", "6")
 			.formParam("_doctor.services", "1")
-			.formParam("_csrf", "${stoken}")
-			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+			.formParam("_csrf", "${stoken}"))
 		.pause(9)
 		.exec(http("LoggedOut")
 			.post("/logout")
@@ -143,8 +142,8 @@ class TwoScenariesPerformanceTestingHU013 extends Simulation {
 														UpdateFullProfile.updateFullProfile)
 
 	setUp(
-		scn1.inject(rampUsers(5000) during (100 seconds)), 
-		scn2.inject(rampUsers(5000) during (100 seconds)))
+		scn1.inject(rampUsers(8000) during (100 seconds)), 
+		scn2.inject(rampUsers(8000) during (100 seconds)))
 	.protocols(httpProtocol)
 	.assertions(
 		global.responseTime.max.lt(5000),

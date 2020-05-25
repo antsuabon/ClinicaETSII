@@ -22,6 +22,11 @@ class TwoScenariesPerformanceTestingHU007 extends Simulation {
 		"Origin" -> "http://www.dp2.com",
 		"Upgrade-Insecure-Requests" -> "1")
 
+	val headers_3 = Map(
+		"Origin" -> "http://www.dp2.com",
+		"Proxy-Connection" -> "keep-alive",
+		"Upgrade-Insecure-Requests" -> "1")
+
 	val headers_5 = Map("Accept" -> "image/webp,*/*")
 
 	object Home {
@@ -34,18 +39,29 @@ class TwoScenariesPerformanceTestingHU007 extends Simulation {
 	object Login {
 		val login = exec(http("Login")
 			.get("/login")
-			.headers(headers_0))
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(11)
 	}
 
-	object Logged {
-		val logged = exec(http("Logged")
+	object Logged1 {
+		val logged1 = exec(http("Logged")
 			.post("/login")
-			.headers(headers_2)
+			.headers(headers_3)
 			.formParam("username", "patient1")
 			.formParam("password", "patient1")
-			.formParam("_csrf", "570deb04-6cbd-4293-9eee-24b15dbd0f2d"))
-		.pause(22)
+			.formParam("_csrf", "${stoken}"))
+		.pause(13)
+	}
+
+	object Logged2 {
+		val logged2 = exec(http("Logged2")
+			.post("/login")
+			.headers(headers_3)
+			.formParam("username", "patient2")
+			.formParam("password", "patient2")
+			.formParam("_csrf", "${stoken}"))
+		.pause(10)
 	}
 
 	object ListarCitas {
@@ -57,18 +73,18 @@ class TwoScenariesPerformanceTestingHU007 extends Simulation {
 		
 	val scn1 = scenario("ListarCitas1").exec(Home.home,
 												Login.login,
-												Logged.logged,
+												Logged1.logged1,
 												ListarCitas.listarCitas)
 
 	val scn2 = scenario("ListarCitas2").exec(Home.home,
 												Login.login,
-												Logged.logged,
+												Logged2.logged2,
 												ListarCitas.listarCitas)		
 
 
 	setUp(
-		scn1.inject(rampUsers(1000) during (100 seconds)),
-		scn2.inject(rampUsers(1000) during (100 seconds))
+		scn1.inject(rampUsers(10000) during (100 seconds)),
+		scn2.inject(rampUsers(10000) during (100 seconds))
 		)
 		.protocols(httpProtocol)
 		.assertions(
