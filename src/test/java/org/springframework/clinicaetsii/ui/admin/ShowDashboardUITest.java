@@ -1,9 +1,10 @@
-
 package org.springframework.clinicaetsii.ui.admin;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeUnit;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class ListAndDeleteDoctorsAdminUITest {
+public class ShowDashboardUITest {
 
 	@LocalServerPort
 	private int port;
@@ -34,7 +35,6 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 	private String username;
 
-
 	@BeforeEach
 	public void setUp() throws Exception {
 		String pathToGeckoDriver = "D:\\geckodriver";
@@ -43,71 +43,136 @@ public class ListAndDeleteDoctorsAdminUITest {
 
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	}
-
-	private ListAndDeleteDoctorsAdminUITest as(final String username) {
-
-		this.username = username;
 
 		this.driver.get("http://localhost:" + this.port);
+	}
+
+	private ShowDashboardUITest as(final String username, final String password) {
+		this.username = username;
+
 		this.driver.findElement(By.xpath("//a[contains(text(),'Iniciar sesión')]")).click();
+
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys(username);
+
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys(passwordOf(username));
+		this.driver.findElement(By.id("password")).sendKeys(password);
+
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		return this;
 	}
 
-	private ListAndDeleteDoctorsAdminUITest whenIamLoggedInTheSystem() {
+	private ShowDashboardUITest whenIamLoggedInTheSystem() {
 		return this;
 	}
 
-	private ListAndDeleteDoctorsAdminUITest thenISeeMyUsernameInTheMenuBar() {
-		Assertions.assertEquals(this.username.toUpperCase(),
+	private ShowDashboardUITest thenISeeMyUsernameInTheMenuBar() {
+		assertEquals(this.username.toUpperCase(),
 				this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).getText());
 		return this;
 	}
 
-	private ListAndDeleteDoctorsAdminUITest thenIEnterDoctorList() {
-		this.driver.findElement(By.xpath("//a[contains(text(),'Administrador')]")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/doctors')]")).click();
+	private ShowDashboardUITest thenISeeMyRoleDropDownMenu() {
+		assertEquals("Administrador".toUpperCase(),
+				this.driver.findElement(By.xpath("(//a[contains(@href, '#')])[2]")).getText());
 		return this;
 	}
 
-	private ListAndDeleteDoctorsAdminUITest thenISeeDoctorList() {
-		Assertions.assertEquals("Médicos", this.driver.findElement(By.xpath("//h2")).getText());
-		this.driver.findElement(By.xpath("(//a[contains(text(),'Seleccionar Médico')])[4]"))
-				.click();
-		Assertions.assertEquals("Detalles del médico",
-				this.driver.findElement(By.xpath("//h2")).getText());
-		Assertions.assertEquals("doctor4", this.driver.findElement(By.xpath("//b")).getText());
+
+	private ShowDashboardUITest thenIEnterDashboard() {
+
+		this.driver.findElement(By.xpath("(//a[contains(@href, '#')])[2]")).click();
+
+		assertEquals("Dashboard".toUpperCase(), this.driver
+				.findElement(By.xpath("//a[contains(@href, '/admin/dashboard')]")).getText());
+		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/dashboard')]")).click();
+
 		return this;
 	}
 
-	private ListAndDeleteDoctorsAdminUITest thenIDeleteDoctor() {
-		this.driver.findElement(By.xpath("//a[contains(text(),'Eliminar Médico')]")).click();
-		Assertions.assertFalse(isElementPresent(By.xpath("//td[text(), 'James Smith Rodriguez']")));
+
+	private ShowDashboardUITest thenIShowDashboard() {
+
+		assertEquals("Dashboard", this.driver.findElement(By.xpath("//h2")).getText());
+		assertEquals("Número medio de prescripciones por médico",
+				this.driver.findElement(By.xpath("//th")).getText());
+		assertEquals("Tiempo de espera medio",
+				this.driver.findElement(By.xpath("//tr[2]/th")).getText());
+		assertEquals("Edad media de los pacientes",
+				this.driver.findElement(By.xpath("//tr[4]/th")).getText());
+
+
+
+		for (int second = 0;; second++) {
+			if (second >= 60) {
+				fail("timeout");
+			}
+			try {
+				if (isElementPresent(By.id("mostFrequentDiagnoses"))) {
+					break;
+				}
+			} catch (Exception e) {
+			}
+		}
+
+		for (int second = 0;; second++) {
+			if (second >= 60) {
+				fail("timeout");
+			}
+			try {
+				if (isElementPresent(By.id("numberOfConsultationsByDischargeType"))) {
+					break;
+				}
+			} catch (Exception e) {
+			}
+		}
+
+		for (int second = 0;; second++) {
+			if (second >= 60) {
+				fail("timeout");
+			}
+			try {
+				if (isElementPresent(By.id("mostFrequestMedicines"))) {
+					break;
+				}
+			} catch (Exception e) {
+			}
+		}
+
+		for (int second = 0;; second++) {
+			if (second >= 60) {
+				fail("timeout");
+			}
+			try {
+				if (isElementPresent(By.id("ratioServicesPatients"))) {
+					break;
+				}
+			} catch (Exception e) {
+			}
+		}
+
+		Assertions.assertThat(this.driver.findElement(By.xpath("//b")).getText()).isNotEmpty();
+		Assertions
+				.assertThat(
+						this.driver.findElement(By.xpath("//table[2]/tbody/tr[2]/td")).getText())
+				.isNotEmpty();
+		Assertions.assertThat(this.driver.findElement(By.xpath("//tr[3]/td")).getText())
+				.isNotEmpty();
+		Assertions.assertThat(this.driver.findElement(By.xpath("//tr[4]/td")).getText())
+				.isNotEmpty();
+
 		return this;
 	}
 
 	@Test
-	public void shouldListDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
-				.thenIEnterDoctorList().thenISeeDoctorList();
+	public void testShowDashboardUI() throws Exception {
+
+		as("admin", "admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
+				.thenISeeMyRoleDropDownMenu().thenIEnterDashboard().thenIShowDashboard();
 	}
 
-	@Test
-	public void shouldDeleteDoctor() throws Exception {
-		as("admin").whenIamLoggedInTheSystem().thenISeeMyUsernameInTheMenuBar()
-				.thenIEnterDoctorList().thenISeeDoctorList().thenIDeleteDoctor();
-	}
-
-	private String passwordOf(final String username) {
-		return username;
-	}
 
 	@AfterEach
 	public void tearDown() throws Exception {
@@ -150,4 +215,5 @@ public class ListAndDeleteDoctorsAdminUITest {
 			this.acceptNextAlert = true;
 		}
 	}
+
 }
