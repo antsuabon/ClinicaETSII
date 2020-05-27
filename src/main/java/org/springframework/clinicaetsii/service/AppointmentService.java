@@ -3,9 +3,9 @@ package org.springframework.clinicaetsii.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Appointment;
+import org.springframework.clinicaetsii.model.projection.AppointmentPatient;
 import org.springframework.clinicaetsii.repository.AppointmentRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,6 +58,18 @@ public class AppointmentService {
 
 		return this.appointmentRepository
 				.findAppointmentsWithoutConsultationByDoctorUsername(username);
+	}
+
+	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('doctor')")
+	public Collection<AppointmentPatient> findCurrentDoctorAppointmentsWithPatient() throws DataAccessException {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		String username = user.getUsername();
+
+		return this.appointmentRepository
+				.findAppointmentsPatientsWithoutConsultationByDoctorUsername(username);
 	}
 
 	@Transactional

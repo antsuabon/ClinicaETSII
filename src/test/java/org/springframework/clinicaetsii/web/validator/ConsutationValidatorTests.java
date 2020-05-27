@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,8 +34,10 @@ public class ConsutationValidatorTests {
 
 	private ConsultationValidator consultationValidator;
 
-	private void initConsultationValidator(final Integer appointmentId, final Integer consultationId) {
-		this.consultationValidator = new ConsultationValidator(this.appointmentService, this.consultationService, appointmentId, consultationId);
+	private void initConsultationValidator(final Integer appointmentId,
+			final Integer consultationId) {
+		this.consultationValidator = new ConsultationValidator(this.appointmentService,
+				this.consultationService, appointmentId, consultationId);
 	}
 
 	private Doctor doctor3;
@@ -138,9 +139,10 @@ public class ConsutationValidatorTests {
 
 		Integer appointmentId = 1;
 		Integer consultationId = 1;
-		this.initConsultationValidator(appointmentId, consultationId);
+		initConsultationValidator(appointmentId, consultationId);
 		this.consultation1.setStartTime(null);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -153,8 +155,9 @@ public class ConsutationValidatorTests {
 	void shouldValidateWhenStartTimeIsAfterAppointmentStartTime() {
 
 		Integer appointmentId = 1;
-		this.initConsultationValidator(appointmentId, null);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
+		initConsultationValidator(appointmentId, null);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -168,10 +171,12 @@ public class ConsutationValidatorTests {
 
 		Integer appointmentId = 1;
 		Integer consultationId = 1;
-		this.initConsultationValidator(appointmentId, consultationId);
+		initConsultationValidator(appointmentId, consultationId);
 		this.consultation1.setDischargeType(this.dischargeType1);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
-		Mockito.when(this.consultationService.findConsultationById(consultationId)).thenReturn(this.consultation1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
+		Mockito.when(this.consultationService.findFullConsultationById(consultationId))
+				.thenReturn(this.consultation1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -184,9 +189,10 @@ public class ConsutationValidatorTests {
 	void shouldValidateWhenStartTimeIsEqualsToAppointmentStartTime() {
 
 		Integer appointmentId = 1;
-		this.initConsultationValidator(appointmentId, null);
+		initConsultationValidator(appointmentId, null);
 		this.consultation1.setStartTime(this.appointment1.getStartTime());
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -199,9 +205,10 @@ public class ConsutationValidatorTests {
 	void shouldNotValidateWhenStartTimeAfterAppointmentStartTime() {
 
 		Integer appointmentId = 1;
-		this.initConsultationValidator(appointmentId, null);
+		initConsultationValidator(appointmentId, null);
 		this.consultation1.setStartTime(this.appointment1.getStartTime().minusMinutes(1));
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -215,11 +222,13 @@ public class ConsutationValidatorTests {
 
 		Integer appointmentId = 1;
 		Integer consultationId = 1;
-		this.initConsultationValidator(appointmentId, consultationId);
+		initConsultationValidator(appointmentId, consultationId);
 		this.consultation1.setExaminations(null);
 		this.consultation1.setDischargeType(this.dischargeType1);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
-		Mockito.when(this.consultationService.findConsultationById(consultationId)).thenReturn(this.consultation1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
+		Mockito.when(this.consultationService.findFullConsultationById(consultationId))
+				.thenReturn(this.consultation1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -233,11 +242,13 @@ public class ConsutationValidatorTests {
 
 		Integer appointmentId = 1;
 		Integer consultationId = 1;
-		this.initConsultationValidator(appointmentId, consultationId);
+		initConsultationValidator(appointmentId, consultationId);
 		this.consultation1.setExaminations(new ArrayList<>());
 		this.consultation1.setDischargeType(this.dischargeType1);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
-		Mockito.when(this.consultationService.findConsultationById(consultationId)).thenReturn(this.consultation1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
+		Mockito.when(this.consultationService.findFullConsultationById(consultationId))
+				.thenReturn(this.consultation1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);
@@ -251,11 +262,13 @@ public class ConsutationValidatorTests {
 
 		Integer appointmentId = 1;
 		Integer consultationId = 1;
-		this.initConsultationValidator(appointmentId, consultationId);
+		initConsultationValidator(appointmentId, consultationId);
 		this.consultation1.setId(null);
 		this.consultation1.setDischargeType(this.dischargeType1);
-		Mockito.when(this.appointmentService.findAppointmentById(appointmentId)).thenReturn(this.appointment1);
-		Mockito.when(this.consultationService.findConsultationById(consultationId)).thenReturn(this.consultation1);
+		Mockito.when(this.appointmentService.findAppointmentById(appointmentId))
+				.thenReturn(this.appointment1);
+		Mockito.when(this.consultationService.findFullConsultationById(consultationId))
+				.thenReturn(this.consultation1);
 
 		BindException errors = new BindException(this.consultation1, "consultation");
 		this.consultationValidator.validate(this.consultation1, errors);

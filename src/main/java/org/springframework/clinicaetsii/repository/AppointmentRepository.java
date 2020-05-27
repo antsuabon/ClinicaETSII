@@ -4,6 +4,7 @@ package org.springframework.clinicaetsii.repository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import org.springframework.clinicaetsii.model.Appointment;
+import org.springframework.clinicaetsii.model.projection.AppointmentPatient;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
@@ -15,6 +16,9 @@ public interface AppointmentRepository {
 
 	Collection<Appointment> findAppointmentsWithoutConsultationByDoctorUsername(
 			@Param("doctorUsername") String doctorUsername) throws DataAccessException;
+
+	Collection<AppointmentPatient> findAppointmentsPatientsWithoutConsultationByDoctorUsername(
+			@Param("doctorUsername") String doctorUsername);
 
 	Collection<LocalDateTime> findAppointmentsDatesByDoctorId(
 			@Param("id") int id) throws DataAccessException;

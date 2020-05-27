@@ -2,6 +2,7 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.Diagnosis;
 import org.springframework.clinicaetsii.model.DischargeType;
@@ -35,23 +36,32 @@ public class ConsultationService {
 		return this.consultationRepository.findById(consultationId);
 	}
 
+	@Transactional(readOnly = true)
+	public Consultation findFullConsultationById(
+			final int consultationId) throws DataAccessException {
+		return this.consultationRepository.findFullConsultation(consultationId);
+	}
+
 	@Transactional
 	public void save(final Consultation consultation) throws DataAccessException {
 		this.consultationRepository.save(consultation);
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("dischargeTypes")
 	public Collection<DischargeType> findDischargeTypes() throws DataAccessException {
 		return this.consultationRepository.findDischargeTypes();
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("diagnoses")
 	public Collection<Diagnosis> findAllDiagnoses() throws DataAccessException {
 		return this.diagnosisRepository.findAll();
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Consultation> findAllConsultationsFromDoctor(final int doctorId) throws DataAccessException {
+	public Collection<Consultation> findAllConsultationsFromDoctor(
+			final int doctorId) throws DataAccessException {
 		return this.consultationRepository.findConsultationsByDoctorId(doctorId);
 	}
 }

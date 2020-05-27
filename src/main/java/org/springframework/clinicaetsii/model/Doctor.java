@@ -44,7 +44,7 @@ public class Doctor extends User {
 	@NotEmpty
 	private String collegiateCode;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "doctor_services", joinColumns = @JoinColumn(name = "doctor_id"),
 			inverseJoinColumns = @JoinColumn(name = "service_id"))
 	private Collection<Service> services;

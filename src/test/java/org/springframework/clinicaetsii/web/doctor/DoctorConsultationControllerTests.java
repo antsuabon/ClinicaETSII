@@ -212,7 +212,7 @@ class DoctorConsultationControllerTests {
 		BDDMockito.given(this.consultationService.findConsultationsByPatientId(1))
 				.willReturn(consultations2);
 		BDDMockito
-				.given(this.consultationService.findConsultationById(
+				.given(this.consultationService.findFullConsultationById(
 						DoctorConsultationControllerTests.TEST_CONSULTATION_ID_1))
 				.willReturn(this.consultation1);
 

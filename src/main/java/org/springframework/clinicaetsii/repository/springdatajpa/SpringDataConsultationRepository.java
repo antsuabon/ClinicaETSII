@@ -1,7 +1,6 @@
 package org.springframework.clinicaetsii.repository.springdatajpa;
 
 import java.util.Collection;
-
 import org.springframework.clinicaetsii.model.Consultation;
 import org.springframework.clinicaetsii.model.DischargeType;
 import org.springframework.clinicaetsii.repository.ConsultationRepository;
@@ -9,7 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface SpringDataConsultationRepository extends ConsultationRepository,CrudRepository<Consultation, Integer> {
+public interface SpringDataConsultationRepository
+		extends ConsultationRepository, CrudRepository<Consultation, Integer> {
 
 	@Override
 	@Query("SELECT consultation FROM Consultation consultation WHERE consultation.appointment.patient.id =:patientId")
@@ -18,9 +18,14 @@ public interface SpringDataConsultationRepository extends ConsultationRepository
 	@Override
 	@Query("SELECT dischargeType FROM DischargeType dischargeType")
 	Collection<DischargeType> findDischargeTypes();
-	
+
 	@Override
 	@Query("SELECT c FROM Consultation c WHERE c.appointment.patient.generalPractitioner.id =:doctorId")
 	Collection<Consultation> findConsultationsByDoctorId(@Param("doctorId") int doctorId);
 
+
+	@Override
+	@Query("SELECT c FROM Consultation c LEFT JOIN FETCH c.examinations examinations "
+			+ "WHERE c.id = :id")
+	Consultation findFullConsultation(@Param("id") int id);
 }

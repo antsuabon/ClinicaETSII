@@ -16,10 +16,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
+@Transactional
 public class DoctorConstantControllerE2ETests {
 
 	@Autowired
@@ -95,7 +97,7 @@ public class DoctorConstantControllerE2ETests {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(
 				"/doctor/patients/{patientId}/consultations/{consultationId}/constants/{constantId}/edit",
 				4, 1, 1).with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("constantType", "5").param("value", "-5"))
+				.param("constantType", "-1").param("value", "-5"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("constant"))
 				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("constant",

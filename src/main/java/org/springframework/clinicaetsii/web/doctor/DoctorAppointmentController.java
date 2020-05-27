@@ -2,9 +2,8 @@ package org.springframework.clinicaetsii.web.doctor;
 
 import java.util.Collection;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.clinicaetsii.model.Appointment;
+import org.springframework.clinicaetsii.model.projection.AppointmentPatient;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,8 @@ public class DoctorAppointmentController {
 
 	@GetMapping
 	public String listAppointments(final Map<String, Object> model) {
-		Collection<Appointment> results = this.appointmentService.findCurrentDoctorAppointments();
+		Collection<AppointmentPatient> results =
+				this.appointmentService.findCurrentDoctorAppointmentsWithPatient();
 
 		if (results.isEmpty()) {
 			model.put("emptyList", true);

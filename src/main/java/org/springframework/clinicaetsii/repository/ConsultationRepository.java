@@ -24,4 +24,6 @@ public interface ConsultationRepository {
 	void delete(Consultation consultation) throws DataAccessException;
 
 	void deleteAll() throws DataAccessException;
+
+	Consultation findFullConsultation(int id) throws DataAccessException;
 }

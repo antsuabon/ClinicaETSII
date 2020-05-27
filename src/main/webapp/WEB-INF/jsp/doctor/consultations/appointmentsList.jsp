@@ -41,11 +41,11 @@
             
             	<td><spring:eval expression="appointment.startTime"/></td>
             	<td><spring:eval expression="appointment.endTime"/></td>
-				<td><c:out value="${appointment.patient.fullName}"/></td>
+				<td><c:out value="${appointment.surname}, ${appointment.name}"/></td>
                 <td>
 					<spring:url value="/doctor/patients/{patientId}/consultations/new?appointmentId={appointmentId}" var="appointmentUrl">
-                        <spring:param name="patientId" value="${appointment.patient.id}"/>
-                        <spring:param name="appointmentId" value="${appointment.id}"/>
+                        <spring:param name="patientId" value="${appointment.patientId}"/>
+                        <spring:param name="appointmentId" value="${appointment.appointmentId}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(appointmentUrl)}">Añadir consulta</a>
 

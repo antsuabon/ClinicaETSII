@@ -2,6 +2,7 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.clinicaetsii.model.Constant;
 import org.springframework.clinicaetsii.model.ConstantType;
 import org.springframework.clinicaetsii.repository.ConstantRepository;
@@ -34,6 +35,7 @@ public class ConstantService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("constantTypes")
 	public Collection<ConstantType> findAllConstantTypes() {
 		return this.constantRepository.findAllConstantTypes();
 	}

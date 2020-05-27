@@ -41,7 +41,7 @@ public class Consultation extends BaseEntity {
 	@JoinColumn(name = "discharge_type_id")
 	private DischargeType dischargeType;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consultation_id")
 	private Collection<Examination> examinations;
 

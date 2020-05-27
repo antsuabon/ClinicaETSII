@@ -11,14 +11,16 @@ import org.springframework.validation.Validator;
 
 public class ConsultationValidator implements Validator {
 
-	private AppointmentService	appointmentService;
-	private ConsultationService	consultationService;
-	private Integer				appointmentId;
-	private Integer				consultationId;
+	private AppointmentService appointmentService;
+	private ConsultationService consultationService;
+	private Integer appointmentId;
+	private Integer consultationId;
 
 
 	@Autowired
-	public ConsultationValidator(final AppointmentService appointmentService, final ConsultationService	consultationService, final Integer appointmentId, final Integer consultationId) {
+	public ConsultationValidator(final AppointmentService appointmentService,
+			final ConsultationService consultationService, final Integer appointmentId,
+			final Integer consultationId) {
 		this.appointmentService = appointmentService;
 		this.consultationService = consultationService;
 		this.appointmentId = appointmentId;
@@ -36,19 +38,24 @@ public class ConsultationValidator implements Validator {
 
 		Consultation cosultation = new Consultation();
 		if (this.consultationId != null) {
-			cosultation = this.consultationService.findConsultationById(this.consultationId);
+			cosultation = this.consultationService.findFullConsultationById(this.consultationId);
 		}
 
 		Consultation consultationToUpdate = (Consultation) target;
 
 		if (consultationToUpdate.getStartTime() == null) {
-			errors.rejectValue("startTime", "requiredStartTime", "La fecha de inicio es obligatoria");
+			errors.rejectValue("startTime", "requiredStartTime",
+					"La fecha de inicio es obligatoria");
 		} else if (appointment.getStartTime().isAfter(consultationToUpdate.getStartTime())) {
-			errors.rejectValue("startTime", "invalidStartTime", "La fecha de inicio de la consulta debe ser igual o posterior al de la cita");
+			errors.rejectValue("startTime", "invalidStartTime",
+					"La fecha de inicio de la consulta debe ser igual o posterior al de la cita");
 		}
 
-		if (consultationToUpdate.getDischargeType() != null && !cosultation.isNew() && (cosultation.getExaminations() == null || cosultation.getExaminations().isEmpty())) {
-			errors.rejectValue("dischargeType", "emptyExplorations", "No es posible dar de alta una consulta sin exploraciones");
+		if (consultationToUpdate.getDischargeType() != null && !cosultation.isNew()
+				&& (cosultation.getExaminations() == null
+						|| cosultation.getExaminations().isEmpty())) {
+			errors.rejectValue("dischargeType", "emptyExplorations",
+					"No es posible dar de alta una consulta sin exploraciones");
 		}
 	}
 

@@ -18,6 +18,8 @@ import org.springframework.clinicaetsii.configuration.SecurityConfiguration;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
+import org.springframework.clinicaetsii.model.projection.AppointmentPatient;
+import org.springframework.clinicaetsii.model.projection.AppointmentPatientImpl;
 import org.springframework.clinicaetsii.service.AppointmentService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -49,6 +51,9 @@ public class DoctorAppointmentControllerTests {
 
 	private Appointment appointment1;
 	private Appointment appointment2;
+
+	private AppointmentPatientImpl appointmentPatient1;
+	private AppointmentPatientImpl appointmentPatient2;
 
 	@BeforeEach
 	void initAppointments() {
@@ -100,7 +105,29 @@ public class DoctorAppointmentControllerTests {
 		appointments.add(this.appointment1);
 		appointments.add(this.appointment2);
 
+		this.appointmentPatient1 = new AppointmentPatientImpl();
+		this.appointmentPatient1.setPatientId(this.appointment1.getPatient().getId());
+		this.appointmentPatient1.setName(this.appointment1.getPatient().getName());
+		this.appointmentPatient1.setSurname(this.appointment1.getPatient().getSurname());
+		this.appointmentPatient1.setAppointmentId(this.appointment1.getId());
+		this.appointmentPatient1.setStartTime(this.appointment1.getStartTime());
+		this.appointmentPatient1.setEndTime(this.appointment1.getEndTime());
+
+		this.appointmentPatient2 = new AppointmentPatientImpl();
+		this.appointmentPatient2.setPatientId(this.appointment2.getPatient().getId());
+		this.appointmentPatient2.setName(this.appointment2.getPatient().getName());
+		this.appointmentPatient2.setSurname(this.appointment2.getPatient().getSurname());
+		this.appointmentPatient2.setAppointmentId(this.appointment2.getId());
+		this.appointmentPatient2.setStartTime(this.appointment2.getStartTime());
+		this.appointmentPatient2.setEndTime(this.appointment2.getEndTime());
+
+		Collection<AppointmentPatient> appointmentPatients = new ArrayList<>();
+		appointmentPatients.add(this.appointmentPatient1);
+		appointmentPatients.add(this.appointmentPatient2);
+
 		given(this.appointmentService.findCurrentDoctorAppointments()).willReturn(appointments);
+		given(this.appointmentService.findCurrentDoctorAppointmentsWithPatient())
+				.willReturn(appointmentPatients);
 
 	}
 
@@ -115,7 +142,7 @@ public class DoctorAppointmentControllerTests {
 	@Test
 	@WithMockUser(username = "doctor1", roles = "doctor")
 	void doctorShouldListEmptyAppointments() throws Exception {
-		given(this.appointmentService.findCurrentDoctorAppointments())
+		given(this.appointmentService.findCurrentDoctorAppointmentsWithPatient())
 				.willReturn(new ArrayList<>());
 
 		this.mockMvc.perform(get("/doctor/appointments")).andExpect(status().isOk())
@@ -126,7 +153,7 @@ public class DoctorAppointmentControllerTests {
 	@Test
 	@WithMockUser(value = "spring")
 	void anyOtherUserShouldNotListAppointments() throws Exception {
-		given(this.appointmentService.findCurrentDoctorAppointments())
+		given(this.appointmentService.findCurrentDoctorAppointmentsWithPatient())
 				.willThrow(AccessDeniedException.class);
 
 		this.mockMvc.perform(get("/doctor/appointments")).andExpect(status().isOk())
