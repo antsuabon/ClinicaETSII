@@ -76,7 +76,7 @@ public class DoctorService {
 		this.doctorRepository.save(doctor);
 	}
 	
-	@Cacheable("Services")
+	@Cacheable("services")
 	@Transactional(readOnly = true)
 	public Collection<org.springframework.clinicaetsii.model.Service> findAllServices() {
 		return this.doctorRepository.findAllServices();

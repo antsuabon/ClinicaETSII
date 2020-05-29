@@ -118,7 +118,7 @@ public class PatientService {
 	}
 
 	@Transactional
-	@CacheEvict(cacheNames = "findAllDoctors", allEntries = true)
+	@CacheEvict(cacheNames = "doctors", allEntries = true)
 	public void save(final Patient patient) throws DataAccessException {
 		this.patientRepository.save(patient);
 	}
