@@ -1,8 +1,9 @@
 
 package org.springframework.clinicaetsii.service;
 
-import java.util.Collection;
+import java.util.Collection; 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.ConsultationRepository;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
@@ -35,6 +36,7 @@ public class DoctorService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("doctors")
 	public Collection<Doctor> findAllDoctors() throws DataAccessException {
 		return this.doctorRepository.findAll();
 	}
@@ -73,7 +75,8 @@ public class DoctorService {
 			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
 		this.doctorRepository.save(doctor);
 	}
-
+	
+	@Cacheable("Services")
 	@Transactional(readOnly = true)
 	public Collection<org.springframework.clinicaetsii.model.Service> findAllServices() {
 		return this.doctorRepository.findAllServices();

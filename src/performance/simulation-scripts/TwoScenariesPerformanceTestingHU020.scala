@@ -39,9 +39,7 @@ class TwoScenariesPerformanceTestingHU020 extends Simulation {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("request_2")
-			.get("/login")
-			.headers(headers_2)))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(10)
 	}
 	
@@ -51,7 +49,7 @@ class TwoScenariesPerformanceTestingHU020 extends Simulation {
 			.headers(headers_3)
 			.formParam("username", "admin")
 			.formParam("password", "admin")
-			.formParam("_csrf", "583065bb-2a66-4949-b17a-147887c9a3e1"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(128)
 	}
 	
