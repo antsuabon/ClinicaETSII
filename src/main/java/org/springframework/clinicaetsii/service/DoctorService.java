@@ -40,6 +40,13 @@ public class DoctorService {
 	public Collection<Doctor> findAllDoctors() throws DataAccessException {
 		return this.doctorRepository.findAll();
 	}
+	
+
+	@Transactional(readOnly = true)
+	@Cacheable("doctorsS")
+	public Collection<Doctor> findAllDoctorsAndServices() throws DataAccessException {
+		return this.doctorRepository.findAllDoctorsAndServices();
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
