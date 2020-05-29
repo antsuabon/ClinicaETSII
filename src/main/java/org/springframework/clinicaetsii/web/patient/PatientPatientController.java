@@ -81,6 +81,12 @@ public class PatientPatientController {
 		model.addAttribute(patientForm);
 		return "/patient/updatePatientForm";
 	}
+	
+	private boolean passwordNotNull(PatientForm patientForm) {
+		
+		return patientForm.getNewPassword() != null
+			&& !StringUtils.isEmpty(patientForm.getNewPassword());
+	}
 
 	@PostMapping(value = "/patient/edit")
 	public String processUpdatePatientForm(@Valid final PatientForm patientForm,
@@ -99,8 +105,7 @@ public class PatientPatientController {
 
 			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password",
 					"username", "enabled");
-			if (patientForm.getNewPassword() != null
-					&& !StringUtils.isEmpty(patientForm.getNewPassword())) {
+			if (passwordNotNull(patientForm)) {
 				patientToUpdate.setPassword(patientForm.getNewPassword());
 			}
 
