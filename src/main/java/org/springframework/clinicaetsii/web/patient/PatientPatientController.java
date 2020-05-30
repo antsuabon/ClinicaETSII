@@ -85,6 +85,12 @@ public class PatientPatientController {
 		return "/patient/updatePatientForm";
 	}
 
+	private boolean passwordNotNull(PatientForm patientForm) {
+
+		return patientForm.getNewPassword() != null
+			&& !StringUtils.isEmpty(patientForm.getNewPassword());
+	}
+
 
 	private boolean checkNewPassword(final PatientForm patientForm) {
 		return patientForm.getNewPassword() != null
@@ -107,7 +113,7 @@ public class PatientPatientController {
 
 			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password",
 					"username", "enabled");
-			if (this.checkNewPassword(patientForm)) {
+			if (passwordNotNull(patientForm)) {
 				patientToUpdate.setPassword(patientForm.getNewPassword());
 			}
 
