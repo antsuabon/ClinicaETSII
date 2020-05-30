@@ -1,6 +1,7 @@
 package org.springframework.clinicaetsii.repository;
 
 import java.util.Collection;
+
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Service;
 import org.springframework.dao.DataAccessException;
@@ -29,4 +30,5 @@ public interface DoctorRepository {
 
 	void deleteAll() throws DataAccessException;
 
+	Collection<Doctor> findDoctorsWithServices() throws DataAccessException;
 }

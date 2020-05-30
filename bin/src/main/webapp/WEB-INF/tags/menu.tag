@@ -117,7 +117,7 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Pacientes</span>
 							</petclinic:menuItem>
-							
+
 							<petclinic:menuItem active="${name eq 'administrative medicines'}" url="/administrative/medicines" title="list my medicines">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Medicamentos</span>
@@ -143,10 +143,15 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Listar Médicos</span>
 							</petclinic:menuItem>
-							
+
 							<petclinic:menuItem active="${name eq 'admin list administratives'}" url="/admin/administratives" title="list administratives">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								<span>Administrativos del centro</span>
+							</petclinic:menuItem>
+
+							<petclinic:menuItem active="${name eq 'administrative dashboard'}" url="/admin/dashboard" title="show dashboard">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span>Dashboard</span>
 							</petclinic:menuItem>
 
 						</ul></li>

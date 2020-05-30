@@ -94,8 +94,6 @@ public class AdministrativeMedicineController {
 	@PostMapping("/administrative/medicines/{medicineId}/edit")
 	public String processUpdateForm(@PathVariable("medicineId") final int medicineId, @Valid final Medicine medicine, final BindingResult result, final ModelMap model) {
 		Prescription prescription = this.prescriptionService.findPrescriptionByMedicineId(medicineId);
-		System.out.println(prescription);
-		System.out.println(medicine);
 
 		if (medicine.getQuantity() < 0) {
 			result.rejectValue("quantity", "incorrect_quantity", "La cantidad introducida debe de ser mayor que 0");

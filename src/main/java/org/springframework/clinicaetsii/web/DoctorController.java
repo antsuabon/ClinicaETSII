@@ -48,7 +48,7 @@ public class DoctorController {
 	@GetMapping(value = "/anonymous/doctors")
 	public String processFind(final Doctor doctor, final BindingResult result, final Map<String, Object> model) {
 
-		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
+		Collection<Doctor> doctors = this.doctorService.findAllDoctorsWithServices();
 		if (doctors.isEmpty()) {
 			model.put("emptylist", true);
 		} else {

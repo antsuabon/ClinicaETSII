@@ -2,7 +2,9 @@
 package org.springframework.clinicaetsii.web.patient;
 
 import java.util.Collection;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.Data;
 
 /**
@@ -82,6 +85,12 @@ public class PatientPatientController {
 		return "/patient/updatePatientForm";
 	}
 
+
+	private boolean checkNewPassword(final PatientForm patientForm) {
+		return patientForm.getNewPassword() != null
+			&& !StringUtils.isEmpty(patientForm.getNewPassword());
+	}
+
 	@PostMapping(value = "/patient/edit")
 	public String processUpdatePatientForm(@Valid final PatientForm patientForm,
 			final BindingResult result) {
@@ -89,7 +98,6 @@ public class PatientPatientController {
 		Patient patientToUpdate = this.patientService.findCurrentPatient();
 		String oldUsername = String.valueOf(patientToUpdate.getUsername());
 
-		System.out.println(result.getAllErrors());
 
 		if (result.hasErrors()) {
 
@@ -99,8 +107,7 @@ public class PatientPatientController {
 
 			BeanUtils.copyProperties(patientForm.getPatient(), patientToUpdate, "id", "password",
 					"username", "enabled");
-			if (patientForm.getNewPassword() != null
-					&& !StringUtils.isEmpty(patientForm.getNewPassword())) {
+			if (this.checkNewPassword(patientForm)) {
 				patientToUpdate.setPassword(patientForm.getNewPassword());
 			}
 

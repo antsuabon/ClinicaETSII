@@ -1,3 +1,8 @@
+SET BUILTIN_ALIAS_OVERRIDE true;
+DROP ALIAS IF EXISTS DATEDIFF;
+CREATE ALIAS DATEDIFF FOR "org.springframework.clinicaetsii.configuration.H2Function.dateDifference";
+
+
 INSERT INTO services (id, name) VALUES (1, 'Consulta Niños');
 INSERT INTO services (id, name) VALUES (2, 'Consulta Adultos');
 INSERT INTO services (id, name) VALUES (3, 'Vacunaciones infantiles');

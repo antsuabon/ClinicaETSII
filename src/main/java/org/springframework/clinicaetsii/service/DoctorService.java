@@ -2,7 +2,9 @@
 package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.ConsultationRepository;
 import org.springframework.clinicaetsii.repository.DoctorRepository;
@@ -39,6 +41,13 @@ public class DoctorService {
 		return this.doctorRepository.findAll();
 	}
 
+
+	@Transactional(readOnly = true)
+	@Cacheable("doctorsWithServices")
+	public Collection<Doctor> findAllDoctorsWithServices() throws DataAccessException {
+		return this.doctorRepository.findDoctorsWithServices();
+	}
+
 	@Transactional(readOnly = true)
 	public Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException {
 		return this.doctorRepository.findDoctorsSortedByNumOfServices();
@@ -55,17 +64,16 @@ public class DoctorService {
 		return this.doctorRepository.findDoctorById(id);
 	}
 
+	private String getUsernameCurrentDoctor() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) principal;
+		return user.getUsername();
+	}
+
 	@PreAuthorize("hasAuthority('doctor')")
 	@Transactional(readOnly = true)
 	public Doctor findCurrentDoctor() throws DataAccessException {
-
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails user = (UserDetails) principal;
-		String username = user.getUsername();
-
-		System.out.println(username);
-
-		return this.doctorRepository.findDoctorByUsername(username);
+		return this.doctorRepository.findDoctorByUsername(this.getUsernameCurrentDoctor());
 	}
 
 	@Transactional
@@ -90,7 +98,7 @@ public class DoctorService {
 	public void delete(
 			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException, DeleteDoctorException {
 
-		if (isErasable(doctor)) {
+		if (this.isErasable(doctor)) {
 			this.doctorRepository.delete(doctor);
 		} else {
 			throw new DeleteDoctorException();

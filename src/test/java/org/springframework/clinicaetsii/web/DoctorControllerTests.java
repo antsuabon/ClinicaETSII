@@ -93,6 +93,8 @@ class DoctorControllerTests {
 
 		BDDMockito.given(this.doctorService.findDoctorsSortedByNumOfServices())
 			.willReturn(doctors2);
+		BDDMockito.given(this.doctorService.findAllDoctorsWithServices())
+		.willReturn(doctors2);
 
 	}
 

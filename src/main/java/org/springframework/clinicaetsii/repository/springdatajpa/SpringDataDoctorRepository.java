@@ -49,4 +49,8 @@ public interface SpringDataDoctorRepository extends DoctorRepository, CrudReposi
 	@Query("SELECT service FROM Service service")
 	Collection<Service> findAllServices();
 
+	@Override
+	@Query("SELECT distinct doctor,doctor.services.size AS size from Doctor doctor left join fetch doctor.services services order by size desc ")
+	Collection<Doctor> findDoctorsWithServices() throws DataAccessException;
+
 }

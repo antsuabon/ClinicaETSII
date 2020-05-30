@@ -17,9 +17,11 @@ package org.springframework.clinicaetsii.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+
 import org.assertj.core.api.Assertions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,29 @@ class DoctorServiceTests {
 	@Test
 	void shouldListDoctorsSortedByServices() {
 		Collection<Doctor> doctors = this.doctorService.findDoctorsSortedByNumOfServices();
+		Assertions.assertThat(doctors.size()).isEqualTo(5);
+
+		List<Doctor> listDoctors = new ArrayList<>(doctors);
+		Doctor firstDoctor = listDoctors.get(0);
+		Doctor lastDoctor = listDoctors.get(listDoctors.size() - 1);
+		Boolean sortedFirst = true;
+		Boolean sortedLast = true;
+		for (Doctor d : listDoctors) {
+			if (d.getServices().size() > firstDoctor.getServices().size()) {
+				sortedFirst = false;
+				break;
+			}
+			if (d.getServices().size() < lastDoctor.getServices().size()) {
+				sortedLast = false;
+				break;
+			}
+		}
+		Assertions.assertThat(sortedFirst && sortedLast).isTrue();
+	}
+
+	@Test
+	void shouldListDoctorsSortedByServicesAndWithServices() {
+		Collection<Doctor> doctors = this.doctorService.findAllDoctorsWithServices();
 		Assertions.assertThat(doctors.size()).isEqualTo(5);
 
 		List<Doctor> listDoctors = new ArrayList<>(doctors);
