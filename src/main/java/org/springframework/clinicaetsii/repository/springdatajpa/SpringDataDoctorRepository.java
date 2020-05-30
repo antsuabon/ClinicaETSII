@@ -36,7 +36,6 @@ public interface SpringDataDoctorRepository extends DoctorRepository, CrudReposi
 	@Query("select d from Doctor d where d.username =:username")
 	Doctor findDoctorByUsername(@Param("username") String username);
 
-
 	@Override
 	@Query("SELECT d from Doctor d where d.id =:id")
 	Doctor findDoctorById(@Param("id") int id);
@@ -48,6 +47,10 @@ public interface SpringDataDoctorRepository extends DoctorRepository, CrudReposi
 	@Override
 	@Query("SELECT service FROM Service service")
 	Collection<Service> findAllServices();
+	
+	@Override
+	@Query("SELECT doctor from Doctor doctor left join fetch doctor.services services")
+	Collection<Doctor> findAllDoctorsAndServices();
 
 	@Override
 	@Query("SELECT distinct doctor,doctor.services.size AS size from Doctor doctor left join fetch doctor.services services order by size desc ")

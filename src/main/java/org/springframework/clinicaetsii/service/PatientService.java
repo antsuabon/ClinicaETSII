@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.clinicaetsii.model.Appointment;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.model.Patient;
@@ -117,6 +118,7 @@ public class PatientService {
 	}
 
 	@Transactional
+	@CacheEvict(cacheNames = "doctorsS", allEntries = true)
 	public void save(final Patient patient) throws DataAccessException {
 		this.patientRepository.save(patient);
 	}

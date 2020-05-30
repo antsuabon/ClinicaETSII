@@ -39,9 +39,7 @@ class TwoScenariesPerformanceTestingHU015 extends Simulation {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("request_2")
-			.get("/login")
-			.headers(headers_2)))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(10)
 	}
 	
@@ -51,7 +49,7 @@ class TwoScenariesPerformanceTestingHU015 extends Simulation {
 			.headers(headers_3)
 			.formParam("username", "doctor2")
 			.formParam("password", "doctor2")
-			.formParam("_csrf", "4bbdf38b-1c3a-495b-9a87-a3b984bc828f"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(22)
 	}
 	
@@ -76,7 +74,8 @@ class TwoScenariesPerformanceTestingHU015 extends Simulation {
 	object NewExamination {
 		val newExamination = exec(http("NewExamination")
 			.get("/doctor/patients/5/consultations/3/examinations/new")
-			.headers(headers_0))
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(23)
 	}
 	
@@ -85,7 +84,7 @@ class TwoScenariesPerformanceTestingHU015 extends Simulation {
 			.post("/doctor/patients/5/consultations/3/examinations/new")
 			.headers(headers_3)
 			.formParam("description", "Some description")
-			.formParam("_csrf", "65645060-5149-4dee-9ceb-aeef8b9be010"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(9)
 	}
 

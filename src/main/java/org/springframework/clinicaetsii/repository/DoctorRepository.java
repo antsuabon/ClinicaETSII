@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 public interface DoctorRepository {
 
 	Collection<Doctor> findAll() throws DataAccessException;
+	
+	Collection<Doctor> findAllDoctorsAndServices() throws DataAccessException;
 
 	Collection<Doctor> findDoctorsSortedByNumOfServices() throws DataAccessException;
 

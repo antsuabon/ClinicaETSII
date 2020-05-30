@@ -55,7 +55,7 @@ public class PatientPatientController {
 
 	@ModelAttribute("doctors")
 	public Collection<Doctor> populateDoctors() {
-		return this.doctorService.findAllDoctors();
+		return this.doctorService.findAllDoctorsAndServices();
 	}
 
 	@GetMapping("/patient")

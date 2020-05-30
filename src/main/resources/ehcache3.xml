@@ -2,12 +2,12 @@
             xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
             xmlns='http://www.ehcache.org/v3'
             xsi:schemaLocation="
-                http://www.ehcache.org/v3 
+                http://www.ehcache.org/v3
                 http://www.ehcache.org/schema/ehcache-core-3.7.xsd">
-                
+
         <!-- Persistent cache directory -->
         <!--<persistence directory="spring-boot-ehcache/cache" />-->
-        
+
         <!-- Default cache template -->
         <cache-template name="default">
             <expiry>
@@ -27,22 +27,38 @@
                 <heap>1000</heap>
             </resources>
         </cache-template>
-        
+
 	    <cache alias="diagnoses" uses-template="default">
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>
-	    
+
 	    <cache alias="dischargeTypes" uses-template="default">
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>
-	    
+
 	    <cache alias="constantTypes" uses-template="default">
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>
-	     <cache alias="doctorsWithServices" uses-template="default">
+	    
+	    <cache alias="services" uses-template="default">
+	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+	        <value-type>java.util.Collection</value-type>
+	    </cache>
+
+	    <cache alias="doctors" uses-template="default">
+	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+	        <value-type>java.util.Collection</value-type>
+	    </cache>
+
+	    <cache alias="doctorsS" uses-template="default">
+        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+        <value-type>java.util.Collection</value-type>
+      </cache>
+
+      <cache alias="doctorsWithServices" uses-template="default">
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>
