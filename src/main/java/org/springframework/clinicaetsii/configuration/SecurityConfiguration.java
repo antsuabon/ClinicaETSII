@@ -75,14 +75,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
-		return encoder;
+		return NoOpPasswordEncoder.getInstance();
 	}
 
 	@Bean
 	public RestTemplate restTemplate(final RestTemplateBuilder builder) {
 
-		return builder.setConnectTimeout(Duration.ofMillis(10 * 1000))
-				.setReadTimeout(Duration.ofMillis(10 * 1000)).build();
+		return builder.setConnectTimeout(Duration.ofMillis(10 * 1000l))
+				.setReadTimeout(Duration.ofMillis(10 * 1000l)).build();
 	}
 }

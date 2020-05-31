@@ -20,12 +20,10 @@ public class Appointment extends BaseEntity {
 
 	@Column(name = "start_time")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	// TODO: Restricción de fecha en el futuro
 	private LocalDateTime startTime;
 
 	@Column(name = "end_time")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	// TODO: Restricción de fecha en el futuro
 	private LocalDateTime endTime;
 
 	@Column(name = "priority")

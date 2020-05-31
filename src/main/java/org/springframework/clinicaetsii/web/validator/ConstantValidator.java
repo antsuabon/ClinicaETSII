@@ -10,12 +10,13 @@ import org.springframework.validation.Validator;
 
 public class ConstantValidator implements Validator {
 
-	private ConsultationService	consultationService;
-	private Integer				consultationId;
+	private ConsultationService consultationService;
+	private Integer consultationId;
 
 
 	@Autowired
-	public ConstantValidator(final ConsultationService consultationService, final Integer consultationId) {
+	public ConstantValidator(final ConsultationService consultationService,
+			final Integer consultationId) {
 		super();
 		this.consultationService = consultationService;
 		this.consultationId = consultationId;
@@ -34,20 +35,25 @@ public class ConstantValidator implements Validator {
 			errors.rejectValue("constantType", "requiredConstantType", "Este campo es obligatorio");
 		} else {
 
-			Consultation consultation = this.consultationService.findConsultationById(this.consultationId);
+			Consultation consultation =
+					this.consultationService.findConsultationById(this.consultationId);
 			if (existsConstantTypeInConsultation(constant, consultation)) {
-				errors.rejectValue("constantType", "alreadyExistingConstantType", "Este tipo de constante ya ha sido registrada en la consulta");
+				errors.rejectValue("constantType", "alreadyExistingConstantType",
+						"Este tipo de constante ya ha sido registrada en la consulta");
 			}
 		}
 
 		if (constant.getValue() < 0f) {
-			errors.rejectValue("value", "negativeValue", "El valor de la constante no debe ser negativo");
+			errors.rejectValue("value", "negativeValue",
+					"El valor de la constante no debe ser negativo");
 		}
 	}
 
-	protected boolean existsConstantTypeInConsultation(Constant constant,
-			Consultation consultation) {
-		return consultation != null && consultation.getConstants().stream().anyMatch(c -> constant.getConstantType().equals(c.getConstantType()) && constant.getId() != c.getId());
+	protected boolean existsConstantTypeInConsultation(final Constant constant,
+			final Consultation consultation) {
+		return consultation != null && consultation.getConstants().stream()
+				.anyMatch(c -> constant.getConstantType().equals(c.getConstantType())
+						&& !c.getId().equals(constant.getId()));
 	}
 
 }

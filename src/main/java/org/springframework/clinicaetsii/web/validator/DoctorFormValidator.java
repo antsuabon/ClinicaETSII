@@ -13,6 +13,7 @@ import org.springframework.validation.Validator;
 
 public class DoctorFormValidator implements Validator {
 
+	private static final String REQUIRED = "Este campo es obligatorio";
 	private Pattern dniPattern = Pattern.compile("^[0-9]{8}[A-Z]{1}$");
 	private Pattern phonePattern =
 			Pattern.compile("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$");
@@ -41,29 +42,29 @@ public class DoctorFormValidator implements Validator {
 		Doctor doctor = doctorForm.getDoctor();
 
 		if (doctor.getName() == null || StringUtils.isEmpty(doctor.getName())) {
-			errors.rejectValue("doctor.name", "requiredName", "Este campo es obligatorio");
+			errors.rejectValue("doctor.name", "requiredName", REQUIRED);
 		}
 
 		if (doctor.getSurname() == null || StringUtils.isEmpty(doctor.getSurname())) {
-			errors.rejectValue("doctor.surname", "requiredSurname", "Este campo es obligatorio");
+			errors.rejectValue("doctor.surname", "requiredSurname", REQUIRED);
 		}
 
 		if (doctor.getDni() == null || StringUtils.isEmpty(doctor.getDni())) {
-			errors.rejectValue("doctor.dni", "requiredDni", "Este campo es obligatorio");
+			errors.rejectValue("doctor.dni", "requiredDni", REQUIRED);
 		} else if (!this.dniPattern.matcher(doctor.getDni()).matches()) {
 			errors.rejectValue("doctor.dni", "invalidDniPattern",
 					"El campo debe seguir el formato: 12345678A");
 		}
 
 		if (doctor.getEmail() == null || StringUtils.isEmpty(doctor.getEmail())) {
-			errors.rejectValue("doctor.email", "requiredEmail", "Este campo es obligatorio");
+			errors.rejectValue("doctor.email", "requiredEmail", REQUIRED);
 		} else if (!this.emailPattern.matcher(doctor.getEmail()).matches()) {
 			errors.rejectValue("doctor.email", "invalidEmailPattern",
 					"No se ha introducido un Email adecuado");
 		}
 
 		if (doctor.getPhone() == null || StringUtils.isEmpty(doctor.getPhone())) {
-			errors.rejectValue("doctor.phone", "requiredPhone", "Este campo es obligatorio");
+			errors.rejectValue("doctor.phone", "requiredPhone", REQUIRED);
 		} else if (!this.phonePattern.matcher(doctor.getPhone()).matches()) {
 			errors.rejectValue("doctor.phone", "invalidPhonePattern",
 					"No se ha introducido un número de teléfono adecuado");
@@ -71,7 +72,7 @@ public class DoctorFormValidator implements Validator {
 
 		if (doctor.getCollegiateCode() == null || StringUtils.isEmpty(doctor.getCollegiateCode())) {
 			errors.rejectValue("doctor.collegiateCode", "requiredCollegiateCode",
-					"Este campo es obligatorio");
+					REQUIRED);
 		} else if (!this.collegiateCodePattern.matcher(doctor.getCollegiateCode()).matches()) {
 			errors.rejectValue("doctor.collegiateCode", "invalidCollegiateCodePattern",
 					"Este campo debe de estar formado por 9 dígitos");
@@ -105,7 +106,7 @@ public class DoctorFormValidator implements Validator {
 		}
 
 		if (doctor.getUsername() == null || StringUtils.isEmpty(doctor.getUsername())) {
-			errors.rejectValue("doctor.username", "emptyUsername", "Este campo es obligatorio");
+			errors.rejectValue("doctor.username", "emptyUsername", REQUIRED);
 		}
 
 		Doctor oldDoctor = this.doctorService.findCurrentDoctor();

@@ -107,7 +107,7 @@ public class AdministrativeUpdateMedicinesUITest {
 	@Test
 	public void shouldListMedicines() throws Exception {
 		as("administrative1", "administrative1").thenISeeMyUserRole().thenIEnterMedicineList()
-				.thenIModify();
+				.thenISeeMedicineList().thenIModify();
 
 	}
 

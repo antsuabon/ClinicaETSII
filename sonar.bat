@@ -1,0 +1,1 @@
+mvn sonar:sonar -Dsonar.projectKey=ClinicaETSII -Dsonar.host.url=http://localhost:9000 -Dsonar.login=19fa2fdca9ef76225e33dc483d0b422198ae59a0

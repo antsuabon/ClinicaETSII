@@ -158,7 +158,7 @@ class PatientServiceTests {
 
 		String username = patient.getUsername();
 
-		Assertions.assertThat(username.equals("patient1"));
+		Assertions.assertThat(username).isEqualTo("patient1");
 
 	}
 
@@ -298,10 +298,8 @@ class PatientServiceTests {
 		Collection<Doctor> doctors = this.doctorService.findAllDoctors();
 
 		List<Doctor> listDoctors = new ArrayList<>(doctors);
-		boolean all = listDoctors.size() == 3;
 
-
-		Assertions.assertThat(all);
+		Assertions.assertThat(listDoctors).isNotNull().hasSize(5);
 
 	}
 

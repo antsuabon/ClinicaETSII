@@ -17,11 +17,9 @@ package org.springframework.clinicaetsii.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-
 import org.assertj.core.api.Assertions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -104,7 +102,7 @@ class DoctorServiceTests {
 
 		String username = currentDoctor.getUsername();
 
-		Assertions.assertThat(username.equals("doctor1"));
+		Assertions.assertThat(username).isEqualTo("doctor1");
 
 	}
 
@@ -224,7 +222,7 @@ class DoctorServiceTests {
 		Doctor doctor1 = this.doctorService.findDoctorById(1);
 		String username = doctor1.getUsername();
 
-		Assertions.assertThat(username.equals("doctor1"));
+		Assertions.assertThat(username).isEqualTo("doctor1");
 
 		Doctor doctor2 = this.doctorService.findDoctorById(-1);
 		Assertions.assertThat(doctor2).isNull();
