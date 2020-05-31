@@ -51,12 +51,17 @@ public class ConsultationValidator implements Validator {
 					"La fecha de inicio de la consulta debe ser igual o posterior al de la cita");
 		}
 
-		if (consultationToUpdate.getDischargeType() != null && !cosultation.isNew()
-				&& (cosultation.getExaminations() == null
-						|| cosultation.getExaminations().isEmpty())) {
+		if (invalidConsultationToUpdate(consultationToUpdate, cosultation)) {
 			errors.rejectValue("dischargeType", "emptyExplorations",
 					"No es posible dar de alta una consulta sin exploraciones");
 		}
+	}
+
+	protected boolean invalidConsultationToUpdate(Consultation consultationToUpdate,
+			Consultation cosultation) {
+		return consultationToUpdate.getDischargeType() != null && !cosultation.isNew()
+				&& (cosultation.getExaminations() == null
+						|| cosultation.getExaminations().isEmpty());
 	}
 
 }

@@ -35,7 +35,7 @@ public class ConstantValidator implements Validator {
 		} else {
 
 			Consultation consultation = this.consultationService.findConsultationById(this.consultationId);
-			if (consultation != null && consultation.getConstants().stream().anyMatch(c -> constant.getConstantType().equals(c.getConstantType()) && constant.getId() != c.getId())) {
+			if (existsConstantTypeInConsultation(constant, consultation)) {
 				errors.rejectValue("constantType", "alreadyExistingConstantType", "Este tipo de constante ya ha sido registrada en la consulta");
 			}
 		}
@@ -43,6 +43,11 @@ public class ConstantValidator implements Validator {
 		if (constant.getValue() < 0f) {
 			errors.rejectValue("value", "negativeValue", "El valor de la constante no debe ser negativo");
 		}
+	}
+
+	protected boolean existsConstantTypeInConsultation(Constant constant,
+			Consultation consultation) {
+		return consultation != null && consultation.getConstants().stream().anyMatch(c -> constant.getConstantType().equals(c.getConstantType()) && constant.getId() != c.getId());
 	}
 
 }
