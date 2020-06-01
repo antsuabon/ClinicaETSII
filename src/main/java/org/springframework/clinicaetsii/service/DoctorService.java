@@ -3,6 +3,7 @@ package org.springframework.clinicaetsii.service;
 
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.clinicaetsii.model.Doctor;
 import org.springframework.clinicaetsii.repository.ConsultationRepository;
@@ -80,10 +81,11 @@ public class DoctorService {
 	@PreAuthorize("hasAuthority('doctor')")
 	@Transactional(readOnly = true)
 	public Doctor findCurrentDoctor() throws DataAccessException {
-		return this.doctorRepository.findDoctorByUsername(this.getUsernameCurrentDoctor());
+		return this.doctorRepository.findDoctorByUsername(getUsernameCurrentDoctor());
 	}
 
 	@Transactional
+	@CacheEvict(cacheNames = {"doctorsWithServices", "doctorsS", "doctors"}, allEntries = true)
 	public void save(
 			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException {
 		this.doctorRepository.save(doctor);
@@ -103,10 +105,11 @@ public class DoctorService {
 	}
 
 	@Transactional
+	@CacheEvict(cacheNames = {"doctorsWithServices", "doctorsS", "doctors"}, allEntries = true)
 	public void delete(
 			final Doctor doctor) throws DataAccessException, DataIntegrityViolationException, DeleteDoctorException {
 
-		if (this.isErasable(doctor)) {
+		if (isErasable(doctor)) {
 			this.doctorRepository.delete(doctor);
 		} else {
 			throw new DeleteDoctorException();

@@ -121,6 +121,8 @@ public class DoctorMedicamentoControllerTests {
 				.willReturn(this.consultaMedicamento1);
 		given(this.cimaService.findMedicamentosByAttributes("no existente", "", "no existente"))
 				.willReturn(this.consultaMedicamento2);
+		given(this.cimaService.findMedicamentosByAttributes("null", "null", "null"))
+				.willReturn(this.consultaMedicamento2);
 	}
 
 	@WithMockUser(username = "doctor1", roles = {"doctor"})
@@ -181,6 +183,16 @@ public class DoctorMedicamentoControllerTests {
 		this.mockMvc.perform(get(
 				"/doctor/medicamentos?nombre={nombre}&pactivos={pactivos}&labtitular={labtitular}",
 				"no existente", "", "no existente").with(csrf())).andExpect(status().isOk())
+				.andExpect(model().attributeExists("emptyList"))
+				.andExpect(view().name("doctor/medicamentos/medicamentosList"));
+	}
+
+	@WithMockUser(username = "doctor1", roles = {"doctor"})
+	@Test
+	void shouldNotFindMedicamentosWithNullResult() throws Exception {
+		this.mockMvc.perform(get(
+				"/doctor/medicamentos?nombre={nombre}&pactivos={pactivos}&labtitular={labtitular}",
+				"null", "null", "null").with(csrf())).andExpect(status().isOk())
 				.andExpect(model().attributeExists("emptyList"))
 				.andExpect(view().name("doctor/medicamentos/medicamentosList"));
 	}

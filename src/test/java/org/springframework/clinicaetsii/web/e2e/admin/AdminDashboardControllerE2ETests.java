@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
-public class AdminDashboardControllerE2E {
+public class AdminDashboardControllerE2ETests {
 
 	@Autowired
 	private MockMvc mockMvc;

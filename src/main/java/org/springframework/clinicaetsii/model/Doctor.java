@@ -15,7 +15,6 @@
 package org.springframework.clinicaetsii.model;
 
 import java.util.Collection;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +24,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,7 +45,7 @@ public class Doctor extends User {
 	@NotEmpty
 	private String collegiateCode;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "doctor_services", joinColumns = @JoinColumn(name = "doctor_id"),
 			inverseJoinColumns = @JoinColumn(name = "service_id"))
 	private Collection<Service> services;

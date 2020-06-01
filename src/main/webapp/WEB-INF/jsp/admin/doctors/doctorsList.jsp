@@ -15,9 +15,8 @@
     <table id="doctorsTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 150px;">Nombre Completo</th>
-            <th style="width: 150px;">Servicios</th>
-            <th></th>
+            <th style="width: 20%;">Nombre Completo</th>
+            <th style="width: 60%;">Servicios</th>
             <th></th>
         </tr>
         </thead>
