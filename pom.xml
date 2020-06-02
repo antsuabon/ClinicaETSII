@@ -35,7 +35,7 @@
 		 <sonar.projectKey>antsuabon_ClinicaETSII</sonar.projectKey>
 		 <sonar.organization>antsuabon</sonar.organization>
 		 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		 <sonar.login>c7acfda51f04734f670242fc22c619026437c89a</sonar.login>
+		 <sonar.login>6525044838e02bff414687b2a33f6dfef22d3bbf</sonar.login>
 		
 
 	</properties>
