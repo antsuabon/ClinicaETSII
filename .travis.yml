@@ -6,10 +6,5 @@ services:
 before_install:
   - chmod +x mvnw
   - mysql -e 'CREATE DATABASE clinica_etsii;'
-addons:
-  sonarcloud:
-    organization: "antsuabon"
-    token:
-      secure: "444386ae00131106bb245fdd0934f1deadfb5b12"
 script: 
   - mvn test sonar:sonar -Dspring-boot.run.profiles=mysql-travis
