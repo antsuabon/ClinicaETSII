@@ -31,6 +31,13 @@
 		<rest-assured.version>4.2.0</rest-assured.version>
 		<selenium.version>3.141.59</selenium.version>
 
+		
+		 <sonar.projectKey>antsuabon_ClinicaETSII</sonar.projectKey>
+		 <sonar.organization>antsuabon</sonar.organization>
+		 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		 <sonar.login>6525044838e02bff414687b2a33f6dfef22d3bbf</sonar.login>
+		
+
 	</properties>
 
 	<dependencies>
