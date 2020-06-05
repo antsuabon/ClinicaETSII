@@ -41,7 +41,7 @@ public class PrescriptionService {
     return this.prescriptionRepository.findAll();
   }
 
-  @Transactional(readOnly = true)
+  @Transactional
   public void savePrescription(final Prescription prescription) throws DataAccessException {
     this.prescriptionRepository.save(prescription);
   }

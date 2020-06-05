@@ -51,8 +51,8 @@ public class ConstantValidator implements Validator {
 
 	protected boolean existsConstantTypeInConsultation(final Constant constant,
 			final Consultation consultation) {
-		return consultation != null && consultation.getConstants().stream()
-				.anyMatch(c -> constant.getConstantType().equals(c.getConstantType())
+		return consultation != null && consultation.getConstants().stream().anyMatch(
+				c -> constant.getConstantType().getName().equals(c.getConstantType().getName())
 						&& !c.getId().equals(constant.getId()));
 	}
 

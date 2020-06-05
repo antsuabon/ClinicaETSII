@@ -1,9 +1,7 @@
 package org.springframework.clinicaetsii.web.doctor;
 
 import java.util.Collection;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -71,15 +69,11 @@ public class DoctorDoctorController {
 
 
 
-
-
 	@PostMapping("/edit")
 	public String processUpdateDoctorForm(@Valid final DoctorForm doctorForm,
 			final BindingResult result) {
 		Doctor doctorToUpdate = this.doctorService.findCurrentDoctor();
 		String oldUsername = String.valueOf(doctorToUpdate.getUsername());
-
-		System.out.println(result.getAllErrors());
 
 		if (result.hasErrors()) {
 			return "/doctor/updateDoctorForm";
