@@ -26,7 +26,7 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public List<Tuple> getMostFrequentDiagnoses() {
 		TypedQuery<Tuple> query = this.entityManager.createQuery(
-				"select diagnosis.name, count(diagnosis.name) from Diagnosis diagnosis group by diagnosis.name order by count(diagnosis.name) desc",
+				"select diagnosis.name, count(diagnosis) from Consultation consultation left join consultation.diagnoses diagnosis where diagnosis.name != null group by diagnosis.name order by count(diagnosis) desc",
 				Tuple.class);
 
 		return query.getResultList();
