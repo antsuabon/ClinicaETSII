@@ -26,7 +26,7 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public List<Tuple> getMostFrequentDiagnoses() {
 		TypedQuery<Tuple> query = this.entityManager.createQuery(
-				"select diagnosis.name, count(diagnosis.name) from Diagnosis diagnosis group by diagnosis.name order by count(diagnosis.name) desc",
+				"select diagnosis.name, count(diagnosis) from Consultation consultation left join consultation.diagnoses diagnosis where diagnosis.name != null group by diagnosis.name order by count(diagnosis) desc",
 				Tuple.class);
 
 		return query.getResultList();
@@ -53,7 +53,7 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public Double getAverageWaitingTime() {
 		TypedQuery<Double> query = this.entityManager.createQuery(
-				"select avg(extract(SECOND FROM (consultation.startTime)) - extract(SECOND FROM consultation.appointment.startTime)) from Consultation consultation",
+				"select avg(extract(DAY_SECOND FROM (consultation.startTime)) - extract(DAY_SECOND FROM consultation.appointment.startTime)) from Consultation consultation where consultation.dischargeType != null",
 				Double.class);
 
 		return query.getSingleResult();
