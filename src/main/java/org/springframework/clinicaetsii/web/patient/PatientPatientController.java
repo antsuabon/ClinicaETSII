@@ -2,9 +2,7 @@
 package org.springframework.clinicaetsii.web.patient;
 
 import java.util.Collection;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.clinicaetsii.model.Doctor;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import lombok.Data;
 
 /**
@@ -85,16 +82,16 @@ public class PatientPatientController {
 		return "/patient/updatePatientForm";
 	}
 
-	private boolean passwordNotNull(PatientForm patientForm) {
+	private boolean passwordNotNull(final PatientForm patientForm) {
 
 		return patientForm.getNewPassword() != null
-			&& !StringUtils.isEmpty(patientForm.getNewPassword());
+				&& !StringUtils.isEmpty(patientForm.getNewPassword());
 	}
 
 
 	private boolean checkNewPassword(final PatientForm patientForm) {
 		return patientForm.getNewPassword() != null
-			&& !StringUtils.isEmpty(patientForm.getNewPassword());
+				&& !StringUtils.isEmpty(patientForm.getNewPassword());
 	}
 
 	@PostMapping(value = "/patient/edit")

@@ -10,7 +10,7 @@
 
 	<jsp:attribute name="customScript">
         <script>
-            $(function () {$("#birthDate").datepicker({dateFormat: 'yy/mm/dd'});});
+            $(function () {$('input[name ="patient.birthDate"]').datepicker({dateFormat: 'dd/mm/yy'});});
         </script>
 	</jsp:attribute>
     
