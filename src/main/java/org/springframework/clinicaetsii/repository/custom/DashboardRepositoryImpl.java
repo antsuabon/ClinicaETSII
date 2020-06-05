@@ -53,7 +53,7 @@ public class DashboardRepositoryImpl implements DashboardRepository {
 	@Override
 	public Double getAverageWaitingTime() {
 		TypedQuery<Double> query = this.entityManager.createQuery(
-				"select avg(extract(DAY_SECOND FROM (consultation.startTime)) - extract(DAY_SECOND FROM consultation.appointment.startTime)) from Consultation consultation where consultation.dischargeType != null",
+				"select avg(extract(SECOND FROM (consultation.startTime)) - extract(SECOND FROM consultation.appointment.startTime)) from Consultation consultation where consultation.dischargeType != null",
 				Double.class);
 
 		return query.getSingleResult();
